@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <LINK REL=StyleSheet HREF="../css/estilo.css" TYPE="text/css" MEDIA=screen>
+    <title>Fallos</title>
+    <h1>Resultados</h1> 
+</head>
+<body>
+    {% if n == "" %}
+        <p> El intervalo es inadecuado para esta función </p>
+    {% else %}
+        <p> No se encontró ninguna raiz en {{n}} iteraciones </p>
+    {% endif %}
+</body>

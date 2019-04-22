@@ -14,4 +14,10 @@
     {% else %}
         <p> No se encontró ninguna raiz en {{n}} iteraciones </p>
     {% endif %}
+
+    <ul>
+        {% for elemento in tablaM %}
+            <li>{{ elemento }}</li>
+        {% endfor %}
+    </ul>
 </body>

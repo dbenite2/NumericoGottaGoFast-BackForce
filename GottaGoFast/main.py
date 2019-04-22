@@ -104,12 +104,12 @@ def busquedas():
         # print('{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1)))    
         #lista.append([contador,x1,fx1])
         if fx1 == 0:
-            return render_template('raizUnica.html',x1 = x1)
+            return render_template('raizUnica.html',x1 = x1, tablaM = tabla)
         elif (fx0 * fx1) < 0:
             print ("Hay una raiz entre ", x0, " y ", x1)
-            return render_template('Busquedas.html',x0 = x0, x1 = x1 , n = contador, fx0 = fx0, fx1 = fx1)
+            return render_template('Busquedas.html',x0 = x0, x1 = x1 , n = contador, fx0 = fx0, fx1 = fx1, tablaM = tabla)
         else : 
-            return render_template('errores.html',n = contador)
+            return render_template('errores.html',n = contador, tablaM = tabla)
 
 #Metodo de biseccion
 @app.route('/biseccion')
@@ -155,13 +155,13 @@ def biseccion():
         tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
         if fxm == 0:
-            return render_template('raizUnica.html',x1 = xm)
+            return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
         elif error < tol:
-            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm)
+            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, tablaM = tabla)
         else:
-            return render_template('errores.html', n = contador)
+            return render_template('errores.html', n = contador, tablaM = tabla)
     else:
-            return render_template('errores.html')
+            return render_template('errores.html', tablaM = tabla)
 
 
 
@@ -208,13 +208,13 @@ def reglaFalsa():
         tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
         if fxm == 0:
-            return render_template('raizUnica.html',x1 = xm)
+            return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
         elif error < tol:
-            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm)
+            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, tablaM = tabla)
         else:
-            return render_template('errores.html', n = contador)
+            return render_template('errores.html', n = contador, tablaM = tabla)
     else:
-            return render_template('errores.html')    
+            return render_template('errores.html', tablaM = tabla)    
         
 @app.route('/puntoFijo')
 def puntoFijo():
@@ -242,14 +242,14 @@ def puntoFijo():
     tabla.append([contador,xn,fx,error])
     #print('{:30},{:30},{:30},{:30}'.format(str(contador),str(xn),str(fx),str(error)))
     if fxa == 0:
-        return render_template('raizUnica.html',x1 = x0)
+        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
     else:
         if error < tol:
-            return render_template('biseccion.html', n = contador, xm = x0, tol = tol,fx0 = fxa)
+            return render_template('biseccion.html', n = contador, xm = x0, tol = tol,fx0 = fxa, tablaM = tabla)
             
             #print(error_type)
         else:
-           return render_template('errores.html', n = contador)
+           return render_template('errores.html', n = contador, tablaM = tabla)
 
 
 
@@ -281,16 +281,16 @@ def newton():
         # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(error)))
 
     if fx0 == 0:
-        return render_template('raizUnica.html',x1 = x0)
+        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
     else:
         if error < tol:
-           return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0)
+           return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0, tablaM = tabla)
         else:
             if dfx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1)
+                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
                  
             else:
-                return render_template('errores.html', n = contador)
+                return render_template('errores.html', n = contador, tablaM = tabla)
 
 
 
@@ -329,15 +329,15 @@ def secante():
         tabla.append([contador,x1, fx1, error])
         # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1),str(error)))
         if fx1 == 0:
-            return render_template('raizUnica.html',x1 = x1)
+            return render_template('raizUnica.html',x1 = x1, tablaM = tabla)
         else:
             if error < tol:
-                 return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1)
+                 return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1, tablaM = tabla)
             else:
                 if denominador == 0:
-                    return render_template('multipleSolucion.html',x1 = x1)
+                    return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
                 else: 
-                    return render_template('errores.html', n = contador)
+                    return render_template('errores.html', n = contador, tablaM = tabla)
 
 
 
@@ -372,17 +372,17 @@ def raicesm():
         # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(d2fx0),str(error)))
 
     if fx0 == 0:
-        return render_template('raizUnica.html',x1 = x0)
+        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
     else:
         if error < tol:
-            return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1)
+            return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1, tablaM = tabla)
         else:
             if dfx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1)
+                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
             elif d2fx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1)
+                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
             else:
-                 return render_template('errores.html', n = contador)
+                 return render_template('errores.html', n = contador, tablaM = tabla)
 
 def limpiar():
     i = 0

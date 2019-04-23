@@ -14,10 +14,75 @@
     {% else %}
         <p> No se encontró ninguna raiz en {{n}} iteraciones </p>
     {% endif %}
-
-    <ul>
-        {% for elemento in tablaM %}
-            <li>{{ elemento }}</li>
-        {% endfor %}
-    </ul>
 </body>
+
+{% if tipo == "5" %}
+    <table>
+        <thead>
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x0)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>
+            {% for i in range(0,len) %}
+                <col>
+                <td>{{ iteracion[i] }}</td>
+                <td>{{ X0[i] }}</td>
+                <td>{{ FX[i] }}</td>
+                <td>{{ Error[i] }}</td>
+                </col>
+            {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "4" %}
+    <table>
+        <thead> 
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x0)</td>
+            <td>DF(x0)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>  
+                {% for i in range(0,len) %}
+                    <col>
+                    <td>{{ iteracion[i] }}</td>
+                    <td>{{ X0[i] }}</td>
+                    <td>{{ FX[i] }}</td> 
+                    <td>{{ DFX[i] }}</td>
+                    <td>{{ Error[i] }}</td>
+                    </col>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "6" %}
+    <table>
+        <thead>
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x)</td>
+            <td>dF(x)</td>
+            <td>d2F(x)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i in range(0,len) %}
+                    <col>
+                        <td>{{ iteracion[i] }}</td>
+                        <td>{{ X0[i] }}</td>
+                        <td>{{ FX[i] }}</td>
+                        <td>{{ DFX[i] }}</td>
+                        <td>{{ D2FX[i] }}</td> 
+                        <td>{{ Error[i] }}</td>
+                    </col>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% endif %}

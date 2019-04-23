@@ -10,9 +10,120 @@
 </head>
 <body>
     <p> {{x1}} es raiz </p>
-    <ul>
-        {% for elemento in tablaM %}
-            <li>{{ elemento }}</li>
-        {% endfor %}
-    </ul>
 </body>
+{% if tipo == "0" %} 
+    <table>
+        <thead>
+            <tr>
+            <th>N</th>
+            <th>x0</th>
+            <th>F(x0)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i in range(0,len) %}
+                    <col>
+                    <td>{{ iteracion[i] }}</td>
+                    <td>{{ X0[i] }}</td>
+                    <td>{{ FX[i] }}</td> 
+                    </col>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "1" or tipo == "2" %}
+    <table>
+        <thead> 
+            <td>N</td>
+            <td>xinf</td>
+            <td>xsup</td>
+            <td>xm</td>
+            <td>F(xm)</td>
+            <td>Error</td>    
+        </thead>
+        <tbody>
+            <tr>
+            {% for i in range(0,len) %}
+                <col>
+                <td>{{ iteracion[i] }}</td>
+                <td>{{ XI[i] }}</td>
+                <td>{{ XU[i] }}</td> 
+                <td>{{ XM[i] }}</td>
+                <td>{{ FX[i] }}</td>
+                <td>{{ Error[i] }}</td>
+                </col>
+            {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "3" or tipo == "5" %}
+    <table>
+        <thead>
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x0)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>
+            {% for i in range(0,len) %}
+                <col>
+                <td>{{ iteracion[i] }}</td>
+                <td>{{ X0[i] }}</td>
+                <td>{{ FX[i] }}</td>
+                <td>{{ Error[i] }}</td>
+                </col>
+            {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "4" %}
+    <table>
+        <thead> 
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x0)</td>
+            <td>DF(x0)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>  
+                {% for i in range(0,len) %}
+                    <col>
+                    <td>{{ iteracion[i] }}</td>
+                    <td>{{ X0[i] }}</td>
+                    <td>{{ FX[i] }}</td> 
+                    <td>{{ DFX[i] }}</td>
+                    <td>{{ Error[i] }}</td>
+                    </col>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% elif tipo == "6" %}
+    <table>
+        <thead>
+            <td>N</td>
+            <td>x0</td>
+            <td>F(x)</td>
+            <td>dF(x)</td>
+            <td>d2F(x)</td>
+            <td>Error</td>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i in range(0,len) %}
+                    <col>
+                        <td>{{ iteracion[i] }}</td>
+                        <td>{{ X0[i] }}</td>
+                        <td>{{ FX[i] }}</td>
+                        <td>{{ DFX[i] }}</td>
+                        <td>{{ D2FX[i] }}</td> 
+                        <td>{{ Error[i] }}</td>
+                    </col>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% endif %}

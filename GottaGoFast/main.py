@@ -4,13 +4,6 @@ import sympy as sy
 import numpy as np
 import math
 
-iteracion = []
-X0 = []
-X1 = []
-FX = []
-DFX = []
-Error = []
-
 X = Symbol('x')
 
 app = Flask(__name__)
@@ -38,12 +31,11 @@ def metodos():
         itebr = request.form.get('itebr')
         #datos para punto fijo
         fgx = request.form.get('fgx') 
-        x0npr = request.form.get('x0f')
-        tolnpr = request.form.get('tolf')
-        itenpr = request.form.get('itef')
+        x0f = request.form.get('x0f')
+        tolf = request.form.get('tolf')
+        itef = request.form.get('itef')
         #datos para newton y raices multiples
         x0npr = request.form.get('x0npr')
-        print ( "x0: ", x0npr)
         tolnpr = request.form.get('tolnpr')
         itenpr = request.form.get('itenpr')
         #datos para secante
@@ -76,7 +68,9 @@ def metodos():
 @app.route('/busquedas')
 def busquedas():
 
-    limpiar()
+    iteracion = []
+    X0 = []
+    FX = []
 
     fx    = request.args['fx']
     x0    = float(request.args['x0b'])
@@ -85,42 +79,46 @@ def busquedas():
 
     fx0 = funcion(fx,x0)
 
-    # print('{:30},{:30},{:30}'.format('n','x0','f(x0)'))
+    
     if fx0 == 0:
         return render_template('raizUnica.html',x1 = x0)
     else:
-        #lista.append([contador, x0, fx0])
         x1 = x0 + delta
         fx1 = funcion(fx,x1)
         contador = 1
-        ##tabla.append([0,x0,fx0])
-        # print('{:30},{:30},{:30}'.format(str(0),str(x0),str(fx0)))
+
         while (fx0 * fx1) > 0 and contador <= iteb:
             #fx1 = fx0
             x0 = x1
             fx0 = fx1
-            #lista.append([contador, x0, fx0])
             x1 = x1 + delta
             fx1 = funcion(fx,x1)
-            ##tabla.append([contador,x0,fx0])
-            #print('{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0)))
+            iteracion.append(contador)
+            X0.append(x0)
+            FX.append(fx0)
             contador += 1
-        ##tabla.append([contador,x1,fx1])
-        # print('{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1)))    
-        #lista.append([contador,x1,fx1])
+
+        iteracion.append(contador)
+        X0.append(x1)
+        FX.append(fx1)
         if fx1 == 0:
-            return render_template('raizUnica.html',x1 = x1, tablaM = tabla)
+            return render_template('raizUnica.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, len = len(iteracion), tipo = "0")
         elif (fx0 * fx1) < 0:
-            print ("Hay una raiz entre ", x0, " y ", x1)
-            return render_template('Busquedas.html',x0 = x0, x1 = x1 , n = contador, fx0 = fx0, fx1 = fx1, tablaM = tabla)
+            
+            return render_template('Busquedas.html',x0 = x0, x1 = x1 , n = contador, fx0 = fx0, fx1 = fx1, iteracion = iteracion, X0 = X0, FX = FX, len = len(iteracion))
         else : 
-            return render_template('errores.html',n = contador, tablaM = tabla)
+            return render_template('errores.html',n = contador, iteracion = iteracion, X0 = X0, FX = FX, len = len(iteracion), tipo = "0")
 
 #Metodo de biseccion
 @app.route('/biseccion')
 def biseccion():
 
-    limpiar()
+    iteracion = []
+    XI = []
+    XU = []
+    XM = []
+    FX = []
+    Error = []
 
     fx = request.args['fx']
     xinf = float(request.args['xinfbr'])
@@ -140,12 +138,13 @@ def biseccion():
         fxm = funcion(fx,xm)
         contador = 1
         error = tol + 1
-<<<<<<< HEAD
-        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-=======
-        tabla.append([0,xinf,xsup,xm,fxm,error])
->>>>>>> d5bcd7dda86be86a7c141b53e231ca448580fd97
-        # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+
+        iteracion.append(contador)
+        XI.append(xinf)
+        XU.append(xsup)
+        XM.append(xm)
+        FX.append(fxm)
+        Error.append(error)
 
         while fxm != 0 and error > tol and contador < ite:
             if (fxinf * fxm) < 0:
@@ -158,26 +157,41 @@ def biseccion():
             xm = (xinf + xsup) / 2
             fxm = funcion(fx,xm)
             error = math.fabs(xm - temp)
-            ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-            # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+            iteracion.append(contador)
+            XI.append(xinf)
+            XU.append(xsup)
+            XM.append(xm)
+            FX.append(fxm)
+            Error.append(error)
             contador += 1
-        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-        # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+
+        iteracion.append(contador)
+        XI.append(xinf)
+        XU.append(xsup)
+        XM.append(xm)
+        FX.append(fxm)
+        Error.append(error)
+        
         if fxm == 0:
-            return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
+            return render_template('raizUnica.html',x1 = xm, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "1")
         elif error < tol:
-            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, tablaM = tabla)
+            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion))
         else:
-            return render_template('errores.html', n = contador, tablaM = tabla)
+            return render_template('errores.html', n = contador, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "1")
     else:
-            return render_template('errores.html', tablaM = tabla)
+            return render_template('errores.html', iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "1")
 
 
-
+#Metodo de Regla Falsa
 @app.route('/reglaFalsa')
 def reglaFalsa():
 
-    limpiar()
+    iteracion = []
+    XI = []
+    XU = []
+    XM = []
+    FX = []
+    Error = []
 
     fx = request.args['fx']
     xinf = float(request.args['xinfbr'])
@@ -198,11 +212,12 @@ def reglaFalsa():
         contador = 1
         error = tol + 1
 
-        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-
-        tabla.append([0,xinf,xsup,xm,fxm,error])
-
-        # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+        iteracion.append(contador)
+        XI.append(xinf)
+        XU.append(xsup)
+        XM.append(xm)
+        FX.append(fxm)
+        Error.append(error)
 
         while fxm != 0 and error > tol and contador < ite:
             if (fxinf * fxm) < 0:
@@ -215,24 +230,38 @@ def reglaFalsa():
             xm = xinf - ((fxinf * (xsup - xinf) / (fxsup - fxinf)))
             fxm = funcion(fx,xm)
             error = math.fabs(xm - temp)
-            ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-            # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+            iteracion.append(contador)
+            XI.append(xinf)
+            XU.append(xsup)
+            XM.append(xm)
+            FX.append(fxm)
+            Error.append(error)
             contador += 1
-        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-        # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
+
+        iteracion.append(contador)
+        XI.append(xinf)
+        XU.append(xsup)
+        XM.append(xm)
+        FX.append(fxm)
+        Error.append(error)
+       
         if fxm == 0:
-            return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
+            return render_template('raizUnica.html',x1 = xm, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "2")
         elif error < tol:
-            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, tablaM = tabla)
+            return render_template('biseccion.html', n = contador, xm = xm, tol = tol,fx0 = fxm, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion))
         else:
-            return render_template('errores.html', n = contador, tablaM = tabla)
+            return render_template('errores.html', n = contador, iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "2")
     else:
-            return render_template('errores.html', tablaM = tabla)    
-        
+            return render_template('errores.html', iteracion = iteracion, XI = XI, XU = XU, XM = XM, Error = Error, FX = FX, len = len(iteracion), tipo = "2")    
+
+#Metodo de Punto Fijo        
 @app.route('/puntoFijo')
 def puntoFijo():
 
-    limpiar()
+    iteracion = []
+    X0 = []
+    FX = []
+    Error = []
     
     fx  = request.args['fx']
     fgx = request.args['fgx']
@@ -243,29 +272,37 @@ def puntoFijo():
     fxa = funcion(fx,x0)
     contador = 0
     error = tol + 1
-    # print('{:30},{:30},{:30},{:30}'.format('n','xn','fxn','error'))
+    
     while fxa != 0 and error > tol and contador < ite:
         xn = funcion(fgx,x0) 
         fxa = funcion(fx,xn)
         error =  math.fabs(xn-x0)
-        x0 = xn 
-        ##tabla.append([contador,xn,fx,error])
-        # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(xn),str(fx),str(error)))
+        x0 = xn
+        
+        iteracion.append(contador)
+        X0.append(xn)
+        FX.append(fxa)
+        Error.append(error)
+    
         contador += 1
-    #tabla.append([contador,xn,fx,error])
-    #print('{:30},{:30},{:30},{:30}'.format(str(contador),str(xn),str(fx),str(error)))
+
+    iteracion.append(contador)
+    X0.append(xn)
+    FX.append(fxa)
+    Error.append(error)
+    
     if fxa == 0:
-        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
+        return render_template('raizUnica.html',x1 = x0, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(contador), tipo = "3")
     else:
         if error < tol:
-            return render_template('biseccion.html', n = contador, xm = x0, tol = tol,fx0 = fxa, tablaM = tabla)
+            return render_template('fijo.html', n = contador, xm = x0, tol = tol,fx0 = fxa,  iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(contador))
             
-            #print(error_type)
+            
         else:
-           return render_template('errores.html', n = contador, tablaM = tabla)
+           return render_template('errores.html', n = contador, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(contador), tipo = "3")
 
 
-
+#Metodo de Newton
 @app.route('/newton')
 def newton():
 
@@ -286,7 +323,6 @@ def newton():
     dfx0  = funcionP(fx,x0)
     error = tol + 1
     contador = 0
-    # print('{:30},{:30},{:30},{:30},{:30}'.format('n','xn','f(xn)','d(xn)','error'))
 
     while error > tol and fx0 != 0 and dfx0 != 0 and contador < ite:
         x1 = x0 - (fx0/dfx0)
@@ -300,27 +336,28 @@ def newton():
         FX.append(fx0)
         DFX.append(dfx0)
         Error.append(error)
-        ##tabla.append([contador,x0, fx0, dfx0, error])
-        # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(error)))
 
     if fx0 == 0:
-        return render_template('raizUnica.html',x1 = x0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
+        return render_template('raizUnica.html',x1 = x0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion), tipo = "4")
     else:
         if error < tol:
-           return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion))
+           return render_template('newton.html', n = contador, xm = x1, tol = tol,fx0 = fx0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion))
         else:
             if dfx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
+                return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion), tipo = "4")
                  
             else:
-                return render_template('errores.html', n = contador, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
+                return render_template('errores.html', n = contador, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion), tipo = "4")
 
 
 
 @app.route('/secante')
 def secante():
 
-    limpiar()
+    iteracion = []
+    X0 = []
+    FX = []
+    Error = []
     
     fx  = request.args['fx']
     x0  = float(request.args['x0s'])
@@ -346,28 +383,38 @@ def secante():
             x1 = x2
             fx1 = funcion(fx,x1)
             denominador = fx1 - fx0
-            ##tabla.append([contador,x1, fx1, error])
-            # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1),str(error)))
+            iteracion.append(contador)
+            X0.append(x1)
+            FX.append(fx1)
+            Error.append(error)
             contador += 1
-        ##tabla.append([contador,x1, fx1, error])
-        # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1),str(error)))
+        iteracion.append(contador)
+        X0.append(x1)
+        FX.append(fx1)
+        Error.append(error)
+        
         if fx1 == 0:
-            return render_template('raizUnica.html',x1 = x1, tablaM = tabla)
+            return render_template('raizUnica.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(iteracion), tipo = "5")
         else:
             if error < tol:
-                 return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1, tablaM = tabla)
+                 return render_template('fijo.html', n = contador, xm = x1, tol = tol,fx0 = fx1, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(iteracion))
             else:
                 if denominador == 0:
-                    return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
+                    return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(iteracion), tipo = "5")
                 else: 
-                    return render_template('errores.html', n = contador, tablaM = tabla)
+                    return render_template('errores.html', n = contador, iteracion = iteracion, X0 = X0, FX = FX, Error = Error, len = len(iteracion), tipo = "5")
 
 
 
 @app.route('/raicesm')
 def raicesm():
 
-    limpiar()
+    iteracion = []
+    X0 = []
+    FX = []
+    DFX = []
+    D2FX = []
+    Error = []
     
     fx = request.args['fx']
     x0  = float(request.args['x0npr'])
@@ -380,7 +427,6 @@ def raicesm():
     den = (dfx0**2) - (fx0*d2fx0)
     error = tol + 1
     contador = 0
-    # print('{:30} {:30} {:30} {:30} {:30} {:30}'.format('Iterations', 'x', 'fx', 'dfx', 'd2f', 'error'))
 
     while (fx0 != 0) and (error > tol) and (den != 0)  and (contador < ite):
         den = (dfx0**2) - (fx0*d2fx0)
@@ -391,32 +437,26 @@ def raicesm():
         error = math.fabs((x1 -x0)/x1)
         contador += 1
         x0 = x1
-        ##tabla.append([contador,x0, fx0,dfx0,d2fx0, error])
-        # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(d2fx0),str(error)))
+        iteracion.append(contador)
+        X0.append(x0)
+        FX.append(fx0)
+        DFX.append(dfx0)
+        D2FX.append(d2fx0)
+        Error.append(error)
 
     if fx0 == 0:
-        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
+        return render_template('raizUnica.html',x1 = x0, iteracion = iteracion,X0 = X0, FX = FX, DFX = DFX, D2FX = D2FX, Error = Error, len = len(iteracion), tipo = "6")
     else:
         if error < tol:
-            return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx1, tablaM = tabla)
+            return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0, iteracion = iteracion,X0 = X0, FX = FX, DFX = DFX, D2FX = D2FX, Error = Error, len = len(iteracion))
         else:
             if dfx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
+                return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion,X0 = X0, FX = FX, DFX = DFX, D2FX = D2FX, Error = Error, len = len(iteracion), tipo = "6")
             elif d2fx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
+                return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion,X0 = X0, FX = FX, DFX = DFX, D2FX = D2FX, Error = Error, len = len(iteracion), tipo = "6")
             else:
-                 return render_template('errores.html', n = contador, tablaM = tabla)
+                 return render_template('errores.html', n = contador, iteracion = iteracion,X0 = X0, FX = FX, DFX = DFX, D2FX = D2FX, Error = Error, len = len(iteracion), tipo = "6")
 
-def limpiar():
-    i = 0
-    tam = len(iteracion)
-    while i < tam :
-        iteracion.pop()
-        X0.pop()
-        X1.pop()
-        FX.pop()
-        DFX.pop()
-        Error.pop()
 
 def funcion(fx,entrada):
     x = entrada

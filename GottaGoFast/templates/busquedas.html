@@ -20,20 +20,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>{{n}}</td>
-      <td>{{x0}}</td>
-      <td>{{fx0}}</td>
-    </tr>
-    <tr>
-      <td>{{n + 1}}</td>
-      <td>{{x1}}</td>
-      <td>{{fx1}}</td>
+   <tr>
+      
+      {% for i in range(0,len) %}
+        <col>
+          <td>{{ iteracion[i] }}</td>
+          <td>{{ X0[i] }}</td>
+          <td>{{ FX[i] }}</td> 
+          
+        </col>
+      {% endfor %}
+      
     </tr>
   </tbody>
-  <ul>
-    {% for elemento in tablaM %}
-        <li>{{ elemento }}</li>
-    {% endfor %}
-</ul>
+  
 </table>

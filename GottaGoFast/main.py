@@ -4,7 +4,12 @@ import sympy as sy
 import numpy as np
 import math
 
-tabla = []
+iteracion = []
+X0 = []
+X1 = []
+FX = []
+DFX = []
+Error = []
 
 X = Symbol('x')
 
@@ -88,7 +93,7 @@ def busquedas():
         x1 = x0 + delta
         fx1 = funcion(fx,x1)
         contador = 1
-        tabla.append([0,x0,fx0])
+        ##tabla.append([0,x0,fx0])
         # print('{:30},{:30},{:30}'.format(str(0),str(x0),str(fx0)))
         while (fx0 * fx1) > 0 and contador <= iteb:
             #fx1 = fx0
@@ -97,10 +102,10 @@ def busquedas():
             #lista.append([contador, x0, fx0])
             x1 = x1 + delta
             fx1 = funcion(fx,x1)
-            tabla.append([contador,x0,fx0])
+            ##tabla.append([contador,x0,fx0])
             #print('{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0)))
             contador += 1
-        tabla.append([contador,x1,fx1])
+        ##tabla.append([contador,x1,fx1])
         # print('{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1)))    
         #lista.append([contador,x1,fx1])
         if fx1 == 0:
@@ -135,7 +140,7 @@ def biseccion():
         fxm = funcion(fx,xm)
         contador = 1
         error = tol + 1
-        tabla.append([contador,xinf,xsup,xm,fxm,error])
+        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
 
         while fxm != 0 and error > tol and contador < ite:
@@ -149,10 +154,10 @@ def biseccion():
             xm = (xinf + xsup) / 2
             fxm = funcion(fx,xm)
             error = math.fabs(xm - temp)
-            tabla.append([contador,xinf,xsup,xm,fxm,error])
+            ##tabla.append([contador,xinf,xsup,xm,fxm,error])
             # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
             contador += 1
-        tabla.append([contador,xinf,xsup,xm,fxm,error])
+        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
         if fxm == 0:
             return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
@@ -188,7 +193,7 @@ def reglaFalsa():
         fxm = funcion(fx,xm)
         contador = 1
         error = tol + 1
-        tabla.append([contador,xinf,xsup,xm,fxm,error])
+        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
 
         while fxm != 0 and error > tol and contador < ite:
@@ -202,10 +207,10 @@ def reglaFalsa():
             xm = xinf - ((fxinf * (xsup - xinf) / (fxsup - fxinf)))
             fxm = funcion(fx,xm)
             error = math.fabs(xm - temp)
-            tabla.append([contador,xinf,xsup,xm,fxm,error])
+            ##tabla.append([contador,xinf,xsup,xm,fxm,error])
             # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
             contador += 1
-        tabla.append([contador,xinf,xsup,xm,fxm,error])
+        ##tabla.append([contador,xinf,xsup,xm,fxm,error])
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
         if fxm == 0:
             return render_template('raizUnica.html',x1 = xm, tablaM = tabla)
@@ -236,10 +241,10 @@ def puntoFijo():
         fxa = funcion(fx,xn)
         error =  math.fabs(xn-x0)
         x0 = xn 
-        tabla.append([contador,xn,fx,error])
+        ##tabla.append([contador,xn,fx,error])
         # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(xn),str(fx),str(error)))
         contador += 1
-    tabla.append([contador,xn,fx,error])
+    #tabla.append([contador,xn,fx,error])
     #print('{:30},{:30},{:30},{:30}'.format(str(contador),str(xn),str(fx),str(error)))
     if fxa == 0:
         return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
@@ -256,7 +261,12 @@ def puntoFijo():
 @app.route('/newton')
 def newton():
 
-    limpiar()
+    iteracion = []
+    X0 = []
+    X1 = []
+    FX = []
+    DFX = []
+    Error = []
     
     fx  = request.args['fx']
     print("error", request.args['x0npr'])
@@ -277,20 +287,25 @@ def newton():
         error = math.fabs((x1 -x0)/x1)
         contador += 1
         x0 = x1
-        tabla.append([contador,x0, fx0, dfx0, error])
+        iteracion.append(contador)
+        X0.append(x0)
+        FX.append(fx0)
+        DFX.append(dfx0)
+        Error.append(error)
+        ##tabla.append([contador,x0, fx0, dfx0, error])
         # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(error)))
 
     if fx0 == 0:
-        return render_template('raizUnica.html',x1 = x0, tablaM = tabla)
+        return render_template('raizUnica.html',x1 = x0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
     else:
         if error < tol:
-           return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0, tablaM = tabla)
+           return render_template('biseccion.html', n = contador, xm = x1, tol = tol,fx0 = fx0, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error, len = len(iteracion))
         else:
             if dfx0 == 0:
-                return render_template('multipleSolucion.html',x1 = x1, tablaM = tabla)
+                return render_template('multipleSolucion.html',x1 = x1, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
                  
             else:
-                return render_template('errores.html', n = contador, tablaM = tabla)
+                return render_template('errores.html', n = contador, iteracion = iteracion, X0 = X0, FX = FX, DFX = DFX, Error = Error)
 
 
 
@@ -323,10 +338,10 @@ def secante():
             x1 = x2
             fx1 = funcion(fx,x1)
             denominador = fx1 - fx0
-            tabla.append([contador,x1, fx1, error])
+            ##tabla.append([contador,x1, fx1, error])
             # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1),str(error)))
             contador += 1
-        tabla.append([contador,x1, fx1, error])
+        ##tabla.append([contador,x1, fx1, error])
         # print('{:30},{:30},{:30},{:30}'.format(str(contador),str(x1),str(fx1),str(error)))
         if fx1 == 0:
             return render_template('raizUnica.html',x1 = x1, tablaM = tabla)
@@ -368,7 +383,7 @@ def raicesm():
         error = math.fabs((x1 -x0)/x1)
         contador += 1
         x0 = x1
-        tabla.append([contador,x0, fx0,dfx0,d2fx0, error])
+        ##tabla.append([contador,x0, fx0,dfx0,d2fx0, error])
         # print('{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(x0),str(fx0),str(dfx0),str(d2fx0),str(error)))
 
     if fx0 == 0:
@@ -386,9 +401,14 @@ def raicesm():
 
 def limpiar():
     i = 0
-    tam = len(tabla)
+    tam = len(iteracion)
     while i < tam :
-        tabla.pop()
+        iteracion.pop()
+        X0.pop()
+        X1.pop()
+        FX.pop()
+        DFX.pop()
+        Error.pop()
 
 def funcion(fx,entrada):
     x = entrada
@@ -404,5 +424,6 @@ def funcionP2(fx,entrada):
     fp2x = str(diff(fx,X,2))
     x = entrada
     return eval(fp2x)
+
 if __name__ == '__main__':
     app.run(debug=True)

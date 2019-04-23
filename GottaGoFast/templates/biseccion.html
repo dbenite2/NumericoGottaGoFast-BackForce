@@ -13,22 +13,31 @@
 </body>
 <table>
   <thead>
-    <tr>
-      <th>N</th>
-      <th>x0</th>
-      <th>F(x0)</th>
-    </tr>
+    
+      
+      <td>N</td>
+      <td>x0</td>
+      <td>F(x0)</td>
+      <td>DF(x0)</td>
+      <td>Error</td>
+    
   </thead>
+
   <tbody>
+    
     <tr>
-      <td>{{n}}</td>
-      <td>{{xm}}</td>
-      <td>{{fx0}}</td>
+      
+      {% for i in range(0,len) %}
+        <col>
+          <td>{{ iteracion[i] }}</td>
+          <td>{{ X0[i] }}</td>
+          <td>{{ FX[i] }}</td> 
+          <td>{{ DFX[i] }}</td>
+          <td>{{ Error[i] }}</td>
+        </col>
+      {% endfor %}
+      
     </tr>
+    
   </tbody>
-  <ul>
-    {% for elemento in tablaM %}
-        <li>{{ elemento }}</li>
-    {% endfor %}
-</ul>
 </table>

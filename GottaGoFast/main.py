@@ -197,11 +197,11 @@ def reglaFalsa():
         fxm = funcion(fx,xm)
         contador = 1
         error = tol + 1
-<<<<<<< HEAD
+
         ##tabla.append([contador,xinf,xsup,xm,fxm,error])
-=======
+
         tabla.append([0,xinf,xsup,xm,fxm,error])
->>>>>>> d5bcd7dda86be86a7c141b53e231ca448580fd97
+
         # print('{:30},{:30},{:30},{:30},{:30},{:30}'.format(str(contador),str(xinf),str(xsup),str(xm),str(fxm),str(error)))
 
         while fxm != 0 and error > tol and contador < ite:

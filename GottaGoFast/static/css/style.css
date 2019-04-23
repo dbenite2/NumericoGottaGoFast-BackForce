@@ -1,0 +1,94 @@
+@charset "UTF-8";
+input:invalid {
+    border: 1px solid red;
+  }
+  
+input:valid {
+  border: 1px solid green;
+}
+
+td, th {
+  width: 4rem;
+  height: 2rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+th {
+  background:rgb(34, 118, 146);
+  border-color: black;
+}
+td {
+  background: rgb(34, 118, 146);
+  border-color: black;
+}
+body {
+  font-family: Lucida, serif;
+  background-color: lightblue; 
+}
+
+h1{
+  font-family: Lucida, serif;
+  color: black;
+}
+
+.button{
+  position: absolute;
+  background-color: cornflowerblue; 
+    border: 1px solid black;
+    border-radius: 12px;
+    color: black;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    top:140.5px;
+    left:9px;
+}
+
+.selectIn{
+  position: absolute;
+  background-color: cornflowerblue;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 5px;
+}
+.selectMet{
+  position: absolute;
+  background-color: cornflowerblue;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 5px;
+  top: 80px;
+  left: 180px;
+}
+
+option{
+  color:black;
+  background-color: cornflowerblue;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 5px;
+}
+
+input{
+  background-color: cornflowerblue;
+  border: 1px solid black;
+  border-radius: 12px;
+  color: black;
+  padding: 5px
+}
+
+::placeholder{
+  font: Lucida, serif;
+  color:black;
+}
+
+.placeholderPosition{
+  position: absolute;
+  top:110.5px;
+  bottom: 127px;
+}
+
+
+

@@ -2,8 +2,8 @@
 
 tablaA = []
 
-def doolittle(A,n):
-    L,U = inicializa(n,0)
+def doolittle(A,n, met):
+    L,U = inicializa(n,met)
     for k in range(n):
         suma1 = 0
         for p in range(0,k):
@@ -37,13 +37,14 @@ def inicializa(n,metodo):
     elif metodo == 2:
         L = [[0 for j in range(n)] for i in range(n)]
         U = [[0 for j in range(n)] for i in range(n)]
-    print("Doolittle")
     print(L)
     print(U)
     return L , U
 
 def main():
     global tablaA
+
+    s = int(input('Ingresa el metodo Doolittle = 0, Court = 1, Cholesky = 2'))
 
     a11 = float(input('Ingresa el valor a11: '))
     a12 = float(input('Ingresa el valor a12: '))
@@ -61,7 +62,7 @@ def main():
 
     print(tablaA)
 
-    doolittle(tablaA,3)
+    doolittle(tablaA,3, s)
 
 
 if __name__ == "__main__":

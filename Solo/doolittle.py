@@ -52,7 +52,7 @@ def inicializa(n,metodo):
 def main():
     global tablaA
 
-    s = int(input('Ingresa el metodo Doolittle = 0, Court = 1 '))
+    s = int(input('Ingresa el metodo Doolittle = 0, Court = 1: '))
 
     a11 = float(input('Ingresa el valor a11: '))
     a12 = float(input('Ingresa el valor a12: '))

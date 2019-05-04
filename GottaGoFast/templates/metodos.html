@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <LINK REL=StyleSheet HREF="../css/estilo.css" TYPE="text/css" MEDIA=screen> 
     <title>Metodos</title>
-    <h1>Solución de ecuaciones de una variable</h1>
 </head>
 <body>
-    
     <form class="" id="form" action="/metodos" method="POST"> 
-        <input type="text" id="fx" name="fx" placeholder="Ingrese la funcion F(x)" value="{{fx}}" required>  
-        <select class="selectIn"  name="selectIntervalos" id="selectIntervalos" onChange="mostrarCampos()">
+        <input type="text" id="fx" name="fx" clase="" placeholder="Ingrese la funcion F(x)" value="{{fx}}" requierd>  
+        <select name="selectIntervalos" id="selectIntervalos" onChange="mostrarCampos()">
             <option value="" disabled selected>¿Desea buscar intervalos?</option>
             <option value="Si">Si</option>
             <option value="No">No</option>
         </select>
-        <select class="selectMet" name="selectMetodo" id="selectMetodo" onChange="mostrarCampos()" style="display:none">
+        <select name="selectMetodo" id="selectMetodo" onChange="mostrarCampos()" style="display:none">
             <option value="" disabled selected>Seleccione el metodo a usar</option>
             <option value="1">Biseccion</option>
             <option value="2">Regla Falsa</option>
@@ -26,37 +24,35 @@
             <option value="5">Secante</option>
             <option value="6">Raices Multiples</option>
         </select>
-        <div class="placeholderPosition" id="busqueda" name="busqueda" style="display:none">
-            <input class="inputValue" type="text" id="x0b" name="x0b" placeholder="Ingrese un x0" value="{{x0b}}" >
-            <input type="inputValue" id="deltab" name="deltab"   placeholder="Ingrese un delta" value="{{deltab}}" >
-            <input type="inputValue" id="iteb" name="iteb" min="1" placeholder="Ingrese cantidad de iteraciones" value="{{iteb}}" >
+        <div id="busqueda" name="busqueda" style="display:none">
+            <input type="text" id="x0b" name="x0b" placeholder="Ingrese un x0" value="{{x0b}}">
+            <input type="text" id="deltab" name="deltab" placeholder="Ingrese un delta" value="{{deltab}}">
+            <input type="text" id="iteb" name="iteb" placeholder="Ingrese cantidad de iteraciones" value="{{iteb}}">
         </div>
-        <div class="placeholderPosition" id="biseccionyregla" name="biseccionyregla" style="display:none">
-            <input type="text" id="xinfbr" name="xinfbr" placeholder="Ingrese un x inferior" value="{{xinfbr}}" >
-            <input type="text" id="xsupbr" name="xsupbr" placeholder="Ingrese un x superior" value="{{xsupbr}}" >
+        <div id="biseccionyregla" name="biseccionyregla" style="display:none">
+            <input type="text" id="xinfbr" name="xinfbr" placeholder="Ingrese un x inferior" value="{{xinfbr}}">
+            <input type="text" id="xsupbr" name="xsupbr" placeholder="Ingrese un x superior" value="{{xsupbr}}">
             <input type="text" id="tolbr" name="tolbr" placeholder="Ingrese una tolerancia" value="{{tolbr}}">
-            <input type="text" id="itebr" name="itebr"  placeholder="Ingrese cantidad de iteraciones" value="{{itebr}}" >
+            <input type="text" id="itebr" name="itebr" placeholder="Ingrese cantidad de iteraciones" value="{{itebr}}">
         </div>
-        <div class="placeholderPosition" id = "punto" name = "punto" style = "display:none">
-            <input type="text" id="fgx"  name="fgx" placeholder="Ingrese la función Gx" value="{{fgx}}" >
-            <input type="text" id="x0f"  name="x0f" placeholder="Ingrese un x0" value="{{x0npr}}" >
-            <input type="text" id="tolf" name="tolf" placeholder="Ingrese una tolerancia" value="{{tolnpr}}" >
-            <input type="text" id="itef" name="itef" placeholder="Ingrese cantidad de iteraciones" value="{{itenpr}}" >
+        <div id = "punto" name = "punto" style = "display:none">
+            <input type = "text" id = "fgx" name = "fgx" placeholder = "Ingrese la función Gx" value = "{{fgx}}">
+            <input type="text" id="x0f" name="x0f" placeholder="Ingrese un x0" value="{{x0npr}}">
+            <input type="text" id="tolf" name="tolf" placeholder="Ingrese una tolerancia" value="{{tolnpr}}">
+            <input type="text" id="itef" name="itef" placeholder="Ingrese cantidad de iteraciones" value="{{itenpr}}">
         </div>
-        <div class="placeholderPosition" id="newtonpuntoraices" name="newtonpuntoraices" style="display:none">
-            <input type="text" id="x0npr" name="x0npr" placeholder="Ingrese un x0" value="{{x0npr}}" >
-            <input type="text" id="tolnpr" name="tolnpr" placeholder="Ingrese una tolerancia" value="{{tolnpr}}" >
-            <input type="text" id="itenpr" name="itenpr" placeholder="Ingrese cantidad de iteraciones" value="{{itenpr}}" >
+        <div id="newtonpuntoraices" name="newtonpuntoraices" style="display:none">
+            <input type="text" id="x0npr" name="x0npr" placeholder="Ingrese un x0" value="{{x0npr}}">
+            <input type="text" id="tolnpr" name="tolnpr" placeholder="Ingrese una tolerancia" value="{{tolnpr}}">
+            <input type="text" id="itenpr" name="itenpr" placeholder="Ingrese cantidad de iteraciones" value="{{itenpr}}">
         </div>
-        <div class="placeholderPosition" id="secante" name="secante" style="display:none">
-            <input type="text" id="x0s" name="x0s" placeholder="Ingrese un x0" value="{{x0s}}" >
-            <input type="text" id="x1s" name="x1s" placeholder="Ingrese un x1" value="{{x1s}}" >
-            <input type="text" id="tols" name="tols" placeholder="Ingrese una tolerancia" value="{{tols}}" >
-            <input type="text" id="ites" name="ites" placeholder="Ingrese cantidad de iteraciones" value="{{ites}}" >
+        <div id="secante" name="secante" style="display:none">
+            <input type="text" id="x0s" name="x0s" placeholder="Ingrese un x0" value="{{x0s}}">
+            <input type="text" id="x1s" name="x1s" placeholder="Ingrese un x1" value="{{x1s}}">
+            <input type="text" id="tols" name="tols" placeholder="Ingrese una tolerancia" value="{{tols}}">
+            <input type="text" id="ites" name="ites" placeholder="Ingrese cantidad de iteraciones" value="{{ites}}">
         </div>
-        <div id="botonEjecucion" name="ejecucion" style="display:none">
-            <input class="button" type="submit" name="Ejecutar" value="Ejecutar">
-        </div>
+        <input type="submit" name="Ejecutar" value="Ejecutar"> <br />
     </form>
 </body>
 </html>
@@ -72,17 +68,13 @@
             document.getElementById('punto').style.display = 'none';
             document.getElementById('newtonpuntoraices').style.display = 'none';
             document.getElementById('secante').style.display = 'none';
-            document.getElementById('botonEjecucion').style.display='block';
-        }
-        if(selectTag1.value == 'No'){
-            document.getElementById('selectIntervalos').style.display = 'none';
+        }else if(selectTag1.value == 'No'){
             document.getElementById('selectMetodo').style.display = 'block';
             document.getElementById('busqueda').style.display = 'none';
             document.getElementById('biseccionyregla').style.display = 'none';
             document.getElementById('punto').style.display = 'none';
             document.getElementById('newtonpuntoraices').style.display = 'none';
             document.getElementById('secante').style.display = 'none';
-            document.getElementById('botonEjecucion').style.display='none';
         }
 
         if((selectTag2.value == '1' || selectTag2.value == '2') && selectTag1.value == 'No'){
@@ -91,28 +83,24 @@
             document.getElementById('punto').style.display = 'none';
             document.getElementById('newtonpuntoraices').style.display = 'none';
             document.getElementById('secante').style.display = 'none';
-            document.getElementById('botonEjecucion').style.display='block';
         }else if(selectTag2.value == '3' && selectTag1.value == 'No'){
             document.getElementById('busqueda').style.display = 'none';
             document.getElementById('biseccionyregla').style.display = 'none';
             document.getElementById('punto').style.display = 'block';
             document.getElementById('newtonpuntoraices').style.display = 'none';
             document.getElementById('secante').style.display = 'none';
-            document.getElementById('botonEjecucion').style.display='block';
         }else if(( selectTag2.value == '4' || selectTag2.value == '6') && selectTag1.value == 'No'){
             document.getElementById('busqueda').style.display = 'none';
             document.getElementById('biseccionyregla').style.display = 'none';
             document.getElementById('punto').style.display = 'none';
             document.getElementById('newtonpuntoraices').style.display = 'block';
             document.getElementById('secante').style.display = 'none';
-            document.getElementById('botonEjecucion').style.display='block';
         }else if(selectTag2.value == '5' && selectTag1.value == 'No'){
             document.getElementById('busqueda').style.display = 'none';
             document.getElementById('biseccionyregla').style.display = 'none';
             document.getElementById('punto').style.display = 'none';
             document.getElementById('newtonpuntoraices').style.display = 'none';
             document.getElementById('secante').style.display = 'block';
-            document.getElementById('botonEjecucion').style.display='block';
         }
     }
 </script> 

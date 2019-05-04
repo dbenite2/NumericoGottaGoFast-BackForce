@@ -8,7 +8,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Biseccion</title>
+<title>Secante</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Metodos, Analisis numerico, GottaGoFast, Android Compatible web template"/>
@@ -97,7 +97,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<h2>
 		<a href="inicio.html">Inicio</a>
 		<i class="fa fa-angle-right"></i>
-		<span>Biseccion</span>
+		<span>Secante</span>
 	</h2>
 </div>
 <!--//banner-->
@@ -105,7 +105,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="grid-form1">
-		<p>Aquí se debe poner informacion sobre biseccion</p>
+		<p>Aquí se debe poner informacion sobre secante</p>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
@@ -116,7 +116,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		{% endif %}
 		<div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
-				<form class="form-horizontal" id="form" action="/biseccion" method="POST">
+				<form class="form-horizontal" id="form" action="/secante" method="POST">
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese una funcion F(X)</label>
 						<div class="col-sm-8">
@@ -159,107 +159,122 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 		<div class="grid-form1">
-			{% if raiz == 1 %}
-				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
-			{% elif raiz == 0%}
-				<p style="margin-bottom: 1%; text-align: center;">El metodo no encontro ninguna raiz con una tolerancia de {{tol}} en {{n}} iteraciones</p>
-				<table class="table">
-					<tbody>
-						<tr class="table-row">
-							<td class="table-text"><h7>N</h7></td>
-							<td class="table-text"><h7>X INF<h7></td>
-                            <td class="table-text"><h7>F(XINF)</h7></td>
-                            <td class="table-text"><h7>X SUP</h7></td>
-                            <td class="table-text"><h7>F(XSUP)</h7></td>
-                            <td class="table-text"><h7>X MED</h7></td>
-                            <td class="table-text"><h7>F(XMED)</h7></td>
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
-						</tr>
-						{% for item in ejecuciones %}
-					
-							<tr class="table-row">
-								<td class="table-text"><p>{{item[0]}}</p></td>
-								<td class="table-text"><p>{{item[1]}}</p></td>
-                                <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
-                                <td class="table-text"><p>{{item[7]}}</p></td>
-                                <td class="table-text"><p>{{item[8]}}</p></td>
-							</tr>
-						
-						{% endfor %}
-					</tbody>
-				</table>
-			{% elif raiz == 3 %}
-				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} con una tolerancia de {{tol}} </p>
-				<table class="table">
-					<tbody>
-							<tr class="table-row">
+                {% if raiz == 1 %}
+                    <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
+                {% elif raiz == 0%}
+                    <p style="margin-bottom: 1%; text-align: center;">El metodo no encontro ninguna raiz con una tolerancia de {{tol}} en {{n}} iteraciones</p>
+                    <table class="table">
+                        <tbody>
+                            <tr class="table-row">
                                 <td class="table-text"><h7>N</h7></td>
                                 <td class="table-text"><h7>X INF<h7></td>
                                 <td class="table-text"><h7>F(XINF)</h7></td>
                                 <td class="table-text"><h7>X SUP</h7></td>
                                 <td class="table-text"><h7>F(XSUP)</h7></td>
-                                <td class="table-text"><h7>X MED</h7></td>
-                                <td class="table-text"><h7>F(XMED)</h7></td>
                                 <td class="table-text"><h7>E. ABSOLUTO</h7></td>
                                 <td class="table-text"><h7>E. RELATIVO</h7></td>
-							</tr>
-						{% for item in ejecuciones %}
-							<tr class="table-row">
-                                <td class="table-text"><p>{{item[0]}}</p></td>
-                                <td class="table-text"><p>{{item[1]}}</p></td>
-                                <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
-                                <td class="table-text"><p>{{item[7]}}</p></td>
-                                <td class="table-text"><p>{{item[8]}}</p></td>
-							</tr>
-						
-						{% endfor %}
-					</tbody>
-				</table>
-				{% elif raiz == 2 %}
-				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
-				<table class="table">
-					<tbody>
-							<tr class="table-row">
-                                <td class="table-text"><h7>N</h7></td>
-                                <td class="table-text"><h7>X INF<h7></td>
-                                <td class="table-text"><h7>F(XINF)</h7></td>
-                                <td class="table-text"><h7>X SUP</h7></td>
-                                <td class="table-text"><h7>F(XSUP)</h7></td>
-                                <td class="table-text"><h7>X MED</h7></td>
-                                <td class="table-text"><h7>F(XMED)</h7></td>
-                                <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                                <td class="table-text"><h7>E. RELATIVO</h7></td>
-							</tr>
-						{% for item in ejecuciones %}
-							<tr class="table-row">
-                                <td class="table-text"><p>{{item[0]}}</p></td>
-                                <td class="table-text"><p>{{item[1]}}</p></td>
-                                <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
-                                <td class="table-text"><p>{{item[7]}}</p></td>
-                                <td class="table-text"><p>{{item[8]}}</p></td>
-							</tr>
-						
-						{% endfor %}
-					</tbody>
-				</table>
-			{% endif %}
-		</div>
-	</div>
-</div>
-</div>
+                            </tr>
+                            {% for item in ejecuciones %}
+                        
+                                <tr class="table-row">
+                                    <td class="table-text"><p>{{item[0]}}</p></td>
+                                    <td class="table-text"><p>{{item[1]}}</p></td>
+                                    <td class="table-text"><p>{{item[2]}}</p></td>
+                                    <td class="table-text"><p>{{item[3]}}</p></td>
+                                    <td class="table-text"><p>{{item[4]}}</p></td>
+                                    <td class="table-text"><p>{{item[5]}}</p></td>
+                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                </tr>
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% elif raiz == 3 %}
+                    <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} con una tolerancia de {{tol}} </p>
+                    <table class="table">
+                        <tbody>
+                                <tr class="table-row">
+                                    <td class="table-text"><h7>N</h7></td>
+                                    <td class="table-text"><h7>X INF<h7></td>
+                                    <td class="table-text"><h7>F(XINF)</h7></td>
+                                    <td class="table-text"><h7>X SUP</h7></td>
+                                    <td class="table-text"><h7>F(XSUP)</h7></td>
+                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                </tr>
+                            {% for item in ejecuciones %}
+                                <tr class="table-row">
+                                    <td class="table-text"><p>{{item[0]}}</p></td>
+                                    <td class="table-text"><p>{{item[1]}}</p></td>
+                                    <td class="table-text"><p>{{item[2]}}</p></td>
+                                    <td class="table-text"><p>{{item[3]}}</p></td>
+                                    <td class="table-text"><p>{{item[4]}}</p></td>
+                                    <td class="table-text"><p>{{item[5]}}</p></td>
+                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                </tr>
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% elif raiz == 2 %}
+                    <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
+                    <table class="table">
+                        <tbody>
+                                <tr class="table-row">
+                                    <td class="table-text"><h7>N</h7></td>
+                                    <td class="table-text"><h7>X INF<h7></td>
+                                    <td class="table-text"><h7>F(XINF)</h7></td>
+                                    <td class="table-text"><h7>X SUP</h7></td>
+                                    <td class="table-text"><h7>F(XSUP)</h7></td>
+                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                </tr>
+                            {% for item in ejecuciones %}
+                                <tr class="table-row">
+                                    <td class="table-text"><p>{{item[0]}}</p></td>
+                                    <td class="table-text"><p>{{item[1]}}</p></td>
+                                    <td class="table-text"><p>{{item[2]}}</p></td>
+                                    <td class="table-text"><p>{{item[3]}}</p></td>
+                                    <td class="table-text"><p>{{item[4]}}</p></td>
+                                    <td class="table-text"><p>{{item[5]}}</p></td>
+                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                </tr>
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% elif raiz == 4 %}
+                    <p style="margin-bottom: 1%; text-align: center;">Existen multiples raices cerca a X = {{xm}} </p>
+                    <table class="table">
+                        <tbody>
+                                <tr class="table-row">
+                                    <td class="table-text"><h7>N</h7></td>
+                                    <td class="table-text"><h7>X INF<h7></td>
+                                    <td class="table-text"><h7>F(XINF)</h7></td>
+                                    <td class="table-text"><h7>X SUP</h7></td>
+                                    <td class="table-text"><h7>F(XSUP)</h7></td>
+                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                </tr>
+                            {% for item in ejecuciones %}
+                                <tr class="table-row">
+                                    <td class="table-text"><p>{{item[0]}}</p></td>
+                                    <td class="table-text"><p>{{item[1]}}</p></td>
+                                    <td class="table-text"><p>{{item[2]}}</p></td>
+                                    <td class="table-text"><p>{{item[3]}}</p></td>
+                                    <td class="table-text"><p>{{item[4]}}</p></td>
+                                    <td class="table-text"><p>{{item[5]}}</p></td>
+                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                </tr>
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </div>
 
 <!--//faq-->
 

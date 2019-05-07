@@ -117,7 +117,7 @@ def reglaFalsa():
             xm = xi - (fxi*(xs-xi))/(fxs-fxi)
             fxm = f.subs(x,xm)
             errorAbs = abs(xm - xmAnt)
-            errorRel = errorAbs/xm
+            errorRel = abs(errorAbs/xm)
             ejecuciones.append([contador, xi, fxi, xs, fxs, xm, fxm, errorAbs, errorRel])
             contador = contador + 1
         if fxm == 0:
@@ -168,7 +168,7 @@ def biseccion():
             xm = (xi + xs) / 2
             fxm = f.subs(x,xm)
             errorAbs = abs(xm - xmAnt)
-            errorRel = errorAbs/xm
+            errorRel = abs(errorAbs/xm)
             ejecuciones.append([contador,xi,fxi,xs,fxs,xm,fxm,errorAbs,errorRel])
             contador = contador + 1
         if fxm == 0:

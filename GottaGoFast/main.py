@@ -23,9 +23,22 @@ def Biseccion():
 def ReglaFalsa():
     return render_template("reglaFalsa.html")
 
+@app.route('/puntoFijo')
+def puntoFijo():
+    return render_template("puntoFijo.html")
+
+@app.route('/newton') # falta implementacion completa 
+def Newton():
+    return render_template("newton.html")
+
+@app.route('/raicesMultiples')
+def Raices():
+    return render_template("raicesMultiples.html")
+
 @app.route('/secante')
 def Secante():
     return render_template("secante.html")
+
 
 @app.route('/secante', methods=['GET','POST'])
 def secante():
@@ -59,13 +72,13 @@ def secante():
         while fxs != 0 and errorAbs > tol and denominador != 0 and contador < ite:
             xn = xs - fxs*(xs-xi)/denominador
             errorAbs = abs(xn - xs)
-            errorRel = abs(errorAbs/xn)
+            errorRel = abs(errorAbs/xn) 
             xi = xs
             fxi = fxs
             xs = xn
             fxs = f.subs(x,xs)
             denominador = fxs - fxi
-            ejecuciones.append([contador, xi, fxi, xs, fxs, errorAbs, errorRel])      
+            ejecuciones.append([contador, xi, fxi, xs, fxs, "{:0.2e}".format(errorAbs),"{:0.2e}".format( errorRel)])      
             contador += 1
         if fxs == 0:
             return render_template('secante.html', raiz = 2, xm = xs, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))

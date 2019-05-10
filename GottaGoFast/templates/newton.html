@@ -1,0 +1,171 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Newton</title>
+{% include 'head.html' %}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+	<div class="content-main">
+ 
+<!--banner-->	
+<div class="banner">
+	<h2>
+		<a href="inicio.html">Inicio</a>
+		<i class="fa fa-angle-right"></i>
+		<span>Newton</span>
+	</h2>
+</div>
+<!--//banner-->
+
+<!--faq-->
+<div class="blank">
+	<div class="grid-form1">
+		<p>Aquí se debe poner informacion sobre Newton</p>
+	</div>
+	<div class="grid-form1">
+		<h3 style="text-align: center;">Ejecutar Metodo</h3>
+		{% if error == 1 %}
+				<div class="form-group has-error">
+					<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
+				</div>
+		{% endif %}
+		<div class="tab-content">
+			<div class="tab-pane active" id="horizontal-form">
+				<form class="form-horizontal" id="form" action="/newton" method="POST">
+					<div class="form-group">
+						<label for="focusedinput" class="col-sm-2 control-label">Ingrese una funcion F(X)</label>
+						<div class="col-sm-8">
+							<input type="text" id="fx" name="fx" class="form-control1" placeholder="F(x)" value="{{fx}}"> 
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="focusedinput" class="col-sm-2 control-label">Ingrese un x0</label>
+						<div class="col-sm-8">
+                                <input type="text" id="x0" class="form-control1" name="x0" placeholder="X0" value="{{x0}}">
+						</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Ingrese la tolerancia</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}">
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label for="focusedinput" class="col-sm-2 control-label">Ingrese las iteraciones</label>
+						<div class="col-sm-8">
+							<input type="text" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}">
+						</div>
+					</div>
+					{% include 'selector.html' %}
+					<div class="form-group">
+						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
+							<label class="hvr-shutter-in-horizontal login-sub">
+								<input type="submit" name="Ejecutar" value="Ejecutar"> <br />
+							</label>
+						</div>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="grid-form1">
+			{% if raiz == 1 %}
+				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
+			{% elif raiz == 0%}
+				<p style="margin-bottom: 1%; text-align: center;">El metodo no encontro ninguna raiz con una tolerancia de {{tol}} en {{n}} iteraciones</p>
+				<table class="table">
+					<tbody>
+						<tr class="table-row">
+							<td class="table-text"><h7>N</h7></td>
+							<td class="table-text"><h7>X0<h7></td>
+                            <td class="table-text"><h7>F(X0)</h7></td>
+                            <td class="table-text"><h7>DF(x0)</h7></td>
+                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+						</tr>
+						{% for item in ejecuciones %}
+					
+							<tr class="table-row">
+								<td class="table-text"><p>{{item[0]}}</p></td>
+								<td class="table-text"><p>{{item[1]}}</p></td>
+                                <td class="table-text"><p>{{item[2]}}</p></td>
+                                <td class="table-text"><p>{{item[3]}}</p></td>
+                                <td class="table-text"><p>{{item[4]}}</p></td>
+                                <td class="table-text"><p>{{item[5]}}</p></td>
+							</tr>
+						
+						{% endfor %}
+					</tbody>
+				</table>
+			{% elif raiz == 3 %}
+				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} con una tolerancia de {{tol}} </p>
+				<table class="table">
+					<tbody>
+						<tr class="table-row">
+							<td class="table-text"><h7>N</h7></td>
+							<td class="table-text"><h7>X0<h7></td>
+                            <td class="table-text"><h7>F(X0)</h7></td>
+                            <td class="table-text"><h7>DF(x0)</h7></td>
+                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+						</tr>
+						{% for item in ejecuciones %}
+					
+							<tr class="table-row">
+								<td class="table-text"><p>{{item[0]}}</p></td>
+								<td class="table-text"><p>{{item[1]}}</p></td>
+                                <td class="table-text"><p>{{item[2]}}</p></td>
+                                <td class="table-text"><p>{{item[3]}}</p></td>
+                                <td class="table-text"><p>{{item[4]}}</p></td>
+                                <td class="table-text"><p>{{item[5]}}</p></td>
+							</tr>
+						
+						{% endfor %}
+					</tbody>
+				</table>
+				{% elif raiz == 2 %}
+				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
+				<table class="table">
+					<tbody>
+						<tr class="table-row">
+							<td class="table-text"><h7>N</h7></td>
+							<td class="table-text"><h7>X0<h7></td>
+                            <td class="table-text"><h7>F(X0)</h7></td>
+                            <td class="table-text"><h7>DF(x0)</h7></td>
+                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+						</tr>
+						{% for item in ejecuciones %}
+					
+							<tr class="table-row">
+								<td class="table-text"><p>{{item[0]}}</p></td>
+								<td class="table-text"><p>{{item[1]}}</p></td>
+                                <td class="table-text"><p>{{item[2]}}</p></td>
+                                <td class="table-text"><p>{{item[3]}}</p></td>
+                                <td class="table-text"><p>{{item[4]}}</p></td>
+                                <td class="table-text"><p>{{item[5]}}</p></td>
+							</tr>
+						
+						{% endfor %}
+					</tbody>
+				</table>
+			{% endif %}
+		</div>
+	</div>
+</div>
+</div>
+
+<!--//faq-->
+
+<!---->
+<div class="copy">
+  <p> &copy; 2019 GottaGoFast. All Rights Reserved .</p>	   
+</div>
+<div class="clearfix"> </div>
+</div>
+  

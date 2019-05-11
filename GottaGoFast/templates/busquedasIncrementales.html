@@ -24,10 +24,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--//banner-->
 
 <!--faq-->
-<div class="blank">
-	<div class="grid-form1">
-		<p>Aquí se debe poner informacion sobre busquedas incrementales</p>
-	</div>
+<div class="blank">	
+	<div class="blank-page" style="margin-bottom: 1%">		
+		<p>El método de búsquedas incrementales consiste en encontrar un intervalo que contenga al menos una raíz partiendo de un extremo del intervalo e ir sumándole el incremento. Se evalúa la función buscando donde existe un cambio de signo, si este ocurre, en ese intervalo hay por lo menos una raíz.</p>
+		<p>A continuación, el procedimiento que se debe de seguir para la aplicación del método.</p>
+		<p> * Se determina un dominio de la función de interés.</p>
+		<p> * Se evalúa la función tomando un pequeño incremento y un valor inicial (Xo) seleccionado del dominio arbitrariamente.</p>
+		<p> *  Analizar el signo del producto de la evolución de un valor actual con el anterior y deducir con el si existe o no la raíz. Si el signo del producto es negativo, se puede dar como confirmado un intervalo que contiene la raíz, de otro modo no existe el intervalo.</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/busquedas.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+	</div>		   
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
 		{% if error == 1 %}
@@ -74,6 +82,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
+		{% if grafica == 1%}
+		<div class="grid-form1">
+			<div class="gallery-img">
+				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+					<span class="zoom-icon"> </span> </a>
+			</div>	
+		</div>
+		{% endif %}
 		<div class="grid-form1">
 			{% if raiz == 1 %}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X={{x1}} </p>

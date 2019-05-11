@@ -24,8 +24,21 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="grid-form1">
-		<p>Aquí se debe poner informacion sobre las Raices Multiples</p>
+	<div class="blank-page" style="margin-bottom: 1%">		
+		<p>Una de las condiciones para garantizar la convergencia del método de Newton es que la primera derivada f’(x) debe ser diferente de cero (0), donde x es la raíz de la ecuación f(x), pero si por el contrario la derivada se va aproximando a cero, se observa que va perdiendo rapidez y se debe hallar la segunda derivada f’’(x) para encontrar una solución.</p>
+		<p>Para poder hallar la segunda derivada, se debe de tener en cuenta la siguiente ecuación:</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/raices.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
+		<p> * Se debe elegir una aproximación inicial X0.</p>
+		<p> * Se calcula la X1 = Expresión … Xn = Expresión (n-1).</p>
+		<p> * Se repite el paso anterior hasta llegar a una aproximación.</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/raices2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
@@ -73,6 +86,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
+		{% if grafica == 1%}
+		<div class="grid-form1">
+			<div class="gallery-img">
+				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+					<span class="zoom-icon"> </span> </a>
+			</div>	
+		</div>
+		{% endif %}
 		<div class="grid-form1">
 			{% if raiz == 1 %}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
@@ -86,8 +107,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             <td class="table-text"><h7>F(Xn)</h7></td>
                             <td class="table-text"><h7>DF(xn)</h7></td>
                             <td class="table-text"><h7>DF2(xn)</h7></td>
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -97,8 +121,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
+                                {% if e == 0 %}
+                                	<td class="table-text"><p>{{item[5]}}</p></td>
+                                {% else %}	
+									<td class="table-text"><p>{{item[6]}}</p></td>
+								{% endif %}
 							</tr>
 						
 						{% endfor %}
@@ -114,8 +141,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             <td class="table-text"><h7>F(Xn)</h7></td>
                             <td class="table-text"><h7>DF(xn)</h7></td>
                             <td class="table-text"><h7>DF2(xn)</h7></td>
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -125,8 +155,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
+                                {% if e == 0 %}
+                                	<td class="table-text"><p>{{item[5]}}</p></td>
+                                {% else %}	
+									<td class="table-text"><p>{{item[6]}}</p></td>
+								{% endif %}
 							</tr>
 						
 						{% endfor %}
@@ -142,8 +175,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             <td class="table-text"><h7>F(Xn)</h7></td>
                             <td class="table-text"><h7>DF(xn)</h7></td>
                             <td class="table-text"><h7>DF2(xn)</h7></td>
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -153,8 +189,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-                                <td class="table-text"><p>{{item[5]}}</p></td>
-                                <td class="table-text"><p>{{item[6]}}</p></td>
+								{% if e == 0 %}
+                                	<td class="table-text"><p>{{item[5]}}</p></td>
+                                {% else %}	
+									<td class="table-text"><p>{{item[6]}}</p></td>
+								{% endif %}
 							</tr>
 						
 						{% endfor %}

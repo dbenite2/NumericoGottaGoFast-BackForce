@@ -25,8 +25,21 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="grid-form1">
-		<p>Aquí se debe poner informacion sobre secante</p>
+	<div class="blank-page" style="margin-bottom: 1%">		
+		<p>Este método es una variante del método de Newton y a partir de la formula iterativa del método de Newton se sustituye la derivada por una expresión que la aproxima.</p>
+		<p>Para hallar la intersección de la recta con el eje X usamos la siguiente fórmula:</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/secante.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>Cuando se tenga bien definida la expresión, se puede proceder de una forma similar a la de Newton.</p>
+		<p> * Se debe elegir dos aproximaciones iniciales X1 y X0</p>
+		<p> * Se calcula X2 = Expresión … Xn = Expresión (n-1)</p>
+		<p> * Se repite el paso anterior hasta que se llegue a una aproximación.</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/secante2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
@@ -80,6 +93,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
+        {% if grafica == 1%}
+		<div class="grid-form1">
+			<div class="gallery-img">
+				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+					<span class="zoom-icon"> </span> </a>
+			</div>	
+		</div>
+		{% endif %}
 		<div class="grid-form1">
                 {% if raiz == 1 %}
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
@@ -93,8 +114,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><h7>F(XINF)</h7></td>
                                 <td class="table-text"><h7>X SUP</h7></td>
                                 <td class="table-text"><h7>F(XSUP)</h7></td>
-                                <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                                <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                {% if e == 0 %}
+                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                {% else %}
+                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                {% endif %}
                             </tr>
                             {% for item in ejecuciones %}
                         
@@ -104,8 +128,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><p>{{item[2]}}</p></td>
                                     <td class="table-text"><p>{{item[3]}}</p></td>
                                     <td class="table-text"><p>{{item[4]}}</p></td>
-                                    <td class="table-text"><p>{{item[5]}}</p></td>
-                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% if e == 0 %}    
+                                        <td class="table-text"><p>{{item[5]}}</p></td>
+                                    {% else %}    
+                                        <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% endif %}
                                 </tr>
                             
                             {% endfor %}
@@ -121,8 +148,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><h7>F(XINF)</h7></td>
                                     <td class="table-text"><h7>X SUP</h7></td>
                                     <td class="table-text"><h7>F(XSUP)</h7></td>
-                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% if e == 0 %}
+                                        <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    {% else %}
+                                        <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% endif %}
                                 </tr>
                             {% for item in ejecuciones %}
                                 <tr class="table-row">
@@ -131,8 +161,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><p>{{item[2]}}</p></td>
                                     <td class="table-text"><p>{{item[3]}}</p></td>
                                     <td class="table-text"><p>{{item[4]}}</p></td>
-                                    <td class="table-text"><p>{{item[5]}}</p></td>
-                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% if e == 0 %}    
+                                        <td class="table-text"><p>{{item[5]}}</p></td>
+                                    {% else %}    
+                                        <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% endif %}
                                 </tr>
                             
                             {% endfor %}
@@ -148,8 +181,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><h7>F(XINF)</h7></td>
                                     <td class="table-text"><h7>X SUP</h7></td>
                                     <td class="table-text"><h7>F(XSUP)</h7></td>
-                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% if e == 0 %}
+                                        <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    {% else %}
+                                        <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% endif %}
                                 </tr>
                             {% for item in ejecuciones %}
                                 <tr class="table-row">
@@ -158,8 +194,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><p>{{item[2]}}</p></td>
                                     <td class="table-text"><p>{{item[3]}}</p></td>
                                     <td class="table-text"><p>{{item[4]}}</p></td>
-                                    <td class="table-text"><p>{{item[5]}}</p></td>
-                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% if e == 0 %}    
+                                        <td class="table-text"><p>{{item[5]}}</p></td>
+                                    {% else %}    
+                                        <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% endif %}
                                 </tr>
                             
                             {% endfor %}
@@ -175,8 +214,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><h7>F(XINF)</h7></td>
                                     <td class="table-text"><h7>X SUP</h7></td>
                                     <td class="table-text"><h7>F(XSUP)</h7></td>
-                                    <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                                    <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% if e == 0 %}
+                                        <td class="table-text"><h7>E. ABSOLUTO</h7></td>
+                                    {% else %}
+                                        <td class="table-text"><h7>E. RELATIVO</h7></td>
+                                    {% endif %}
                                 </tr>
                             {% for item in ejecuciones %}
                                 <tr class="table-row">
@@ -185,8 +227,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <td class="table-text"><p>{{item[2]}}</p></td>
                                     <td class="table-text"><p>{{item[3]}}</p></td>
                                     <td class="table-text"><p>{{item[4]}}</p></td>
-                                    <td class="table-text"><p>{{item[5]}}</p></td>
-                                    <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% if e == 0 %}    
+                                        <td class="table-text"><p>{{item[5]}}</p></td>
+                                    {% else %}    
+                                        <td class="table-text"><p>{{item[6]}}</p></td>
+                                    {% endif %}
                                 </tr>
                             
                             {% endfor %}

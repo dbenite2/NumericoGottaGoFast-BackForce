@@ -24,8 +24,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="grid-form1">
-		<p>Aquí se debe poner informacion sobre Punto Fijo</p>
+	<div class="blank-page" style="margin-bottom: 1%">		
+		<p>El método de Punto Fijo parte desde un punto inicial y aplicando la ecuación g(x)=0 se calcula los términos sucesivos, realizando repeticiones en el proceso hasta que se obtiene el resultado.</p>
+		<p>La ecuación x =g(x) se utiliza para generar la sucesión de {xn}n=0 que se define de la siguiente manera:</p>
+		<p> * Paso 0. Elegimos una aproximación inicial X0</p>
+		<p> * Paso 1. Se sustituye X0 en g para calcular X1, es decir, X1 = g(X0)</p>
+		<p> * Paso 2. Se sustituye X1 en g para calcular X2, es decir, X2 = g(X1)</p>
+		<p> * Paso n. Se sustituye Xn-1 en g para calcular Xn, es decir, Xn = g(Xn-1)</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/punto.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
@@ -79,6 +88,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
+		{% if grafica == 1%}
+		<div class="grid-form1">
+			<div class="gallery-img">
+				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+					<span class="zoom-icon"> </span> </a>
+			</div>	
+		</div>
+		<div class="grid-form1">
+			<div class="gallery-img">
+				<img class="img-responsive " src="{{url_for('static',filename='images/img2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+					<span class="zoom-icon"> </span> </a>
+			</div>	
+		</div>
+		{% endif %}
 		<div class="grid-form1">
 			{% if raiz == 1 %}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
@@ -90,8 +113,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<td class="table-text"><h7>N</h7></td>
 							<td class="table-text"><h7>Xn<h7></td>
                             <td class="table-text"><h7>F(Xn)</h7></td>
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -99,8 +125,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<td class="table-text"><p>{{item[0]}}</p></td>
 								<td class="table-text"><p>{{item[1]}}</p></td>
                                 <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
+                                {% if e == 0 %}
+                                	<td class="table-text"><p>{{item[3]}}</p></td>
+                                {% else %}
+									<td class="table-text"><p>{{item[4]}}</p></td>
+                                {% endif %}
                                 
 							</tr>
 						
@@ -115,9 +144,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<td class="table-text"><h7>N</h7></td>
 							<td class="table-text"><h7>Xn<h7></td>
                             <td class="table-text"><h7>F(Xn)</h7></td>
-                            
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -125,9 +156,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<td class="table-text"><p>{{item[0]}}</p></td>
 								<td class="table-text"><p>{{item[1]}}</p></td>
                                 <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
-                                
+								{% if e == 0 %}
+                                	<td class="table-text"><p>{{item[3]}}</p></td>
+                                {% else %}
+									<td class="table-text"><p>{{item[4]}}</p></td>
+                                {% endif %}
 							</tr>
 						
 						{% endfor %}
@@ -141,9 +174,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<td class="table-text"><h7>N</h7></td>
 							<td class="table-text"><h7>Xn<h7></td>
                             <td class="table-text"><h7>F(Xn)</h7></td>
-                            
-                            <td class="table-text"><h7>E. ABSOLUTO</h7></td>
-                            <td class="table-text"><h7>E. RELATIVO</h7></td>
+                            {% if e == 0 %}
+                            	<td class="table-text"><h7>E. ABSOLUTO</h7></td>
+							{% else %}
+                            	<td class="table-text"><h7>E. RELATIVO</h7></td>
+							{% endif %}
 						</tr>
 						{% for item in ejecuciones %}
 					
@@ -151,9 +186,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<td class="table-text"><p>{{item[0]}}</p></td>
 								<td class="table-text"><p>{{item[1]}}</p></td>
                                 <td class="table-text"><p>{{item[2]}}</p></td>
-                                <td class="table-text"><p>{{item[3]}}</p></td>
-                                <td class="table-text"><p>{{item[4]}}</p></td>
-                                
+                                {% if e == 0 %}
+                                	<td class="table-text"><p>{{item[3]}}</p></td>
+                                {% else %}
+									<td class="table-text"><p>{{item[4]}}</p></td>
+                                {% endif %}
 							</tr>
 						
 						{% endfor %}

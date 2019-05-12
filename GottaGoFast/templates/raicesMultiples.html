@@ -51,7 +51,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="tab-pane active" id="horizontal-form">
 				<form class="form-horizontal" id="form" action="/raicesMultiples" method="POST">
 					<div class="form-group">
-						<label for="focusedinput" class="col-sm-2 control-label">Ingrese una funcion F(X)</label>
+						<label for="focusedinput" class="col-sm-2 control-label">Ingrese una funcion F(X) <i class="fas fa-info-circle" data-toggle="tooltip" title="Log() se recibe como ln(); e^n se recibe como exp(n) o E^n"></i></label>
 						<div class="col-sm-8">
 							<input type="text" id="fx" name="fx" class="form-control1" placeholder="F(x)" value="{{fx}}"> 
 						</div>
@@ -121,11 +121,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-                                {% if e == 0 %}
-                                	<td class="table-text"><p>{{item[5]}}</p></td>
-                                {% else %}	
-									<td class="table-text"><p>{{item[6]}}</p></td>
-								{% endif %}
+                                <td class="table-text"><p>{{item[5]}}</p></td>
+                                
 							</tr>
 						
 						{% endfor %}
@@ -155,11 +152,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-                                {% if e == 0 %}
-                                	<td class="table-text"><p>{{item[5]}}</p></td>
-                                {% else %}	
-									<td class="table-text"><p>{{item[6]}}</p></td>
-								{% endif %}
+                                <td class="table-text"><p>{{item[5]}}</p></td>
 							</tr>
 						
 						{% endfor %}
@@ -189,11 +182,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <td class="table-text"><p>{{item[2]}}</p></td>
                                 <td class="table-text"><p>{{item[3]}}</p></td>
                                 <td class="table-text"><p>{{item[4]}}</p></td>
-								{% if e == 0 %}
-                                	<td class="table-text"><p>{{item[5]}}</p></td>
-                                {% else %}	
-									<td class="table-text"><p>{{item[6]}}</p></td>
-								{% endif %}
+                                <td class="table-text"><p>{{item[5]}}</p></td>
 							</tr>
 						
 						{% endfor %}

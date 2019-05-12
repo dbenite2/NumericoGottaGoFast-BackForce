@@ -94,7 +94,7 @@ div#wrapper {
   top: 11px;
 }
 .label.label-info {
-  background-color:#ef553a;
+  background-color:#3a73ef;
 }
 .label {
   padding: 4px 6px;
@@ -195,7 +195,7 @@ div#wrapper {
   top: 20px;
 }
 .navbar .navbar-nav li a .badge {
-  background: #ff5454;
+  background: #3a73ef;
   border: 2px solid white;
   position: absolute;
   top: 9px;
@@ -220,7 +220,7 @@ h1 a.navbar-brand {
 	font-size: 30px;
 	font-weight: 500;
     padding: 20px 0px;
-    background: #d95459;
+    background: #3a73ef;
     text-align: center;
 	width:248px;
 	height: 60px;
@@ -228,7 +228,7 @@ h1 a.navbar-brand {
 }
 .navbar-default .navbar-brand:hover {
     color: #fff;
-    background-color: #d95459;
+    background-color: #3a73ef;
 }
 .navbar-right {
   margin-right: 10px !important;

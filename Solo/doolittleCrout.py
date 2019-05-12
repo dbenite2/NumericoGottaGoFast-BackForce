@@ -4,6 +4,7 @@ tablaA = []
 
 def doolittle(A,n, met):
     L,U = inicializa(n,met)
+    determinante = 1
     for k in range(n):
         suma1 = 0
         for p in range(0,k):
@@ -27,13 +28,13 @@ def doolittle(A,n, met):
                 U[k][j]= (A[k][j]-suma3)/float(L[k][k])
         #imprimir L  U y k etapa
 
-    determinante = (L[0][0]*L[1][1]*L[2][2])*(U[0][0]*U[1][1]*U[2][2])
+    for i in range(n):
+        determinante = determinante * L[i-1][i-1]
 
     print("Solucion")
     print(L)
     print(U)
-    print("Determinante")
-    print(determinante)
+    print("Determinante es: ", determinante)
     return L,U
 
 #Doolittle == 0, Crout == 1, Cholesky == 2
@@ -52,25 +53,16 @@ def inicializa(n,metodo):
 def main():
     global tablaA
 
-    s = int(input('Ingresa el metodo Doolittle = 0, Court = 1: '))
+    s = int(input("Ingresa el metodo a implementar 0 para Doolittle y 1 para Crout: "))
 
-    a11 = float(input('Ingresa el valor a11: '))
-    a12 = float(input('Ingresa el valor a12: '))
-    a13 = float(input('Ingresa el valor a13: '))
-    a21 = float(input('Ingresa el valor a21: '))
-    a22 = float(input('Ingresa el valor a22: '))
-    a23 = float(input('Ingresa el valor a23: '))
-    a31 = float(input('Ingresa el valor a31: '))
-    a32 = float(input('Ingresa el valor a32: '))
-    a33 = float(input('Ingresa el valor a33: '))
-
-    tablaA.append([a11,a12,a13])
-    tablaA.append([a21,a22,a23])
-    tablaA.append([a31,a32,a33])
+    rows = int(input("Ingresa el tamaño de la matriz: "))
+    print("Ingresa la matriz %s x %s: "% (rows, rows))
+    for i in range(rows):
+        tablaA.append(list(map(int, input().rstrip().split())))
 
     print(tablaA)
 
-    doolittle(tablaA,3, s)
+    doolittle(tablaA,rows, s)
 
 
 if __name__ == "__main__":

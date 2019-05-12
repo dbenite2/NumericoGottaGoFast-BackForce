@@ -4,29 +4,36 @@ from math import sqrt
 from pprint import pprint
 
 tablaA = []
+ 
+def cholesky(C):
+    
+    m = len(C)
 
-def cholesky(A):
-    L = [[0.0] * len(A) for _ in range(len(A))]
-    for i, (Ai, Li) in enumerate(zip(A, L)):
-        for j, Lj in enumerate(L[:i+1]):
-            s = sum(Li[k] * Lj[k] for k in range(j))
-            Li[j] = sqrt(Ai[i] - s) if (i == j) else \
-                      (1.0 / Lj[j] * (Ai[j] - s))
+    L = [[0.0] * m for i in range(m)]
+
+    for i in range(m):
+        for j in range(i+1):
+            Temp = sum(L[i][k] * L[j][k] for k in range(j))
+            
+		# For Diagonal elements
+            if (i == j):
+                
+                L[i][j] = sqrt(C[i][i] - Temp)
+            else:
+                # For Non Diagonal Elements
+                L[i][j] = (1.0 / L[j][j] * (C[i][j] - Temp))
     return L
  
-a11 = float(input('Ingresa el valor a11: '))
-a12 = float(input('Ingresa el valor a12: '))
-a13 = float(input('Ingresa el valor a13: '))
-a21 = float(input('Ingresa el valor a21: '))
-a22 = float(input('Ingresa el valor a22: '))
-a23 = float(input('Ingresa el valor a23: '))
-a31 = float(input('Ingresa el valor a31: '))
-a32 = float(input('Ingresa el valor a32: '))
-a33 = float(input('Ingresa el valor a33: '))
+rows = int(input("Ingresa el tamaño de la fila: "))
+colum = int(input("Ingresa el tamaño de la columna: "))
+print("Ingresa la matriz: ")
+print("Ejemplo: ")
+print("2 5 18 8")
+print("5 18 46")
+print("18 46 327")
+for i in range(rows):
+    tablaA.append(list(map(int, input().rstrip().split())))
 
-tablaA.append([a11,a12,a13])
-tablaA.append([a21,a22,a23])
-tablaA.append([a31,a32,a33])
 L = cholesky(tablaA)
 
 print("A:")

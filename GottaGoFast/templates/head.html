@@ -5,9 +5,13 @@
 <link href=" {{url_for('static',filename='css/bootstrap.min.css')}}" rel='stylesheet' type='text/css' />
 <!-- Custom Theme files -->
 <link href="{{url_for('static',filename='css/style.css')}}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <link href="{{url_for('static',filename='css/font-awesome.css')}}" rel="stylesheet"> 
 <script src="{{url_for('static',filename='js/jquery.min.js')}}"> </script>
 <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
   
 <!-- Mainly scripts -->
 <script src="{{url_for('static',filename='js/jquery.metisMenu.js')}}"></script>
@@ -33,6 +37,9 @@
 
 			
 	});
+  $(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+  });
 </script>
 <script src="{{url_for('static',filename='js/jquery.nicescroll.js')}}"></script>
 <script src="{{url_for('static',filename='js/scripts.js')}}"></script>

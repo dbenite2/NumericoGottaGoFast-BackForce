@@ -10,6 +10,7 @@ import math
 from sympy import *
 from sympy.parsing.sympy_parser import parse_expr,convert_xor,standard_transformations,implicit_multiplication,implicit_application,function_exponentiation,factorial_notation,rationalize
 import os
+from math import pi
 
 f = Function('fx')
 X = Symbol('x')
@@ -20,7 +21,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def paginaPrincipal():
-    return '<h1>Aqui va la pagina principal</h1>'
+    return render_template("inicio.html")
 
 @app.route('/busquedasIncrementales')
 def busquedas_incrementales():
@@ -93,19 +94,19 @@ def Busquedas_incrementales():
                 x0n = x1
                 ejecuciones.append([contador,str(x0n),str(fx0)])
                 graficar(1,f,'',puntoInicial,x0n,delta/10)
-                return render_template('busquedasIncrementales.html',e = e ,grafica = 1, x1 = x1, raiz = 2, error = 0,ejecuciones = ejecuciones, fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
+                return render_template('busquedasIncrementales.html',grafica = 1, x1 = x1, raiz = 2, error = 0,ejecuciones = ejecuciones, n = contador , fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
             elif (fx0 * fx1) < 0:
                 fx0 = fx1
                 x0n = x1
                 graficar(1,f,'',puntoInicial,x0n,delta/10)
                 ejecuciones.append([contador,x0n,fx0])
-                return render_template('busquedasIncrementales.html', e = e,grafica = 1, n = contador, ejecuciones = ejecuciones, raiz = 3, error = 0, x0 = x0, x1 = x1,fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
+                return render_template('busquedasIncrementales.html',grafica = 1, n = contador, ejecuciones = ejecuciones , raiz = 3, error = 0, x0 = x0, x1 = x1,fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
             else: 
                 fx0 = fx1
                 x0n = x1
                 graficar(1,f,'',puntoInicial,x0n, delta/10)
                 ejecuciones.append([contador,str(x0n),str(fx0)])
-                return render_template('busquedasIncrementales.html',e = e ,grafica = 1, n = contador, ejecuciones = ejecuciones, raiz = 0, error = 0, x0 = x0, x1 = x1, fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
+                return render_template('busquedasIncrementales.html',grafica = 1, n = contador, ejecuciones = ejecuciones , raiz = 0, error = 0, x0 = x0, x1 = x1, fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
     else:
         if (metodo == "biseccion") or (metodo == "reglaFalsa") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
@@ -151,7 +152,7 @@ def Biseccion():
         else:
             xm = (xi + xs) / 2
             fxm = Funcion_f(f,xm)
-            ejecuciones.append([0,str(xi),str("{:+.2e}".format(fxi)),str(xs),str("{:+.2e}".format(fxs)),str(xm),str("{:+.2e}".format(fxm)),'No Hay','No Hay'])
+            ejecuciones.append([0,str(xm),str("{:+.2e}".format(fxm)),'No Hay','No Hay'])
             contador = 1
             error = tol + 1
             while fxm != 0 and error > tol and contador < ite:
@@ -171,14 +172,14 @@ def Biseccion():
                         error = abs((xm - xmAnt)/xm)
                     else:
                         error = 0
-                ejecuciones.append([contador,xi,"{:+.2e}".format(fxi),xs,"{:+.2e}".format(fxs),xm,"{:+.2e}".format(fxm),"{:.2e}".format(error)])
+                ejecuciones.append([contador,xm,"{:+.2e}".format(fxm),"{:.2e}".format(error)])
                 contador = contador + 1
             if fxm == 0:
-                return render_template('biseccion.html', e = e, grafica = 1 ,raiz = 2, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('biseccion.html', e = e, grafica = 1 ,raiz = 2, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             elif error < tol:
-                return render_template('biseccion.html',e = e, grafica = 1 , raiz = 3, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('biseccion.html',e = e, grafica = 1 , raiz = 3, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             else:
-                return render_template('biseccion.html',e = e, grafica = 1 , raiz = 0, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('biseccion.html',e = e, grafica = 1 , raiz = 0, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
@@ -215,7 +216,9 @@ def Regla_falsa():
         ite = int(request.form.get('ite'))
         if ite <= 0:
             return render_template('reglaFalsa.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El numero de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+        print('FXI')
         fxi = Funcion_f(f,xi)
+        print('FXs')
         fxs = Funcion_f(f,xs)
         puntoInicial = xi
         puntoFinal = xs
@@ -225,11 +228,11 @@ def Regla_falsa():
         elif fxs == 0:
             return render_template('reglaFalsa.html', grafica = 1,  error = 0, raiz = 1, xm = xs, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         elif fxs*fxi > 0:
-            return render_template('reglaFalsa.html',  grafica = 1, error = 1, mensajeError = 'En el intervalor ingresado no hay ninguna raiz', tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+            return render_template('reglaFalsa.html', grafica = 1, error = 1, mensajeError = 'En el intervalor ingresado no hay ninguna raiz', tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         else:
             xm = xi - (fxi*(xs-xi))/(fxs-fxi)
             fxm = Funcion_f(f,xm)
-            ejecuciones.append([0, xi, "{:+.2e}".format(fxi), xs, "{:+.2e}".format(fxs), xm, "{:+.2e}".format(fxm), 'No Hay', 'No Hay'])
+            ejecuciones.append([0, xm, "{:+.2e}".format(fxm), 'No Hay', 'No Hay'])
             contador = 1
             error = tol + 1
             while fxm != 0 and error > tol and contador < ite:
@@ -246,17 +249,17 @@ def Regla_falsa():
                     error = abs(xm - xmAnt)
                 elif e == 1:
                     if(xm != 0):
-                        error = abs((xm - xAnt)/xm)
+                        error = abs((xm - xmAnt)/xm)
                     else:
                         error = 0
-                ejecuciones.append([contador, xi, "{:+.2e}".format(fxi), xs, "{:+.2e}".format(fxs), xm, "{:+.2e}".format(fxm), "{:.2e}".format(error)])
+                ejecuciones.append([contador, xm, "{:+.2e}".format(fxm), "{:.2e}".format(error)])
                 contador = contador + 1
             if fxm == 0:
-                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 2, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 2, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             elif error < tol:
-                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 3, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 3, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             else:
-                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 0, xm = xm, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('reglaFalsa.html',e = e, grafica = 1, raiz = 0, xm = xm, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error) , n = contador ,tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
     else:
         if (metodo == "biseccion") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
@@ -292,6 +295,7 @@ def Punto_fijo():
         if ite <= 0: 
             return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
+        primerPunto = x0
         fxa = Funcion_f(f,x0)
         contador = 0
         error = tol + 1
@@ -324,13 +328,13 @@ def Punto_fijo():
                 puntoFinal = puntoFinal+2
         if fxa == 0:
             graficar(2,f,g,puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, tolFinal ="{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         elif error < tol:
             graficar(2,f,g,puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         else:
             graficar(2,f,g,puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
@@ -364,11 +368,12 @@ def Newton():
         if ite <= 0: 
             return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
+        primerPunto = x0
         fx0 = Funcion_f(f,x0)
         dfx0 = Funcion_p(f,x0)
         error = tol + 1
         contador = 0
-        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0), 'No Hay', 'No Hay'])
+        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), 'No Hay', 'No Hay'])
         while fx0 != 0 and dfx0 != 0 and error > tol and contador < ite:
             x1 = x0 - (fx0/dfx0)
             fx0 = Funcion_f(f,x1)
@@ -377,14 +382,14 @@ def Newton():
                 error = abs(x1 - x0)
             elif e == 1:
                 if(x1 != 0):
-                    error = abs(x1 - x0/x1)
+                    error = abs((x1 - x0)/x1)
                 else:
                     error = 0
             x0 = x1
             if(contador == 0):
                 primerPunto = x0
             contador += 1 
-            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0), "{:.2e}".format(error)])
+            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:.2e}".format(error)])
         if(abs(abs(puntoInicial)-abs(primerPunto)) > abs(abs(puntoInicial)-abs(x0))):
             puntoFinal = primerPunto
         else:
@@ -394,16 +399,16 @@ def Newton():
                 puntoFinal = puntoFinal+2
         if fx0 == 0:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('newton.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         elif error < tol:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('newton.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error),  tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         elif dfx0 == 0:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('newton.html',e = e, grafica = 1, raiz = 4, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html',e = e, grafica = 1, raiz = 4, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error),  tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         else:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('newton.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error),  tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
@@ -455,31 +460,31 @@ def Secante():
             contador = 0
             error = tol + 1
             denominador = fxs - fxi
-            ejecuciones.append([contador, xi, "{:+.2e}".format(fxi), xs, "{:+.2e}".format(fxs), 'No Hay'])
+            ejecuciones.append([contador, xs, "{:+.2e}".format(fxs), 'No Hay'])
             while fxs != 0 and error > tol and denominador != 0 and contador < ite:
-                xn = xs - fxs*(xs-xi)/denominador
+                xn = (xs - (fxs*(xs-xi)/denominador))
                 if e == 0:
-                    errorAbs = abs(xn - xs)
+                    error = abs(xn - xs)
                 elif e == 1:
                     if(xn != 0):
-                        errorRel = abs((xn - xs)/xn)
+                        error = abs((xn - xs)/xn)
                     else:
-                        errorRel = 0
+                        error = 0
                 xi = xs
                 fxi = fxs
                 xs = xn
                 fxs = Funcion_f(f,xs)
                 denominador = fxs - fxi     
                 contador += 1
-                ejecuciones.append([contador, xi, "{:+.2e}".format(fxi), xs, "{:+.2e}".format(fxs), "{:.2e}".format(error)])
+                ejecuciones.append([contador, xs, "{:+.2e}".format(fxs), "{:.2e}".format(error)])
             if fxs == 0:
-                return render_template('secante.html',e = e, grafica = 1, raiz = 2, xm = xs, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
-            elif errorAbs < tol:
-                return render_template('secante.html',e = e, grafica = 1, raiz = 3, xm = xs, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('secante.html',e = e, grafica = 1, raiz = 2, xm = xs, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+            elif error < tol:
+                return render_template('secante.html',e = e, grafica = 1, raiz = 3, xm = xs, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error),  tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             elif denominador == 0 :
-                return render_template('secante.html',e = e, grafica = 1, raiz = 4, xm = xs, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('secante.html',e = e, grafica = 1, raiz = 4, xm = xs, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
             else:
-                return render_template('secante.html',e = e, grafica = 1, raiz = 0, xm = xs, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+                return render_template('secante.html',e = e, grafica = 1, raiz = 0, xm = xs, ejecuciones = ejecuciones, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), n = contador, fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
     else:
         if (metodo == "biseccion") or (metodo == "reglaFalsa"):
             f = parse_expr(request.form.get('fx'))
@@ -513,32 +518,32 @@ def Raices_multiples():
         if ite <= 0:
             return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe de ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
+        primerPunto = x0
         fx0 = Funcion_f(f,x0)
         dfx0 = Funcion_p(f,x0)
         d2fx0 = Funcion_p2(f,x0)
         den = (dfx0**2) - (fx0*d2fx0)
         error = tol + 1 
         contador = 0
-        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0), "{:+.2e}".format(d2fx0), 'No Hay', 'No Hay'])
-        while (fx0 != 0) and (error_abs > tol) and (den != 0) and (contador < ite):
+        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), 'No Hay', 'No Hay'])
+        while (fx0 != 0) and (error > tol) and (den != 0) and (contador < ite):
             den = (dfx0*dfx0) - (fx0*d2fx0)
             x1 = x0 - ((fx0 * dfx0) / den)
-            print("x1: " , x1)
             fx0 = float(Funcion_f(f,x1))
             dfx0 = float(Funcion_p(f,x1))
             d2fx0 = float(Funcion_p2(f,x1))
             if e == 0:
-                error = abs((x1 - x0))
+                error = abs(x1 - x0)
             elif e == 1:
                 if(x1 != 0):    
-                    error_rel = abs((error_abs/x1))
+                    error = abs((x1 - x0)/x1)
                 else:
-                    error_rel = 0
+                    error = 0
             x0 = x1
             if(contador == 0):
                 primerPunto = x0
             contador += 1
-            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0), "{:+.2e}".format(d2fx0) , "{:.2e}".format(error)])
+            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:.2e}".format(error)])
         if(abs(abs(puntoInicial)-abs(primerPunto)) > abs(abs(puntoInicial)-abs(x0))):
             puntoFinal = primerPunto
         else:
@@ -548,16 +553,16 @@ def Raices_multiples():
                 puntoFinal = puntoFinal+2
         if fx0 == 0:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
-        elif error_abs < tol:
+            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 2, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+        elif error < tol:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 3, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         elif dfx0 == 0:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 4, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 4, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         else:
             graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
-            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultiples.html',e = e, grafica = 1, raiz = 0, xs = x0, ejecuciones = ejecuciones, n = contador, tolFinal = "{:.2e}".format(error), tol = request.form.get('tol'), fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
@@ -580,21 +585,30 @@ def Funcion_f(fx,entrada):
     fx = str(fx)
     print("fx: ",fx)
     print("eval: ", eval(fx))
-    return eval(fx)
+    fx = eval(fx)
+    fx = complex(fx)
+    fx = fx.real
+    return fx
 
 def Funcion_p(fx,entrada):
     fpx = str(diff(fx,X))
     x = entrada
     print("f'x: ",fpx)
     print("eval: ", eval(fpx))
-    return eval(fpx)
+    fpx = eval(fpx)
+    fpx = complex(fpx)
+    fpx = fpx.real
+    return fpx
 
 def Funcion_p2(fx,entrada):
     fp2x = str(diff(fx,X,2))
     x = entrada
     print("f''x: ",fp2x)
     print("eval: ", eval(fp2x))
-    return eval(fp2x)
+    fp2x = eval(fp2x)
+    fp2x = complex(fp2x)
+    fp2x = fp2x.real
+    return fp2x
 
 def graficar(opcion, funcion, funcion2, puntoInicial,puntoFinal, paso):
     global f
@@ -604,9 +618,8 @@ def graficar(opcion, funcion, funcion2, puntoInicial,puntoFinal, paso):
         puntoInicial = puntoFinal
         puntoFinal = ac
     if(opcion == 0):
-        os.remove('.\static\images\img.png')
         a=np.arange(puntoInicial-2,puntoInicial+2,paso)
-        b=[funcion.subs(x,a[ai]) for ai in range(len(a))]
+        b=[Funcion_f(f,a[ai]) for ai in range(len(a))]
         plt.plot(a,b,label='f(x)')
         plt.xlabel('X')
         plt.ylabel('Y')
@@ -614,12 +627,12 @@ def graficar(opcion, funcion, funcion2, puntoInicial,puntoFinal, paso):
         plt.autoscale()
         plt.grid()
         plt.legend(loc=1)
-        plt.savefig('.\static\images\img.png')
+        plt.savefig('GottaGoFast\static\images\img.png')
         plt.delaxes()
     elif(opcion == 1):
-        os.remove('.\static\images\img.png')
+        print('VALORES')
         a=np.arange(puntoInicial,puntoFinal,paso)
-        b=[funcion.subs(x,a[ai]) for ai in range(len(a))]
+        b=[Funcion_f(f,a[ai]) for ai in range(len(a))]
         plt.plot(a,b,label='f(x)')
         plt.xlabel('X')
         plt.ylabel('Y')
@@ -627,13 +640,12 @@ def graficar(opcion, funcion, funcion2, puntoInicial,puntoFinal, paso):
         plt.autoscale()
         plt.grid()
         plt.legend(loc=1)
-        plt.savefig('.\static\images\img.png')
+        plt.savefig('GottaGoFast\static\images\img.png')
         plt.delaxes()
     elif(opcion == 2):
         a=np.arange(puntoInicial,puntoFinal,paso)
-        os.remove('.\static\images\img.png')
         a=np.arange(puntoInicial,puntoFinal,paso)
-        b=[funcion.subs(x,a[ai]) for ai in range(len(a))]
+        b=[Funcion_f(f,a[ai]) for ai in range(len(a))]
         plt.plot(a,b,label='f(x)')
         b=[funcion2.subs(x,a[ai]) for ai in range(len(a))]
         plt.plot(a,b,label='g(x)')
@@ -643,7 +655,7 @@ def graficar(opcion, funcion, funcion2, puntoInicial,puntoFinal, paso):
         plt.autoscale()
         plt.grid()
         plt.legend(loc=1)
-        plt.savefig('.\static\images\img.png')
+        plt.savefig('GottaGoFast\static\images\img.png')
         plt.delaxes()
 
 if __name__ == '__main__':

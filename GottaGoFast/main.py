@@ -23,6 +23,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 def paginaPrincipal():
     return render_template("inicio.html")
 
+#-------------------------------------------------ECUACIONES DE UNA VARIABLE-------------------------------------------------
+
 @app.route('/busquedasIncrementales')
 def busquedas_incrementales():
     return render_template("busquedasIncrementales.html")
@@ -525,7 +527,7 @@ def Raices_multiples():
         den = (dfx0**2) - (fx0*d2fx0)
         error = tol + 1 
         contador = 0
-        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), 'No Hay', 'No Hay'])
+        ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0), 'No Hay', 'No Hay'])
         while (fx0 != 0) and (error > tol) and (den != 0) and (contador < ite):
             den = (dfx0*dfx0) - (fx0*d2fx0)
             x1 = x0 - ((fx0 * dfx0) / den)
@@ -543,7 +545,7 @@ def Raices_multiples():
             if(contador == 0):
                 primerPunto = x0
             contador += 1
-            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:.2e}".format(error)])
+            ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), "{:+.2e}".format(dfx0) , "{:.2e}".format(error)])
         if(abs(abs(puntoInicial)-abs(primerPunto)) > abs(abs(puntoInicial)-abs(x0))):
             puntoFinal = primerPunto
         else:
@@ -579,6 +581,22 @@ def Raices_multiples():
             # ite = int(request.form.get('ite'))
             # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
+
+#-------------------------------------------------ECUACIONES DE UNA VARIABLE-------------------------------------------------
+
+
+
+
+#-------------------------------------------------- SISTEMAS DE ECUACIONES---------------------------------------------------
+@app.route('/eliminacionGaussiana')
+def eliminacionGaussiana():
+    return render_template("eliminacionGaussiana.html")
+
+@app.route('/eliminacionGaussiana', methods = ['POST'])
+def EliminacionGaussiana():
+    n = int(request.form.get('tamaño'))
+    matriz  = np.empty((n,n))
+    return render_template("eliminacionGaussiana.html", matriz = matriz, n = n)
 
 def Funcion_f(fx,entrada):
     x = entrada

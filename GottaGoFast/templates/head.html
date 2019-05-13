@@ -41,6 +41,24 @@
   $('[data-toggle="tooltip"]').tooltip();   
   });
 </script>
+<script language="javascript">
+function crear(){
+var col = document.getElementById("cols").value;
+var filas = col
+var tabla="<table class=\"table\" border=\"0\">";
+for(i=0;i<filas;i++){
+tabla+="<tr class=\"table-row\">";
+for(j=0;j<col;j++){ 
+tabla+="<td class=\"table-text\">"+"<input class=\"form-control1\" type=\"text\" id=\""+i+j+"\" name=\""+i+j+"\" placeholder=\""+i+j+"\" value=\"\"\{\{matriz["+i+"]["+j+"] \}\} >"+"</td>";
+}
+tabla+="</tr>";
+}
+tabla+="</table>";
+tabla+="<input type=\"text\"class=\"form-control1\" style=\"visibility:hidden\" name=\"tamaño\" value=\""+col+"\"type=\"text\">";
+document.getElementById("resultado").innerHTML=tabla;
+}
+
+</script>
 <script src="{{url_for('static',filename='js/jquery.nicescroll.js')}}"></script>
 <script src="{{url_for('static',filename='js/scripts.js')}}"></script>
 

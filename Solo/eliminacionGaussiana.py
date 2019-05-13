@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import numpy as np
 
 tablaA = []
 tablaB = []
@@ -8,30 +9,30 @@ def eliminacion_gaussiana_pivoteo(A,b,metodo):
     marcas = np.arange(n)
     Ab = forma_matriz_aumentada(A,b,n)
     for k in range(n-1):
-        print "Etapa ",k
+        print ("Etapa ",k)
         if metodo == 1:
             Ab = pivoteo_parcial(Ab,k,n)
         elif metodo == 2:
             Ab,marcas = pivoteo_total(Ab,k,marcas,n)
-            print "Marcas ",marcas
+            print ("Marcas ",marcas)
         elif metodo == 3:
             s = []
             for i in range(len(A)):
                 s.append(max(A[i]))
-            print s
+            print(s)
             Ab = pivoteo_escalonado(Ab,k,n,s)
         for i in range(k+1,n):
             if Ab[k][k]:
                 multiplicador = Ab[i][k]/float(Ab[k][k])
-                print "multiplicador fila ",i," ",multiplicador
+                print ("multiplicador fila ",i," ",multiplicador)
             else:
                 # raise Exception("Error, división por 0")
                 sys.exit()
-                print "Error, división por 0"
+                print ("Error, división por 0")
             for j in range(k,n+1):
                 Ab[i][j] = Ab[i][j] - multiplicador * Ab[k][j]
 
-        print "Matriz aumentada \n",npy.array(Ab)
+        print ("Matriz aumentada \n",npy.array(Ab))
 
     if metodo ==  1:
         return Ab

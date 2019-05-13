@@ -396,6 +396,16 @@ nav.navbar.navbar-static-top {
 	font-size: 0.9em;
 	
 }
+.navbar-left-right input[type="button"]{
+	background: url(../images/search.png) 0px 2px no-repeat;
+	width:16px;
+	height:16px;
+	border: none;
+	outline: none;
+	color:#B3AEAE;
+	font-size: 0.9em;
+	
+}
 .drop-men {
     float: right;
 }
@@ -857,7 +867,19 @@ i.fa.fa-globe {
     padding: 0.5em 1.5em;
     border-radius: 4px;
 }
+.text-sub input[type="button"]{
+	background-color: #D95459;
+    font-size: 1em;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 0.5em 1.5em;
+    border-radius: 4px;
+}
 .text-sub input[type="submit"]:hover {
+    background-color: #FBB03B;
+}
+.text-sub input[type="button"]:hover {
     background-color: #FBB03B;
 }
 .post-bottom-1 {
@@ -1396,6 +1418,17 @@ label.control-label {
     font-family: 'Muli-Regular';
 }
 .login-do input[type="submit"]{
+	border: none;
+    outline: none;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    color: #fff;   
+    width: 100%;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background: none;	
+}
+.login-do input[type="button"]{
 	border: none;
     outline: none;
     font-size: 1em;
@@ -2826,6 +2859,11 @@ ul.dropdown-menu.dropdown-menu-right {
 .login-do input[type="submit"] {
     font-size: 0.9em;
 }
+
+.login-do input[type="button"] {
+    font-size: 0.9em;
+}
+
 .profile-bottom {
     width: 100%;
 }

@@ -598,6 +598,34 @@ def EliminacionGaussiana():
     matriz  = np.empty((n,n))
     return render_template("eliminacionGaussiana.html", matriz = matriz, n = n)
 
+#-----------------------------------------------------INTERPOLACIONES---------------------------------------------------------
+@app.route('/newtonInt')
+def interpolacionNewton():
+    return render_template("newtonInterpolacion.html")
+
+@app.route('/newtonInt', methods = ['GET','POST'])
+def InterpolacionNewton():
+    x = request.form.get('x')
+    y = request.form.get('y')
+    val = request.form.get('val')
+    n = len(request.form.get('puntos'))
+    for i in range(n):
+        x[i] = float(x[i])
+        y[i] = float(y[i])
+
+    aux = [[0 for i in range(n)]]
+    prod = 1.0
+    acum = 0
+
+    for i in range(n):
+        aux[i][0] = y[i]
+        for j in range(1,i):
+            aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
+        if(i > 0):
+            prod *= val-x[i-1]
+        acum += aux[i][i] * prod
+    return render_template("newtonInterpolacion.html",acum = acum)
+
 def Funcion_f(fx,entrada):
     x = entrada
     fx = str(fx)

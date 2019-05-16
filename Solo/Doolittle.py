@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 tablaA = []
 
 def progresiva(l,b):
@@ -30,7 +32,7 @@ def regresiva(u,z):
     for i in range(len(x)):
         print(x[i])    
 
-def crout(A,n,b):
+def doolittle(A,n,b):
     L,U = inicializa(n)
     determinante = 1
 
@@ -38,8 +40,8 @@ def crout(A,n,b):
         suma1 = 0.0
         for p in range(0,k):
             suma1 += (L[k][p] * U[p][k])
-        L[k][k] = A[k][k] - suma1
-        U[k][k] = 1
+        L[k][k] = 1
+        U[k][k] = A[k][k] - suma1
         for i in range (k+1,n):
             suma2 = 0.0
             for p in range (0,k):
@@ -48,6 +50,7 @@ def crout(A,n,b):
                 L[i][k] = (A[i][k] - suma2)/U[k][k]
             else:
                 print("El sistema puede no tener solucion")
+                break
         for j in range(k+1,n):
             suma3 = 0.0
             for p in range (0,k):
@@ -56,6 +59,7 @@ def crout(A,n,b):
                 U[k][j] = (A[k][j]-suma3)/L[k][k]
             else:
                 print("El sistema puede no tener solucion")
+                break
 
     print("L solucion")
     for i in range(len(L)):
@@ -69,18 +73,15 @@ def crout(A,n,b):
     return x
 
 def inicializa(n):
-   
-    L = [[0.0 for j in range(n)] for i in range(n)]
-    U = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
+    L = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
+    U = [[0.0 for j in range(n)] for i in range(n)]
     
     return L , U
 
 
 def main():
     global tablaA
-
-   
-
+    
     rows = int(input("Ingresa el tamaño de la matriz: "))
     print("Ingresa la matriz %s x %s: "% (rows, rows))
     for i in range(rows):
@@ -96,7 +97,7 @@ def main():
         b[i] = float(b[i])
 
    
-    crout(tablaA,rows,b)
+    doolittle(tablaA,rows,b)
 
 
 if __name__ == "__main__":

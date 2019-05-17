@@ -592,11 +592,28 @@ def Raices_multiples():
 def eliminacionGaussiana():
     return render_template("eliminacionGaussiana.html")
 
-@app.route('/eliminacionGaussiana', methods = ['POST'])
+@app.route('/eliminacionGaussianaM', methods = ['GET','POST'])
+def EliminacionGaussianaM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("eliminacionGaussiana.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/eliminacionGaussiana', methods = ['GET','POST'])
 def EliminacionGaussiana():
-    n = int(request.form.get('tamaño'))
-    matriz  = np.empty((n,n))
-    return render_template("eliminacionGaussiana.html", matriz = matriz, n = n)
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            print(indice)
+            matrizInicial[i][j] = int(request.form.get(indice))
+            print(matrizInicial)
+    return render_template("eliminacionGaussiana.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 def Funcion_f(fx,entrada):
     x = entrada

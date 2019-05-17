@@ -610,9 +610,7 @@ def EliminacionGaussiana():
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
-            print(indice)
             matrizInicial[i][j] = int(request.form.get(indice))
-            print(matrizInicial)
     return render_template("eliminacionGaussiana.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 def Funcion_f(fx,entrada):

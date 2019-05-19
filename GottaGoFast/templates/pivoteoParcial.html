@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Eliminacion Gaussiana</title>
+<title>Pivoteo Parcial</title>
 {% include 'head.html' %}
 <div id="page-wrapper" class="gray-bg dashbard-1">
 	<div class="content-main">
@@ -17,7 +17,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<h2>
 		<a href="inicio.html">Inicio</a>
 		<i class="fa fa-angle-right"></i>
-		<span>Eliminacion Gaussiana</span>
+		<span>Pivoteo Parcial</span>
 	</h2>
 </div>
 <!--//banner-->
@@ -25,7 +25,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Eliminacion Gaussiana</p>
+		<p>Aqui va informacion sobre Pivoteo Parcial</p>
 	</div>
 	
 	<div class="grid-form1">
@@ -37,7 +37,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		{% endif %}
 		<div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
-				<form class="form-horizontal" id="form" action="/eliminacionGaussianaM" method="POST">
+				<form class="form-horizontal" id="form" action="/pivoteoParcialM" method="POST">
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese el Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="El tamaño de la matriz sera N*N+1 donde la columna final son los valores independientes"></i></label>
 						<div class="col-sm-8">
@@ -65,7 +65,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			{% endif %}
 				<div class="tab-content">
 				<div class="tab-pane active" id="horizontal-form">
-					<form class="form-horizontal" id="form2" action="/eliminacionGaussiana" method="POST">
+					<form class="form-horizontal" id="form2" action="/pivoteoParcial" method="POST">
 						<input type="text" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}">
 						{% for i in indiceFilas %}
 							<table class="table">
@@ -88,7 +88,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					</form>
 				</div>
 			</div>
-		</div>
 		{% endif %}
 		{% if dibujarMatrizSolucion == 1  %}
 			<div class="grid-form1">
@@ -111,11 +110,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							{% endfor %}
 							</tbody>
 						</table>
-						<div class="form-group">
-								{% for i in indiceFilas %}
-									<p style="margin-bottom: 1%;margin-top:2%;text-align:center;">X{{i}} = {{X[i][0]}} </p>
-								{% endfor %}
-						</div>
 				</div>
 			</div>
 		{% endif %}

@@ -698,16 +698,62 @@ def GaussSeidelM():
 
 @app.route('/eliminacionGaussiana', methods = ['GET','POST'])
 def EliminacionGaussiana():
-    n = int(request.form.get('n'))
-    indiceColumnas = [i for i in range(n+1)]
-    indiceFilas= [i for i in range(n)]
-    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
-    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
-    for i in range(n):
-        for j in range(n+1):
+    tam = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(tam+1)]
+    indiceFilas= [i for i in range(tam)]
+    matrizInicial = [['' for i in range(tam+1)] for j in range(tam)]
+    matrizSolucion = [['' for i in range(tam+1)] for j in range(tam)]
+    for i in range(tam):
+        for j in range(tam+1):
             indice = str(i)+str(j)
-            matrizInicial[i][j] = int(request.form.get(indice))
-    return render_template("eliminacionGaussiana.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            matrizInicial[i][j] = float(request.form.get(indice))
+    casicero = 0
+    # Gauss elimina hacia adelante
+    AB = np.vstack(matrizInicial)
+    print(AB)
+    tamano = np.shape(AB)
+    n = tamano[0]
+    m = tamano[1]
+    for i in range(0,n,1):
+        print("Entré")
+        pivote = AB[i,i]
+        adelante = i+1 
+        for k in range(adelante,n,1):
+            if (np.abs(AB[k,i])>=casicero):
+                coeficiente = pivote/AB[k,i]
+                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+            else:
+                coeficiente= 'division para cero'
+            print('coeficiente: ',coeficiente)
+            print(AB)
+
+    print(' *** Gauss-Jordan elimina hacia atras *** ')
+    # Gauss-Jordan elimina hacia atras
+    ultfila = n-1
+    ultcolumna = m-1
+    for i in range(ultfila,0-1,-1):
+        # Normaliza a 1 elemento diagonal
+        AB[i,:] = AB[i,:]/AB[i,i]
+        pivote = AB[i,i] # uno
+        # arriba de la fila i
+        atras = i-1 
+        for k in range(atras,0-1,-1):
+            if (np.abs(AB[k,i])>=casicero):
+                coeficiente = pivote/AB[k,i]
+                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+            else:
+                coeficiente= 'division para cero'
+            print('coeficiente: ', coeficiente)
+            print(AB)
+    X = AB[:,ultcolumna]
+    X = np.transpose([X])
+
+    # SALIDA
+    print('aumentada: ')
+    print(AB)
+    print('X: ')
+    print(X)
+    return render_template("eliminacionGaussiana.html", X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = AB, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/pivoteoTotal', methods = ['GET','POST'])
 def PivoteoTotal():

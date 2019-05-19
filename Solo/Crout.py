@@ -28,7 +28,7 @@ def regresiva(u,z):
     
     print("X: ")
     for i in range(len(x)):
-        print(x[i])    
+        print("x",i,": ", x[i])    
 
 def crout(A,n,b):
     L,U = inicializa(n)

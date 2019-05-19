@@ -1,0 +1,91 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Newton</title>
+{% include 'head.html' %}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+	<div class="content-main">
+ 
+<!--banner-->	
+<div class="banner">
+	<h2>
+		<a href="inicio.html">Inicio</a>
+		<i class="fa fa-angle-right"></i>
+		<span>Eliminacion Gaussiana</span>
+	</h2>
+</div>
+<!--//banner-->
+
+<!--faq-->
+<div class="blank">
+	<div class="blank-page" style="margin-bottom: 1%">		
+		<p>Aqui va informacion sobre Eliminacion Gaussiana</p>
+	</div>
+	<div class="grid-form1">
+		<h3 style="text-align: center;">Puntos a interpolar</h3>
+		{% if error == 1 %}
+				<div class="form-group has-error">
+					<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
+				</div>
+		{% endif %}
+		<div class="tab-content">
+			<div class="tab-pane active" id="horizontal-form">
+				<form  class="form-horizontal" id="form1">
+					<div class="form-group">
+						<label for="focusedinput" class="col-sm-2 control-label"> Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="Ingrese la cantidad de puntos a interpolar"></i></label>
+						<div class="col-sm-8">
+							<input type="text" id="cols" name="cols" class="form-control1" placeholder="Tamaño" value=" {{n}} "/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
+							<label class="hvr-shutter-in-horizontal login-sub">
+								<input type="button" id="enviar" name="enviar" value="Crear" onclick="crearTabla()">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+    <div class="grid-form1">
+        <h3 style="text-align: center;">Puntos y sus Funciones</h3>
+		{% if error == 1 %}
+				<div class="form-group has-error">
+					<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
+				</div>
+		{% endif %}
+        <div class="tab-content">
+			<div class="tab-pane active" id="horizontal-form">
+				<form class="form-horizontal" id="form2" action="/eliminacionGaussiana" method="POST">
+					<div id="x" >
+					</div>
+					<div class="form-group">
+						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
+							<label class="hvr-shutter-in-horizontal login-sub">
+								<input type="submit" id="ejecutar" name="ejecutar" value="Ejecutar">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+</div>
+
+<!--//faq-->
+
+<!---->
+<div class="copy">
+  <p> &copy; 2019 GottaGoFast. All Rights Reserved .</p>	   
+</div>
+<div class="clearfix"> </div>
+</div>

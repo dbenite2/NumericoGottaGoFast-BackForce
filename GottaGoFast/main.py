@@ -749,10 +749,6 @@ def EliminacionGaussiana():
     X = np.transpose([X])
 
     # SALIDA
-    print('aumentada: ')
-    print(AB)
-    print('X: ')
-    print(X)
     return render_template("eliminacionGaussiana.html", X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = AB, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/pivoteoTotal', methods = ['GET','POST'])
@@ -779,7 +775,37 @@ def PivoteoParcial():
         for j in range(n+1):
             indice = str(i)+str(j)
             matrizInicial[i][j] = int(request.form.get(indice))
-    return render_template("pivoteoParcial.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    
+    
+    M = matrizInicial
+
+    for k in range(n):
+        print("iteracion ",k)
+        for i in range(k,n):
+            if abs(M[i][k]) > abs(M[k][k]):
+                M[k], M[i] = M[i],M[k]
+            else:
+                pass
+
+        for j in range(k+1,n):
+            q = float(M[j][k]) / M[k][k]
+            for m in range(k, n+1):
+                M[j][m] -=  q * M[k][m]
+        
+        #print de analisis
+        print(M) 
+
+    X = [0 for i in range(n)]
+
+    X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+    for i in range (n-1,-1,-1):
+        z = 0
+        for j in range(i+1,n):
+            z = z  + float(M[i][j])*X[j]
+        X[i] = float(M[i][n] - z)/M[i][i]
+    
+    X = X
+    return render_template("pivoteoParcial.html",X = X ,dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/pivoteoEscalonado', methods = ['GET','POST'])
 def PivoteoEscalonado():

@@ -110,6 +110,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							{% endfor %}
 							</tbody>
 						</table>
+						<div class="form-group">
+								{% for i in indiceFilas %}
+									<p style="margin-bottom: 1%;margin-top:2%;text-align:center;">X{{i}} = {{X[i][0]}} </p>
+								{% endfor %}
+						</div>
 				</div>
 			</div>
 		{% endif %}

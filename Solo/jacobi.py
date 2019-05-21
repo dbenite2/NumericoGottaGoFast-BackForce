@@ -11,7 +11,7 @@ def jacobi(A, b, n, tol, x0, niter):
         dispersion = abs((normalizar(x1) - normalizar(x0))/normalizar(x1))
         x0 = x1
         cont = cont +  1
-        print('{:30},{:30}'.format(str(cont),str(x1),))
+        print('{:30},{:30},{:30}'.format(str(cont),str(x1),dispersion))
     if dispersion < tol:
         print("x1:",x1," es una aproximacion con una tolerancia" ,tol)
     else:
@@ -34,11 +34,11 @@ def normalizar(x0):
     return math.sqrt(cont)
 
 def main():
-    A = [[13,-4,-5],[3,-7,2],[-4,5,-16]]
-    b = [-23,5,34]
+    A = [[9,2,-3],[-3,-8,4],[3,2,-7]]
+    b = [27,-61,-21]
     n = 3
     tol = 5e-6
-    x0 = [0,0,0]
+    x0 = [2,4,5]
     niter = 20
     jacobi(A,b,n,tol,x0,niter)
 

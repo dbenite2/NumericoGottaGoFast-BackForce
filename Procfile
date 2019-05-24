@@ -1,1 +1,1 @@
-web: gunicorn main:numericogottagotastan
+web: gunicorn main:app

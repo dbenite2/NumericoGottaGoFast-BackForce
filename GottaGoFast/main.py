@@ -761,8 +761,24 @@ def PivoteoTotal():
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
-            matrizInicial[i][j] = int(request.form.get(indice))
-    return render_template("pivoteoTotal.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            matrizInicial[i][j] = float(request.form.get(indice))
+    
+    for k in range(0,n-1):
+        matrizSolucion = linear_solver(matrizInicial,k,n)
+        for i in range(k+1,n):
+            mult = matrizSolucion[i][k] / matrizSolucion[k][k]
+            for j in range(k,n+1):
+                matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
+    
+    x = [0 for i in range (n)]
+    x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
+    for i in reversed(range(0,n)):
+        z = 0
+        for j in range(i+1,n):
+            z = z + float(matrizSolucion[i][i]) * x[j]
+        x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
+
+    return render_template("pivoteoTotal.html",X = x, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/pivoteoParcial', methods = ['GET','POST'])
 def PivoteoParcial():
@@ -912,6 +928,43 @@ def InterpolacionNewton():
             prod *= val-x[i-1]
         acum += aux[i][i] * prod
     return render_template("newtonInterpolacion.html",acum = acum)
+#------------------------------------------------------------------------------------------------------------------
+
+def linear_solver(A,k,n):
+    mayor = 0
+    fila_mayor = k
+    columna_mayor = k
+    marcas = [0 for i in range(n)]
+    for i in range(1,n+1):
+        marcas[i-1] = i
+    for i in range(k,n):
+        for j in range(k,n):
+            if(abs(A[i][j]) > mayor):
+                mayor = abs(A[i][j])
+                fila_mayor = i
+                columna_mayor = j
+            else: 
+                pass
+    if mayor == 0:
+        return null 
+    else:
+        if fila_mayor != k:
+            A = swap_rows(A,fila_mayor,k)
+        if columna_mayor != k:
+            A = swap_cols(A,columna_mayor,k)
+            temp = marcas[columna_mayor]
+            marcas[columna_mayor] = marcas[k]
+            marcas[k] = temp
+    return A
+
+def swap_rows(A,row_A,row_B):
+    A[row_A], A[row_B] = A[row_B], A[row_A]
+    return A
+
+def swap_cols(A,col_A,col_B):
+    for i in range(len(A)):
+        A[i][col_A], A[i][col_B] = A[i][col_B], A[i][col_A]
+    return A
 
 def Funcion_f(fx,entrada):
     x = entrada

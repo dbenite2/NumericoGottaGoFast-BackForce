@@ -592,11 +592,298 @@ def Raices_multiples():
 def eliminacionGaussiana():
     return render_template("eliminacionGaussiana.html")
 
-@app.route('/eliminacionGaussiana', methods = ['POST'])
+@app.route('/pivoteoTotal')
+def pivoteoTotal():
+    return render_template("pivoteoTotal.html")
+
+@app.route('/pivoteoParcial')
+def pivoteoParcial():
+    return render_template("pivoteoParcial.html")
+
+@app.route('/pivoteoEscalonado')
+def pivoteoEscalonado():
+    return render_template("pivoteoEscalonado.html")
+
+@app.route('/crout')
+def crout():
+    return render_template("crout.html")
+    
+@app.route('/doolittle')
+def doolittle():
+    return render_template("doolittle.html")
+
+@app.route('/cholesky')
+def cholesky():
+    return render_template("cholesky.html")
+
+@app.route('/jacobi')
+def jacobi():
+    return render_template("jacobi.html")
+
+@app.route('/gaussSeidel')
+def gaussSeidel():
+    return render_template("gaussSeidel.html")
+
+@app.route('/eliminacionGaussianaM', methods = ['GET','POST'])
+def EliminacionGaussianaM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("eliminacionGaussiana.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoTotalM', methods = ['GET','POST'])
+def PivoteoTotalM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("pivoteoTotal.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoParcialM', methods = ['GET','POST'])
+def PivoteoParcialM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("pivoteoParcial.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoEscalonadoM', methods = ['GET','POST'])
+def PivoteoEscalonadoM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/croutM', methods = ['GET','POST'])
+def CroutM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("crout.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/doolittleM', methods = ['GET','POST'])
+def DoolittleM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("doolittle.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/choleskyM', methods = ['GET','POST'])
+def CholeskyM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("cholesky.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/jacobiM', methods = ['GET','POST'])
+def JacobiM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("jacobi.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/gaussSeidelM', methods = ['GET','POST'])
+def GaussSeidelM():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    return render_template("gaussSeidel.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/eliminacionGaussiana', methods = ['GET','POST'])
 def EliminacionGaussiana():
-    n = int(request.form.get('tamaño'))
-    matriz  = np.empty((n,n))
-    return render_template("eliminacionGaussiana.html", matriz = matriz, n = n)
+    tam = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(tam+1)]
+    indiceFilas= [i for i in range(tam)]
+    matrizInicial = [['' for i in range(tam+1)] for j in range(tam)]
+    matrizSolucion = [['' for i in range(tam+1)] for j in range(tam)]
+    for i in range(tam):
+        for j in range(tam+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = float(request.form.get(indice))
+    casicero = 0
+    # Gauss elimina hacia adelante
+    AB = np.vstack(matrizInicial)
+    print(AB)
+    tamano = np.shape(AB)
+    n = tamano[0]
+    m = tamano[1]
+    for i in range(0,n,1):
+        print("Entré")
+        pivote = AB[i,i]
+        adelante = i+1 
+        for k in range(adelante,n,1):
+            if (np.abs(AB[k,i])>=casicero):
+                coeficiente = pivote/AB[k,i]
+                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+            else:
+                coeficiente= 'division para cero'
+            print('coeficiente: ',coeficiente)
+            print(AB)
+
+    print(' *** Gauss-Jordan elimina hacia atras *** ')
+    # Gauss-Jordan elimina hacia atras
+    ultfila = n-1
+    ultcolumna = m-1
+    for i in range(ultfila,0-1,-1):
+        # Normaliza a 1 elemento diagonal
+        AB[i,:] = AB[i,:]/AB[i,i]
+        pivote = AB[i,i] # uno
+        # arriba de la fila i
+        atras = i-1 
+        for k in range(atras,0-1,-1):
+            if (np.abs(AB[k,i])>=casicero):
+                coeficiente = pivote/AB[k,i]
+                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+            else:
+                coeficiente= 'division para cero'
+            print('coeficiente: ', coeficiente)
+            print(AB)
+    X = AB[:,ultcolumna]
+    X = np.transpose([X])
+
+    # SALIDA
+    return render_template("eliminacionGaussiana.html", X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = AB, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoTotal', methods = ['GET','POST'])
+def PivoteoTotal():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("pivoteoTotal.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoParcial', methods = ['GET','POST'])
+def PivoteoParcial():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    
+    
+    M = matrizInicial
+
+    for k in range(n):
+        print("iteracion ",k)
+        for i in range(k,n):
+            if abs(M[i][k]) > abs(M[k][k]):
+                M[k], M[i] = M[i],M[k]
+            else:
+                pass
+
+        for j in range(k+1,n):
+            q = float(M[j][k]) / M[k][k]
+            for m in range(k, n+1):
+                M[j][m] -=  q * M[k][m]
+        
+        #print de analisis
+        print(M) 
+
+    X = [0 for i in range(n)]
+
+    X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+    for i in range (n-1,-1,-1):
+        z = 0
+        for j in range(i+1,n):
+            z = z  + float(M[i][j])*X[j]
+        X[i] = float(M[i][n] - z)/M[i][i]
+    
+    X = X
+    return render_template("pivoteoParcial.html",X = X ,dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoEscalonado', methods = ['GET','POST'])
+def PivoteoEscalonado():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/crout', methods = ['GET','POST'])
+def Crout():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("crout.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/doolittle', methods = ['GET','POST'])
+def Doolittle():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("doolittle.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/cholesky', methods = ['GET','POST'])
+def Cholesky():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("cholesky.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/jacobi', methods = ['GET','POST'])
+def Jacobi():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("jacobi.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/gaussSeidel', methods = ['GET','POST'])
+def GaussSeidel():
+    n = int(request.form.get('n'))
+    indiceColumnas = [i for i in range(n+1)]
+    indiceFilas= [i for i in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
+    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    for i in range(n):
+        for j in range(n+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = int(request.form.get(indice))
+    return render_template("gaussSeidel.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 #-----------------------------------------------------INTERPOLACIONES---------------------------------------------------------
 @app.route('/newtonInt')

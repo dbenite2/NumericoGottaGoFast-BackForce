@@ -64,12 +64,12 @@ def cholesky(A,n,b):
                 print("El sistema puede no tener solucion")
                 break
 
-    print("L solucion")
-    for i in range(len(L)):
-        print(L[i])
-    print("U solucion")
-    for i in range(len(U)):
-        print(U[i])
+        print("L solucion")
+        for i in range(len(L)):
+            print(L[i])
+        print("U solucion")
+        for i in range(len(U)):
+            print(U[i])
 
     z = progresiva(L,b)
     x = regresiva(U,z)

@@ -890,7 +890,7 @@ def Crout():
             suma_1 = 0.0
             for p in range(0,k):
                 suma_1 += (L[k][p] * U[p][k])
-            L[k][k] = matriz_s - suma_1
+            L[k][k] = (matriz_s[k][k] - suma_1)
             procedimientoL.append(L)
             U[k][k] = 1
             procedimientoU.append(U)
@@ -904,7 +904,7 @@ def Crout():
                         procedimientoL.append(L)
                     except(ValueError, TypeError, NameError):
                         return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-            for j in range(k+1,0):
+            for j in range(k+1,n):
                 suma_3 = 0.0
                 for p in range(0,k):
                     suma_3 += L[k][p] * U[p][j]
@@ -912,8 +912,9 @@ def Crout():
                     try:
                         U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
                         procedimientoL.append(U)
+                        print(U)
                     except(ValueError, TypeError, NameError):
-                        return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                       return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         try:                
             z = progresiva(L,b)
         except(ValueError, TypeError, NameError):
@@ -949,8 +950,8 @@ def Doolittle():
     matriz_s = np.vstack(matriz_s)
     procedimientoL.append(np.vstack([L]))
     procedimientoU.append(np.vstack([U]))
-    b = matriz_s[:,n+1]
-    matriz_s = np.delete(matriz_s,n+1,1)
+    b = matriz_s[:,n]
+    matriz_s = np.delete(matriz_s,n,1)
     if cambiarMetodo == '0':
         for k in range(0,n):
             suma_1 = 0.0
@@ -958,7 +959,7 @@ def Doolittle():
                 suma_1 += (L[k][p] * U[p][k])
             L[k][k] = 1
             procedimientoL.append(L)
-            U[k][k] = matriz_s - suma_1
+            U[k][k] = matriz_s[k][k] - suma_1
             procedimientoL.append(U)
             for i in range(k+1,n):
                 suma_2 = 0.0 
@@ -970,7 +971,7 @@ def Doolittle():
                         procedimientoL.append(L)
                     except(ValueError, TypeError, NameError):
                         return render_template("doolittle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-            for j in range(k+1,0):
+            for j in range(k+1,n):
                 suma_3 = 0.0
                 for p in range(0,k):
                     suma_3 += L[k][p] * U[p][j]
@@ -980,14 +981,14 @@ def Doolittle():
                         procedimientoL.append(U)
                     except(ValueError, TypeError, NameError):
                         return render_template("doolittle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        try:                
+        try:
             z = progresiva(L,b)
         except(ValueError, TypeError, NameError):
-                        return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         try:
             x = regresiva(U,z)
         except(ValueError, TypeError, NameError):
-                        return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         return render_template("doolittle.html",verProcedimiento = verProcedimiento, X = x, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
@@ -1015,15 +1016,15 @@ def Cholesky():
     procedimientoU.append(np.vstack([U]))
     matriz_i = np.vstack(matriz_i)
     matriz_s = np.vstack(matriz_s)
-    b = matriz_s[:,n+1]
-    matriz_s = np.delete(matriz_s,n+1,1)
+    b = matriz_s[:,n]
+    matriz_s = np.delete(matriz_s,n,1)
     if cambiarMetodo == '0':
         for k in range(0,n):
             suma_1 = 0.0
             for p in range(0,k):
                 suma_1 += (L[k][p] * U[p][k])
             try:
-                L[k][k] = sqrt(matriz_s, - suma_1)
+                L[k][k] = sqrt(matriz_s[k][k] - suma_1)
                 procedimientoL.append(L)
             except:
                 return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "La solucion del sistema no se encuentra en los reales", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
@@ -1039,7 +1040,7 @@ def Cholesky():
                         procedimientoL.append(L)
                     except(ValueError, TypeError, NameError):
                         return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-            for j in range(k+1,0):
+            for j in range(k+1,n):
                 suma_3 = 0.0
                 for p in range(0,k):
                     suma_3 += L[k][p] * U[p][j]
@@ -1081,8 +1082,8 @@ def Jacobi():
         iniciales = float(request.form.get(str(i)))
     cont = 0
     disp = tol + 1
-    b = matriz_s[:,n+1]
-    matriz_s = np.delete(matriz_s,n+1,1)
+    b = matriz_s[:,n]
+    matriz_s = np.delete(matriz_s,n,1)
     x1 = [0 for i in range(n)]
     resultados.append(cont,iniciales,disp)
     while disp > tol and cont < niter:
@@ -1123,8 +1124,8 @@ def GaussSeidel():
         iniciales = float(request.form.get(str(i)))
     cont = 0
     disp = tol + 1
-    b = matriz_s[:,n+1]
-    matriz_s = np.delete(matriz_s,n+1,1)
+    b = matriz_s[:,n]
+    matriz_s = np.delete(matriz_s,n,1)
     x1 = [0 for i in range(n)]
     resultados.append(cont,iniciales,disp)
     while disp > tol and cont < niter:
@@ -1268,7 +1269,7 @@ def progresiva(L,b):
     z[0] = b[0] / L[0][0]
     for i in range(1,len(b)):
         sum = 0.0
-        for j in range(0,1):
+        for j in range(0,i):
             sum += L[i][j] * z[j]
         z[i] = ((b[i] - sum)/L[i][i])
     return z

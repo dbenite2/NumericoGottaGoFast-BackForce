@@ -698,125 +698,150 @@ def GaussSeidelM():
     matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     iniciales = ['' for i in range(n)]
     return render_template("gaussSeidel.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
 #Metodos operacionales
 @app.route('/eliminacionGaussiana', methods = ['GET','POST'])
 def EliminacionGaussiana():
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
     tam = int(request.form.get('n'))
     indiceColumnas = [i for i in range(tam+1)]
     indiceFilas= [i for i in range(tam)]
     matrizInicial = [['' for i in range(tam+1)] for j in range(tam)]
     matrizSolucion = [['' for i in range(tam+1)] for j in range(tam)]
+    procedimiento = []
     for i in range(tam):
         for j in range(tam+1):
             indice = str(i)+str(j)
             matrizInicial[i][j] = float(request.form.get(indice))
     casicero = 0
-    # Gauss elimina hacia adelante
-    AB = np.vstack(matrizInicial)
-    print(AB)
-    tamano = np.shape(AB)
-    n = tamano[0]
-    m = tamano[1]
-    for i in range(0,n,1):
-        print("Entré")
-        pivote = AB[i,i]
-        adelante = i+1 
-        for k in range(adelante,n,1):
-            if (np.abs(AB[k,i])>=casicero):
-                coeficiente = pivote/AB[k,i]
-                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
-            else:
-                coeficiente= 'division para cero'
-            print('coeficiente: ',coeficiente)
-            print(AB)
+    if cambiarMetodo == '0':   
+        # Gauss elimina hacia adelante
+        AB = np.vstack(matrizInicial)
+        print(AB)
+        tamano = np.shape(AB)
+        n = tamano[0]
+        m = tamano[1]
+        for i in range(0,n,1):
+            print("Entré")
+            pivote = AB[i,i]
+            adelante = i+1 
+            for k in range(adelante,n,1):
+                if (np.abs(AB[k,i])>=casicero):
+                    coeficiente = pivote/AB[k,i]
+                    AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+                else:
+                    coeficiente= 'division para cero'
+                print('coeficiente: ',coeficiente)
+                print(AB)
+                procedimiento.append(np.vstack(AB))
+        print(' *** Gauss-Jordan elimina hacia atras *** ')
+        matrizSolucion = np.vstack(AB)
+        print(matrizSolucion)
+        # Gauss-Jordan elimina hacia atras
+        ultfila = n-1
+        ultcolumna = m-1
+        for i in range(ultfila,0-1,-1):
+            # Normaliza a 1 elemento diagonal
+            AB[i,:] = AB[i,:]/AB[i,i]
+            pivote = AB[i,i] # uno
+            # arriba de la fila i
+            atras = i-1 
+            for k in range(atras,0-1,-1):
+                if (np.abs(AB[k,i])>=casicero):
+                    coeficiente = pivote/AB[k,i]
+                    AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
+                else:
+                    coeficiente= 'division para cero'
+        print(matrizSolucion)
+        X = AB[:,ultcolumna]
+        X = np.transpose([X])
 
-    print(' *** Gauss-Jordan elimina hacia atras *** ')
-    # Gauss-Jordan elimina hacia atras
-    ultfila = n-1
-    ultcolumna = m-1
-    for i in range(ultfila,0-1,-1):
-        # Normaliza a 1 elemento diagonal
-        AB[i,:] = AB[i,:]/AB[i,i]
-        pivote = AB[i,i] # uno
-        # arriba de la fila i
-        atras = i-1 
-        for k in range(atras,0-1,-1):
-            if (np.abs(AB[k,i])>=casicero):
-                coeficiente = pivote/AB[k,i]
-                AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
-            else:
-                coeficiente= 'division para cero'
-            print('coeficiente: ', coeficiente)
-            print(AB)
-    X = AB[:,ultcolumna]
-    X = np.transpose([X])
-
-    # SALIDA
-    return render_template("eliminacionGaussiana.html", X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = AB, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        # SALIDA
+        return render_template("eliminacionGaussiana.html",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam)
 
 @app.route('/pivoteoTotal', methods = ['GET','POST'])
 def PivoteoTotal():
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
+    n = int(request.form.get('n'))
+    tam = n
+    indiceColumnas = [i for i in range(tam+1)]
+    indiceFilas= [i for i in range(tam)]
+    matrizInicial = [['' for i in range(tam+1)] for j in range(tam)]
+    matrizSolucion = [['' for i in range(tam+1)] for j in range(tam)]
+    procedimiento = []
+    for i in range(tam):
+        for j in range(tam+1):
+            indice = str(i)+str(j)
+            matrizInicial[i][j] = float(request.form.get(indice))
+    if cambiarMetodo == '0':
+        matrizInicial1 = np.vstack(matrizInicial)
+        procedimiento.append(np.vstack(matrizInicial1))
+        matrizSolucion = np.vstack(matrizInicial1)
+        for k in range(0,n-1):
+            matrizSolucion = linear_solver(matrizSolucion,k,n)
+            procedimiento.append(np.vstack(matrizSolucion))  
+            for i in range(k+1,n):
+                mult = matrizSolucion[i][k] / matrizSolucion[k][k]
+                for j in range(k,n+1):
+                    matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
+            procedimiento.append(np.vstack(matrizSolucion))         
+        x = [0 for i in range(n)]
+        x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
+        for i in reversed(range(0,n)):
+            z = 0
+            for j in range(i+1,n):
+                z = z + float(matrizSolucion[i][i]) * x[j]
+            x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
+        X = np.transpose([x])
+        return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+
+@app.route('/pivoteoParcial', methods = ['GET','POST'])
+def PivoteoParcial():
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
     n = int(request.form.get('n'))
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    procedimiento = []
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
             matrizInicial[i][j] = float(request.form.get(indice))
-    
-    for k in range(0,n-1):
-        matrizSolucion = linear_solver(matrizInicial,k,n)
-        for i in range(k+1,n):
-            mult = matrizSolucion[i][k] / matrizSolucion[k][k]
-            for j in range(k,n+1):
-                matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
-    
-    x = [0 for i in range (n)]
-    x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
-    for i in reversed(range(0,n)):
-        z = 0
-        for j in range(i+1,n):
-            z = z + float(matrizSolucion[i][i]) * x[j]
-        x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
-
-    return render_template("pivoteoTotal.html",X = x, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-
-@app.route('/pivoteoParcial', methods = ['GET','POST'])
-def PivoteoParcial():
-    n = int(request.form.get('n'))
-    indiceColumnas = [i for i in range(n+1)]
-    indiceFilas= [i for i in range(n)]
-    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
-    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
-    for i in range(n):
-        for j in range(n+1):
-            indice = str(i)+str(j)
-            matrizInicial[i][j] = int(request.form.get(indice))
-    M = matrizInicial
-    for k in range(n):
-        print("iteracion ",k)
-        for i in range(k,n):
-            if abs(M[i][k]) > abs(M[k][k]):
-                M[k], M[i] = M[i],M[k]
-            else:
-                pass
-        for j in range(k+1,n):
-            q = float(M[j][k]) / M[k][k]
-            for m in range(k, n+1):
-                M[j][m] -=  q * M[k][m]
-        #print de analisis
-        print(M) 
-    X = [0 for i in range(n)]
-    X[n-1] =float(M[n-1][n])/M[n-1][n-1]
-    for i in range (n-1,-1,-1):
-        z = 0
-        for j in range(i+1,n):
-            z = z  + float(M[i][j])*X[j]
-        X[i] = float(M[i][n] - z)/M[i][i]
-    X = X
-    return render_template("pivoteoParcial.html",X = X ,dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    M = np.vstack(matrizInicial)
+    if cambiarMetodo == '0':
+        for k in range(n):
+            print("iteracion ",k)
+            for i in range(k,n):
+                if abs(M[i][k]) > abs(M[k][k]):
+                    M[k], M[i] = M[i],M[k]
+                else:
+                    pass
+            for j in range(k+1,n):
+                q = float(M[j][k]) / M[k][k]
+                for m in range(k, n+1):
+                    M[j][m] -=  q * M[k][m]
+            #print de analisis
+            print(M)
+            procedimiento.append(M)
+        X = [0 for i in range(n)]
+        X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+        for i in range (n-1,-1,-1):
+            z = 0
+            for j in range(i+1,n):
+                z = z  + float(M[i][j])*X[j]
+            X[i] = float(M[i][n] - z)/M[i][i]
+        X = np.transpose([X])
+        return render_template("pivoteoParcial.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/pivoteoEscalonado', methods = ['GET','POST'])
 def PivoteoEscalonado():
@@ -833,156 +858,208 @@ def PivoteoEscalonado():
 
 @app.route('/crout', methods = ['GET','POST'])
 def Crout():
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
     n = int(request.form.get('n'))
+    procedimientoL = []
+    procedimientoU = []
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     L = [[0.0 for j in range(n)] for i in range(n)]
     U = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
-            matriz_i[i][j] = float(request.form.get(indice))
-            matriz_s[i][k] = float(request.form.get(indice))
-    b = matriz_s[:,n+1]
-    matriz_s = np.delete(matriz_s,n+1,1)
-    for k in range(0,n):
-        suma_1 = 0.0
-        for p in range(0,k):
-            suma_1 += (L[k][p] * U[p][k])
-        L[k][k] = matriz_s - suma_1
-        U[k][k] = 1
-        for i in range(k+1,n):
-            suma_2 = 0.0 
+            matrizInicial[i][j] = float(request.form.get(indice))
+    procedimientoL.append(np.vstack([L]))
+    procedimientoU.append(np.vstack([U]))
+    if cambiarMetodo == '0':
+        for i in range(n):
+            for j in range(n+1):
+                indice = str(i)+str(j)
+                matriz_i[i][j] = float(request.form.get(indice))
+                matriz_s[i][j] = float(request.form.get(indice))
+        matriz_i = np.vstack(matriz_i)
+        matriz_s = np.vstack(matriz_s)
+        b = matriz_s[0:n,n]
+        matriz_s = np.delete(matriz_s,n,1)
+        for k in range(0,n):
+            suma_1 = 0.0
             for p in range(0,k):
-                suma_2 += (L[i][p] * U[p][k])
-            if L[k][k] != 0:
-                try:
-                    L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        for j in range(k+1,0):
-            suma_3 = 0.0
-            for p in range(0,k):
-                suma_3 += L[k][p] * U[p][j]
-            if L[k][k] != 0:
-                try:
-                    U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:                
-        z = progresiva(L,b)
-    except(ValueError, TypeError, NameError):
-                    return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:
-        x = regresiva(U,z)
-    except(ValueError, TypeError, NameError):
-                    return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    return render_template("crout.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, x = x, z = z, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                suma_1 += (L[k][p] * U[p][k])
+            L[k][k] = matriz_s - suma_1
+            procedimientoL.append(L)
+            U[k][k] = 1
+            procedimientoU.append(U)
+            for i in range(k+1,n):
+                suma_2 = 0.0 
+                for p in range(0,k):
+                    suma_2 += (L[i][p] * U[p][k])
+                if L[k][k] != 0:
+                    try:
+                        L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
+                        procedimientoL.append(L)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            for j in range(k+1,0):
+                suma_3 = 0.0
+                for p in range(0,k):
+                    suma_3 += L[k][p] * U[p][j]
+                if L[k][k] != 0:
+                    try:
+                        U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
+                        procedimientoL.append(U)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("crout.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        try:                
+            z = progresiva(L,b)
+        except(ValueError, TypeError, NameError):
+                        return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        try:
+            x = regresiva(U,z)
+        except(ValueError, TypeError, NameError):
+                        return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template("crout.html",verProcedimiento = verProcedimiento, X = x, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/doolittle', methods = ['GET','POST'])
 def Doolittle():
     n = int(request.form.get('n'))
+    procedimientoL = []
+    procedimientoU = []
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     L = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
     U = [[0.0 for j in range(n)] for i in range(n)]
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
             matriz_i[i][j] = float(request.form.get(indice))
-            matriz_s[i][k] = float(request.form.get(indice))
+            matriz_s[i][j] = float(request.form.get(indice))
+    matriz_i = np.vstack(matriz_i)
+    matriz_s = np.vstack(matriz_s)
+    procedimientoL.append(np.vstack([L]))
+    procedimientoU.append(np.vstack([U]))
     b = matriz_s[:,n+1]
     matriz_s = np.delete(matriz_s,n+1,1)
-    for k in range(0,n):
-        suma_1 = 0.0
-        for p in range(0,k):
-            suma_1 += (L[k][p] * U[p][k])
-        L[k][k] = 1
-        U[k][k] = matriz_s - suma_1
-        for i in range(k+1,n):
-            suma_2 = 0.0 
+    if cambiarMetodo == '0':
+        for k in range(0,n):
+            suma_1 = 0.0
             for p in range(0,k):
-                suma_2 += (L[i][p] * U[p][k])
-            if L[k][k] != 0:
-                try:
-                    L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("doolitle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        for j in range(k+1,0):
-            suma_3 = 0.0
-            for p in range(0,k):
-                suma_3 += L[k][p] * U[p][j]
-            if L[k][k] != 0:
-                try:
-                    U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("doolitle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:                
-        z = progresiva(L,b)
-    except(ValueError, TypeError, NameError):
-                    return render_template("doolitle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:
-        x = regresiva(U,z)
-    except(ValueError, TypeError, NameError):
-                    return render_template("doolitle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    return render_template("doolitle.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, x = x, z = z, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                suma_1 += (L[k][p] * U[p][k])
+            L[k][k] = 1
+            procedimientoL.append(L)
+            U[k][k] = matriz_s - suma_1
+            procedimientoL.append(U)
+            for i in range(k+1,n):
+                suma_2 = 0.0 
+                for p in range(0,k):
+                    suma_2 += (L[i][p] * U[p][k])
+                if L[k][k] != 0:
+                    try:
+                        L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
+                        procedimientoL.append(L)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("doolittle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            for j in range(k+1,0):
+                suma_3 = 0.0
+                for p in range(0,k):
+                    suma_3 += L[k][p] * U[p][j]
+                if L[k][k] != 0:
+                    try:
+                        U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
+                        procedimientoL.append(U)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("doolittle.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        try:                
+            z = progresiva(L,b)
+        except(ValueError, TypeError, NameError):
+                        return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        try:
+            x = regresiva(U,z)
+        except(ValueError, TypeError, NameError):
+                        return render_template("doolittle.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template("doolittle.html",verProcedimiento = verProcedimiento, X = x, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/cholesky', methods = ['GET','POST'])
 def Cholesky():
     n = int(request.form.get('n'))
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
+    procedimientoL = []
+    procedimientoU = []
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     L = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
     U = [[1.0 if j == i else 0.0 for j in range(n)] for i in range(n)]
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
             matriz_i[i][j] = float(request.form.get(indice))
-            matriz_s[i][k] = float(request.form.get(indice))
+            matriz_s[i][j] = float(request.form.get(indice))
+    procedimientoL.append(np.vstack([L]))
+    procedimientoU.append(np.vstack([U]))
+    matriz_i = np.vstack(matriz_i)
+    matriz_s = np.vstack(matriz_s)
     b = matriz_s[:,n+1]
     matriz_s = np.delete(matriz_s,n+1,1)
-    for k in range(0,n):
-        suma_1 = 0.0
-        for p in range(0,k):
-            suma_1 += (L[k][p] * U[p][k])
+    if cambiarMetodo == '0':
+        for k in range(0,n):
+            suma_1 = 0.0
+            for p in range(0,k):
+                suma_1 += (L[k][p] * U[p][k])
+            try:
+                L[k][k] = sqrt(matriz_s, - suma_1)
+                procedimientoL.append(L)
+            except:
+                return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "La solucion del sistema no se encuentra en los reales", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            U[k][k] = L[k][k]
+            procedimientoL.append(U)
+            for i in range(k+1,n):
+                suma_2 = 0.0 
+                for p in range(0,k):
+                    suma_2 += (L[i][p] * U[p][k])
+                if L[k][k] != 0:
+                    try:
+                        L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
+                        procedimientoL.append(L)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            for j in range(k+1,0):
+                suma_3 = 0.0
+                for p in range(0,k):
+                    suma_3 += L[k][p] * U[p][j]
+                if L[k][k] != 0:
+                    try:
+                        U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
+                        procedimientoL.append(U)
+                    except(ValueError, TypeError, NameError):
+                        return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        try:                
+            z = progresiva(L,b)
+        except(ValueError, TypeError, NameError):
+                        return render_template("cholesky.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         try:
-            L[k][k] = sqrt(matriz_s, - suma_1)
-        except:
-            return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "La solucion del sistema no se encuentra en los reales", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        U[k][k] = L[k][k]
-        for i in range(k+1,n):
-            suma_2 = 0.0 
-            for p in range(0,k):
-                suma_2 += (L[i][p] * U[p][k])
-            if L[k][k] != 0:
-                try:
-                    L[i][k] = (matriz_s[i][k] - suma_2) / U[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        for j in range(k+1,0):
-            suma_3 = 0.0
-            for p in range(0,k):
-                suma_3 += L[k][p] * U[p][j]
-            if L[k][k] != 0:
-                try:
-                    U[k][j] = (matriz_s[k][j] - suma_3) / L[k][k]
-                except(ValueError, TypeError, NameError):
-                    return render_template("cholesky.html",dibujarMatrizInicial = 1, error = 1, mensajeError = "Se produjo una división por 0 o el sistema puede no tener solucion. Abortando", matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:                
-        z = progresiva(L,b)
-    except(ValueError, TypeError, NameError):
-                    return render_template("cholesky.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    try:
-        x = regresiva(U,z)
-    except(ValueError, TypeError, NameError):
-                    return render_template("cholesky.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    return render_template("doolitle.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, x = x, z = z, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            x = regresiva(U,z)
+        except(ValueError, TypeError, NameError):
+                        return render_template("cholesky.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template("cholesky.html",verProcedimiento = verProcedimiento, X = x, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 @app.route('/jacobi', methods = ['GET','POST'])
 def Jacobi():
@@ -994,7 +1071,7 @@ def Jacobi():
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
-    iniciales = [0 for in range(n)]
+    iniciales = [0 for i in range(n)]
     resultados = []
     for i in range(n):
         for j in range(n+1):
@@ -1036,7 +1113,7 @@ def GaussSeidel():
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
-    iniciales = [0 for in range(n)]
+    iniciales = [0 for i in range(n)]
     resultados = []
     for i in range(n):
         for j in range(n+1):

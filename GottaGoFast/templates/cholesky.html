@@ -116,7 +116,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		{% endif %}
 		{% if dibujarMatrizSolucion == 1  %}
 			<div class="grid-form1">
-					<h3 style="text-align: center;">Matriz Solucion</h3>
 			{% if error == 1 %}
 					<div class="form-group has-error">
 						<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
@@ -137,7 +136,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								{% endfor %}
 							</tbody>
 						</table>
-						<h3 style="text-align: center;">Matriz Solucion U</h3>
+						<h3 style="text-align: center;margin-top:1.5%">Matriz Solucion U</h3>
 						<table class="table">
 							<tbody>
 								{% for i in matrizSolucionU %}
@@ -157,10 +156,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					</div>
 				</div>
 			{% else %}
+				<h3 style="text-align: center;">Matriz Solucion L</h3>
 				{% for k in procedimientoL %}
 				<div class="tab-content">
 					<div class="tab-pane active" id="horizontal-form">
-						<h3 style="text-align: center;">Matriz Solucion L</h3>
 						<table class="table">
 							<tbody>
 									{% for i in k %}
@@ -175,10 +174,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					</div>
 				</div>
 				{% endfor %}
+				<h3 style="text-align: center;margin-top:1.5%">Matriz Solucion U</h3>
 				{% for k in procedimientoU %}
 				<div class="tab-content">
 					<div class="tab-pane active" id="horizontal-form">
-						<h3 style="text-align: center;">Matriz Solucion U</h3>
 						<table class="table">
 							<tbody>
 									{% for i in k %}

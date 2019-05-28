@@ -1211,9 +1211,9 @@ def interpolacionNewton():
 def interpolacion_lagrange():
     return render_template("lagrange.html")
 
-@app.route('/neville')
-def interpolacion_neville():
-    return render_template("nevile.html")
+# @app.route('/neville')
+# def interpolacion_neville():
+#     return render_template("nevile.html")
 
 
 @app.route('/newtonIntM', methods = ['GET' , 'POST'])
@@ -1232,13 +1232,13 @@ def interpolacion_lagrange_t():
     fx = ['' for i in range(n)]
     return render_template("lagrange.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
-@app.route('/nevilleM', methods = ['GET' , 'POST'])
-def interpolacion_lagrange_t():
-    n = int(request.form.get('puntos'))
-    indiceColumnas = [i for i in range(n)]
-    x = ['' for i in range(n)]
-    fx = ['' for i in range(n)]
-    return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
+# @app.route('/nevilleM', methods = ['GET' , 'POST'])
+# def interpolacion_lagrange_t():
+#     n = int(request.form.get('puntos'))
+#     indiceColumnas = [i for i in range(n)]
+#     x = ['' for i in range(n)]
+#     fx = ['' for i in range(n)]
+#     return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
@@ -1302,37 +1302,37 @@ def lagrange():
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
-@app.route('/neville', methods = ['GET','POST'])
-def neville():
-    n = int(request.form.get('puntos'))
-    indiceColumnas = [i for i in range(n)]
-    cambiarMetodo = str(request.form.get('selector1'))
-    val = float(request.form.get('valor'))
-    x = [0 for i in range(n)]
-    y = [0 for i in range(n)]
-    for i in range(n):
-        x[i] = float(request.form.get('x'+str(i)))
-        y[i] = float(request.form.get('fx'+str(i)))
-    valores = [[0 for i in range(n)] for j in range(n)]
-    acum = ''
-    res = 0.0
-    #valorfx = 0
-    if cambiarMetodo == '0':
-        for i in range(n):
-            valores[i][0] = y[i]
-        for i in range(n):
-            for j in range(1,i):
-                try:
-                    valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j]) 
+# @app.route('/neville', methods = ['GET','POST'])
+# def neville():
+#     n = int(request.form.get('puntos'))
+#     indiceColumnas = [i for i in range(n)]
+#     cambiarMetodo = str(request.form.get('selector1'))
+#     val = float(request.form.get('valor'))
+#     x = [0 for i in range(n)]
+#     y = [0 for i in range(n)]
+#     for i in range(n):
+#         x[i] = float(request.form.get('x'+str(i)))
+#         y[i] = float(request.form.get('fx'+str(i)))
+#     valores = [[0 for i in range(n)] for j in range(n)]
+#     acum = ''
+#     res = 0.0
+#     #valorfx = 0
+#     if cambiarMetodo == '0':
+#         for i in range(n):
+#             valores[i][0] = y[i]
+#         for i in range(n):
+#             for j in range(1,i):
+#                 try:
+#                     valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j]) 
 
-        res = valores[n-1][n-1]
+#         res = valores[n-1][n-1]
         
-        temp = len(acum)
-        acum = acum[:temp - 1]
+#         temp = len(acum)
+#         acum = acum[:temp - 1]
         
-        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
-    else:
-        return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+#         return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+#     else:
+#         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
 #------------------------------------------------------------------------------------------------------------------
 

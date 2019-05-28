@@ -78,6 +78,53 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								</tbody>
 							</table>
 						{% endfor %}
+						<h3 style="text-align: center;margin-top:1.5%">Valores Iniciales</h3>
+						<table class="table">
+							<tbody>
+								<tr class="table-row"style="border: 1px solid">
+									{% for i in indiceFilas %}	
+										<td class="table-text"style="border: 1px solid"><input type="text" name="iniciales{{i}}" class="form-control1" placeholder="Valor x{{i}}" value="{{iniciales[i]}}"></td>
+									{% endfor %}
+								</tr>
+							</tbody>
+						</table>
+						<div class="form-group" style="margin-top:3%;">
+							<label for="focusedinput" class="col-sm-2 control-label">Ingrese la tolerancia <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba un valor del error minimo para que el metodo termine, escribalo0. en formato 0.01"></i></label>
+							<div class="col-sm-8">
+								<input type="text" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}">
+							</div>
+                    	</div>
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Ingrese las iteraciones <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba el numero de iteraciones que el metodo hará"></i></label>
+							<div class="col-sm-8">
+								<input type="text" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="selector2" class="col-sm-2 control-label">Tipo de error <i class="fas fa-info-circle" data-toggle="tooltip" title="Selecciona que tipo de error deseas ver en tu tabla de respuesta"></i></label>
+								<div class="col-sm-8">
+									<select name="selector2" id="selector2" class="form-control1">
+										<option value="0">Error Absoluto</option>
+										<option value="1">Error Relativo</option>
+									</select>
+								</div>
+						</div>
+						<div class="form-group">
+							<label for="selector1" class="col-sm-2 control-label">¿Desea usar otro metodo? <i class="fas fa-info-circle" data-toggle="tooltip" title="Cambia de metodo escogiendo que metodo deseas usar y dandole al boton ejecutar"></i></label>
+							<div class="col-sm-8">
+								<select name="selector1" id="selector1" class="form-control1">
+									<option selected="true" value="0">No</option>
+									<option value="eliminacionGaussiana">Eliminacion Gaussiana</option>
+									<option value="pivoteoParcial">Pivoteo Parcial</option>
+									<option value="pivoteoEscalonado">Pivoteo Escalonado</option>
+									<option value="pivoteoTotal">Pivoteo Total</option>
+									<option value="crout">Crout</option>
+									<option value="cholesky">Cholesky</option>
+									<option value="dolittle">Doolittle</option>
+									<option value="jacobi">Jacobi</option>
+								</select>
+							</div>
+						</div>
 						<div class="form-group">
 							<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
 								<label class="hvr-shutter-in-horizontal login-sub">
@@ -91,26 +138,25 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		{% endif %}
 		{% if dibujarMatrizSolucion == 1  %}
 			<div class="grid-form1">
-					<h3 style="text-align: center;">Matriz Solucion</h3>
+					<h3 style="text-align: center;">Solución</h3>
 			{% if error == 1 %}
 					<div class="form-group has-error">
 						<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
 					</div>
 			{% endif %}
-				<div class="tab-content">
-				<div class="tab-pane active" id="horizontal-form">
-						<table class="table">
-							<tbody>
-							{% for i in matrizSolucion %}
-									<tr class="table-row"style="border: 1px solid">
-									{% for j in i %}
-											<td class="table-text"style="border: 1px solid">{{j}}</td>
-									{% endfor %}
-									</tr
-							{% endfor %}
-							</tbody>
-						</table>
-				</div>
+				<table class="table">
+					<tbody>
+						{% for i in resultados %}
+							<tr class="table-row"style="border: 1px solid">
+								<td class="table-text"style="border: 1px solid"><h7> {{i[0]}} </h7></td>
+								{% for j in i[1] %}	
+									<td class="table-text"style="border: 1px solid"><h7> {{j}} </h7></td>
+								{% endfor %}
+								<td class="table-text"style="border: 1px solid"><h7> {{i[2]}} </h7></td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
 		{% endif %}
 	</div>

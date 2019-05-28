@@ -94,7 +94,7 @@ div#wrapper {
   top: 11px;
 }
 .label.label-info {
-  background-color:#3a73ef;
+  background-color:#EB0000;
 }
 .label {
   padding: 4px 6px;
@@ -220,7 +220,7 @@ h1 a.navbar-brand {
 	font-size: 30px;
 	font-weight: 500;
     padding: 20px 0px;
-    background: #3a73ef;
+    background: #d95459;
     text-align: center;
 	width:248px;
 	height: 60px;
@@ -228,7 +228,7 @@ h1 a.navbar-brand {
 }
 .navbar-default .navbar-brand:hover {
     color: #fff;
-    background-color: #3a73ef;
+    background-color: #d95459;
 }
 .navbar-right {
   margin-right: 10px !important;

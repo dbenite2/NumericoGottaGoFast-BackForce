@@ -129,7 +129,10 @@ def Biseccion():
     if (metodo == "0") or (metodo == "biseccion"):
         x = Symbol('x')
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except (ValueError, TypeError, NameError):
+            return render_template('biseccion.html', error = 1, mensajeError = 'Hay un error en la expresión ingresada',fx = request.form.get('fx'), x0i = request.form.get('x0'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         xi = float(request.form.get('xinf'))
         puntoInicial = xi
         xs = float(request.form.get('xsup'))
@@ -286,7 +289,10 @@ def Punto_fijo():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "puntoFijo"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except (ValueError, TypeError, NameError):
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         g = parse_expr(request.form.get('gx'),transformations=transformations)
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
@@ -361,7 +367,10 @@ def Newton():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "newton"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:
@@ -436,7 +445,10 @@ def Secante():
     if (metodo == "0")  or (metodo == "secante"):
         # x = Symbol('x')
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         xi = float(request.form.get('xinf'))
         xs = float(request.form.get('xsup'))
         if xi == xs:
@@ -511,7 +523,10 @@ def Raices_multiples():
     e = int(request.form.get('selector2'))
     if (metodo == "0") or (metodo == "raicesMultiples"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:

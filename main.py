@@ -129,7 +129,10 @@ def Biseccion():
     if (metodo == "0") or (metodo == "biseccion"):
         x = Symbol('x')
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except (ValueError, TypeError, NameError):
+            return render_template('biseccion.html', error = 1, mensajeError = 'Hay un error en la expresión ingresada',fx = request.form.get('fx'), x0i = request.form.get('x0'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         xi = float(request.form.get('xinf'))
         puntoInicial = xi
         xs = float(request.form.get('xsup'))
@@ -286,7 +289,10 @@ def Punto_fijo():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "puntoFijo"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except (ValueError, TypeError, NameError):
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         g = parse_expr(request.form.get('gx'),transformations=transformations)
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
@@ -361,7 +367,10 @@ def Newton():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "newton"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:
@@ -436,7 +445,10 @@ def Secante():
     if (metodo == "0")  or (metodo == "secante"):
         # x = Symbol('x')
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         xi = float(request.form.get('xinf'))
         xs = float(request.form.get('xsup'))
         if xi == xs:
@@ -511,7 +523,10 @@ def Raices_multiples():
     e = int(request.form.get('selector2'))
     if (metodo == "0") or (metodo == "raicesMultiples"):
         ejecuciones = []
-        f = parse_expr(request.form.get('fx'),transformations=transformations)
+        try:
+            f = parse_expr(request.form.get('fx'),transformations=transformations)
+        except:
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:
@@ -718,17 +733,19 @@ def EliminacionGaussiana():
     if cambiarMetodo == '0':   
         # Gauss elimina hacia adelante
         AB = np.vstack(matrizInicial)
-        print(AB)
         tamano = np.shape(AB)
         n = tamano[0]
         m = tamano[1]
         for i in range(0,n,1):
-            print("Entré")
             pivote = AB[i,i]
             adelante = i+1 
             for k in range(adelante,n,1):
                 if (np.abs(AB[k,i])>=casicero):
-                    coeficiente = pivote/AB[k,i]
+                    try:
+                        coeficiente = pivote/AB[k,i]
+                    except:
+                        matrizSolucion = np.vstack(AB)
+                        return render_template("eliminacionGaussiana.html", error = 1, mensajeError = "Se produjo una division por cero, abortando.",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                     AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
                 else:
                     coeficiente= 'division para cero'
@@ -749,7 +766,10 @@ def EliminacionGaussiana():
             atras = i-1 
             for k in range(atras,0-1,-1):
                 if (np.abs(AB[k,i])>=casicero):
-                    coeficiente = pivote/AB[k,i]
+                    try:
+                        coeficiente = pivote/AB[k,i]
+                    except:
+                        return render_template("eliminacionGaussiana.html",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                     AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
                 else:
                     coeficiente= 'division para cero'
@@ -785,17 +805,28 @@ def PivoteoTotal():
             matrizSolucion = linear_solver(matrizSolucion,k,n)
             procedimiento.append(np.vstack(matrizSolucion))  
             for i in range(k+1,n):
-                mult = matrizSolucion[i][k] / matrizSolucion[k][k]
+                try:
+                    mult = matrizSolucion[i][k] / matrizSolucion[k][k]
+                except:
+                    return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero, abortando.", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                 for j in range(k,n+1):
                     matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
             procedimiento.append(np.vstack(matrizSolucion))         
         x = [0 for i in range(n)]
-        x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
+        try:
+            x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
+        except:
+            X = np.traspose([x])
+            return render_template("pivoteoTotal.html", X = X, verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero, abortando.", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         for i in reversed(range(0,n)):
             z = 0
             for j in range(i+1,n):
                 z = z + float(matrizSolucion[i][i]) * x[j]
-            x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
+            try:
+                x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
+            except:
+                X = np.traspose([x])
+                return render_template("pivoteoTotal.html", X = X, verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero, abortando.", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         X = np.transpose([x])
         return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
@@ -825,19 +856,28 @@ def PivoteoParcial():
                 else:
                     pass
             for j in range(k+1,n):
-                q = float(M[j][k]) / M[k][k]
+                try:
+                    q = float(M[j][k]) / M[k][k]
+                except:
+                    return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
                 for m in range(k, n+1):
                     M[j][m] -=  q * M[k][m]
             #print de analisis
             print(M)
             procedimiento.append(M)
         X = [0 for i in range(n)]
-        X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+        try:
+            X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+        except:
+            return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, X = X, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
         for i in range (n-1,-1,-1):
             z = 0
             for j in range(i+1,n):
                 z = z  + float(M[i][j])*X[j]
-            X[i] = float(M[i][n] - z)/M[i][i]
+            try:
+                X[i] = float(M[i][n] - z)/M[i][i]
+            except:
+                return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, X = X, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
         X = np.transpose([X])
         return render_template("pivoteoParcial.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
@@ -1171,6 +1211,10 @@ def interpolacionNewton():
 def interpolacion_lagrange():
     return render_template("lagrange.html")
 
+# @app.route('/neville')
+# def interpolacion_neville():
+#     return render_template("nevile.html")
+
 
 @app.route('/newtonIntM', methods = ['GET' , 'POST'])
 def interpolacion_newton_t():
@@ -1188,33 +1232,42 @@ def interpolacion_lagrange_t():
     fx = ['' for i in range(n)]
     return render_template("lagrange.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
+# @app.route('/nevilleM', methods = ['GET' , 'POST'])
+# def interpolacion_lagrange_t():
+#     n = int(request.form.get('puntos'))
+#     indiceColumnas = [i for i in range(n)]
+#     x = ['' for i in range(n)]
+#     fx = ['' for i in range(n)]
+#     return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
+
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
     n = int(request.form.get('puntos'))
     cambiarMetodo = str(request.form.get('selector1'))
     indiceColumnas = [i for i in range(n)]
     val = float(request.form.get('valor'))
-    x = ['' for i in range(n)]
-    y = ['' for i in range(n)]
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
     for i in range(n):
         x[i] = float(request.form.get('x'+str(i)))
         y[i] = float(request.form.get('fx'+str(i)))
-    aux = [['' for i in range(n+1)] for j in range(1)]
+    aux = [[0 for i in range(n)] for j in range(n)]
     prod = 1.0
     acum = ''
     res = 0.0
     if cambiarMetodo == '0':
         for i in range(n):
             aux[i][0] = y[i]
-            for j in range(1,i):
+            for j in range(1,i + 1):
                 aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
             if(i > 0):
                 prod *= val-x[i-1]
             res += aux[i][i] * prod
-            acum = str(aux[i][i])+'*'+str(prod)+'+'
+            acum += str(aux[i][i])+'*'+str(prod)+'+'
         temp = len(acum)
         acum = acum[:temp - 1]
-        return render_template("newtonInterpolacion.html",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+        print(aux)
+        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
@@ -1225,12 +1278,12 @@ def lagrange():
     indiceColumnas = [i for i in range(n)]
     cambiarMetodo = str(request.form.get('selector1'))
     val = float(request.form.get('valor'))
-    x = ['' for i in range(n)]
-    y = ['' for i in range(n)]
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
     for i in range(n):
         x[i] = float(request.form.get('x'+str(i)))
         y[i] = float(request.form.get('fx'+str(i)))
-    l = ['' for i in range(n+1)]
+    l = [0.0 for i in range(n)]
     acum = ''
     res = 0.0
     #valorfx = 0
@@ -1239,15 +1292,48 @@ def lagrange():
             prod = 1.0
             for j in range(n):
                 if(j != i):
-                    prod *= (val - x[j]) / (x[i] / x[j])
-                l[i] = prod
-                acum += str(l[i])+'*'+str(y[i])+'+'
-                res += l[i]*y[i]
+                    prod *= (val - x[j]) / (x[i] - x[j])
+            l[i] = prod
+            res += (l[i]*y[i])
+            acum += str(l[i])+'*f(x'+str(i)+')+'
         temp = len(acum)
         acum = acum[:temp - 1]
         return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+
+# @app.route('/neville', methods = ['GET','POST'])
+# def neville():
+#     n = int(request.form.get('puntos'))
+#     indiceColumnas = [i for i in range(n)]
+#     cambiarMetodo = str(request.form.get('selector1'))
+#     val = float(request.form.get('valor'))
+#     x = [0 for i in range(n)]
+#     y = [0 for i in range(n)]
+#     for i in range(n):
+#         x[i] = float(request.form.get('x'+str(i)))
+#         y[i] = float(request.form.get('fx'+str(i)))
+#     valores = [[0 for i in range(n)] for j in range(n)]
+#     acum = ''
+#     res = 0.0
+#     #valorfx = 0
+#     if cambiarMetodo == '0':
+#         for i in range(n):
+#             valores[i][0] = y[i]
+#         for i in range(n):
+#             for j in range(1,i):
+#                 try:
+#                     valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j]) 
+
+#         res = valores[n-1][n-1]
+        
+#         temp = len(acum)
+#         acum = acum[:temp - 1]
+        
+#         return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+#     else:
+#         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+
 #------------------------------------------------------------------------------------------------------------------
 
 def linear_solver(A,k,n):

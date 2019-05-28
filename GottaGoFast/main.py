@@ -1069,7 +1069,7 @@ def Jacobi():
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
     iniciales = [0 for i in range(n)]
-    resultados = []
+    resultados = [['N',['X'+str(i) for i in range(n)],'ERROR']]
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
@@ -1098,11 +1098,12 @@ def Jacobi():
             iniciales = x1
             cont = cont + 1
             resultados.append([cont, iniciales,disp])
+        print(resultados)
         if disp < tol:
-            return render_template("jacobi.html",  tol = tol, ite = niter,dibujarMatrizInicial = 1, matrizInicial = matriz_i,resultados = resultados, iniciales = iniciales1 ,indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("jacobi.html",  tol = tol, ite = niter,dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, matrizInicial = matriz_i,resultados = resultados, iniciales = iniciales1 ,indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         else: 
-            return render_template("jacobi.html", tol = tol, ite = niter,dibujarMatrizInicial = 1, error = 1,mensajeError = "Fracaso en las iteraciones dadas", resultados = resultados, iniciales = iniciales1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
-        return render_template("jacobi.html", tol = tol, ite = niter, dibujarMatrizInicial = 1, matrizInicial = matriz_i, resultados = resultados, iniciales = iniciales1, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("jacobi.html", tol = tol, ite = niter, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, error = 1,mensajeError = "Fracaso en las iteraciones dadas", resultados = resultados, iniciales = iniciales1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
+        return render_template("jacobi.html", tol = tol, ite = niter, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, matrizInicial = matriz_i, resultados = resultados, iniciales = iniciales1, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         if cambiarMetodo == 'gaussSeidel':
             return render_template(cambiarMetodo+".html", tol = tol, ite = niter,dibujarMatrizInicial = 1, iniciales = iniciales1, dibujarMatrizSolucion = 0, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
@@ -1144,17 +1145,17 @@ def GaussSeidel():
                 try:
                     disp = abs((norma(x1) - norma(iniciales)) / norma(x1))
                 except:
-                    return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1,dibujarMatrizInicial = 1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
+                    return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1,dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             elif error == 0:
                 disp = abs(norma(x1) - norma(iniciales))
             iniciales = x1
             cont = cont + 1
             resultados.append([cont,iniciales,disp])
         if disp < tol:
-            return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1, dibujarMatrizInicial = 1, matrizInicial = matriz_i,resultados = resultados, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1, dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, matrizInicial = matriz_i,resultados = resultados, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         else: 
-            return render_template("gaussSeidel.html",  tol = tol, ite = niter,iniciales = iniciales1,dibujarMatrizInicial = 1, error = 1,mensajeError = "Fracaso en las iteraciones dadas", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
-        return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1, dibujarMatrizInicial = 1, matrizInicial = matriz_i, resultados = resultados, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("gaussSeidel.html",  tol = tol, ite = niter,iniciales = iniciales1,dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, error = 1,mensajeError = "Fracaso en las iteraciones dadas", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
+        return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1, dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, matrizInicial = matriz_i, resultados = resultados, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:   
         if cambiarMetodo == 'jacobi':
             return render_template(cambiarMetodo+".html", iniciales = iniciales1, tol = tol, ite = niter,dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
@@ -1171,76 +1172,82 @@ def interpolacion_lagrange():
     return render_template("lagrange.html")
 
 
-@app.route('/newtonInt', methods = ['GET' , 'POST'])
+@app.route('/newtonIntM', methods = ['GET' , 'POST'])
 def interpolacion_newton_t():
     n = int(request.form.get('puntos'))
-    val = float(request.get.form('valor'))
     indiceColumnas = [i for i in range(n)]
-    indiceFilas = 2
-    matrizInicial = [['' for i in range(n)] for j in range(2)]
-    return render_template("newtonInterpolacion.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    x = ['' for i in range(n)]
+    fx = ['' for i in range(n)]
+    return render_template("newtonInterpolacion.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
-@app.route('/lagrange', methods = ['GET' , 'POST'])
+@app.route('/lagrangeM', methods = ['GET' , 'POST'])
 def interpolacion_lagrange_t():
     n = int(request.form.get('puntos'))
-    val = float(request.get.form('valor'))
     indiceColumnas = [i for i in range(n)]
-    indiceFilas = 2
-    matrizInicial = [['' for i in range(n)] for j in range(2)]
-    return render_template("lagrange.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    x = ['' for i in range(n)]
+    fx = ['' for i in range(n)]
+    return render_template("lagrange.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
     n = int(request.form.get('puntos'))
+    cambiarMetodo = str(request.form.get('selector1'))
     indiceColumnas = [i for i in range(n)]
-    indiceFilas = 2
-    matriz_i = [['' for i in range(n)] for j in range(2)]
-    val = float(request.get.form('valor'))
-    for i in range(2):
-        for j in range(n):
-            indice = str(i)+str(j)
-            matriz_i[i][j] = float(request.form.get(indice))
-    x = np.delete(matriz_i,1,0)
-    y = np.delete(matriz_i,0,0)
-
-    aux = [[0 for i in range(n)]]
-    prod = 1.0
-    acum = 0
-
+    val = float(request.form.get('valor'))
+    x = ['' for i in range(n)]
+    y = ['' for i in range(n)]
     for i in range(n):
-        aux[i][0] = y[i]
-        for j in range(1,i):
-            aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
-        if(i > 0):
-            prod *= val-x[i-1]
-        acum += aux[i][i] * prod
-    return render_template("newtonInterpolacion.html",acum = acum)
+        x[i] = float(request.form.get('x'+str(i)))
+        y[i] = float(request.form.get('fx'+str(i)))
+    aux = [['' for i in range(n+1)] for j in range(1)]
+    prod = 1.0
+    acum = ''
+    res = 0.0
+    if cambiarMetodo == '0':
+        for i in range(n):
+            aux[i][0] = y[i]
+            for j in range(1,i):
+                aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
+            if(i > 0):
+                prod *= val-x[i-1]
+            res += aux[i][i] * prod
+            acum = str(aux[i][i])+'*'+str(prod)+'+'
+        temp = len(acum)
+        acum = acum[:temp - 1]
+        return render_template("newtonInterpolacion.html",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+    else:
+        return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
 
 @app.route('/lagrange', methods = ['GET','POST'])
 def lagrange():
     n = int(request.form.get('puntos'))
     indiceColumnas = [i for i in range(n)]
-    indiceFilas = 2
-    matriz_i = [['' for i in range(n)] for j in range(2)]
-    val = float(request.get.form('valor'))
-    for i in range(2):
-        for j in range(n):
-            indice = str(i)+str(j)
-            matriz_i[i][j] = float(request.form.get(indice))
-    x = np.delete(matriz_i,1,0)
-    y = np.delete(matriz_i,0,0)
-    l = [[0.0 for i in range(n)]]
-    acum = 0.0
-    #valorfx = 0
+    cambiarMetodo = str(request.form.get('selector1'))
+    val = float(request.form.get('valor'))
+    x = ['' for i in range(n)]
+    y = ['' for i in range(n)]
     for i in range(n):
-        prod = 1.0
-        for j in range(n):
-            if(j != i):
-                prod *= (val - x[j]) / (x[i] / x[j])
-            l[i] = prod
-            acum += l[i]*y[i]
-    return render_template("newtonInterpolacion.html",acum = acum)
+        x[i] = float(request.form.get('x'+str(i)))
+        y[i] = float(request.form.get('fx'+str(i)))
+    l = ['' for i in range(n+1)]
+    acum = ''
+    res = 0.0
+    #valorfx = 0
+    if cambiarMetodo == '0':
+        for i in range(n):
+            prod = 1.0
+            for j in range(n):
+                if(j != i):
+                    prod *= (val - x[j]) / (x[i] / x[j])
+                l[i] = prod
+                acum += str(l[i])+'*'+str(y[i])+'+'
+                res += l[i]*y[i]
+        temp = len(acum)
+        acum = acum[:temp - 1]
+        return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+    else:
+        return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 #------------------------------------------------------------------------------------------------------------------
 
 def linear_solver(A,k,n):

@@ -146,13 +146,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			{% endif %}
 				<table class="table">
 					<tbody>
-							{% for i in resultados %}
-								<tr class="table-row"style="border: 1px solid">
-								{% for j in i %}
+						{% for i in resultados %}
+							<tr class="table-row"style="border: 1px solid">
+								<td class="table-text"style="border: 1px solid"><h7> {{i[0]}} </h7></td>
+								{% for j in i[1] %}	
 									<td class="table-text"style="border: 1px solid"><h7> {{j}} </h7></td>
 								{% endfor %}
-								</tr>
-							{% endfor %}
+								<td class="table-text"style="border: 1px solid"><h7> {{i[2]}} </h7></td>
+							</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>

@@ -1171,6 +1171,10 @@ def interpolacionNewton():
 def interpolacion_lagrange():
     return render_template("lagrange.html")
 
+@app.route('/neville')
+def interpolacion_neville():
+    return render_template("nevile.html")
+
 
 @app.route('/newtonIntM', methods = ['GET' , 'POST'])
 def interpolacion_newton_t():
@@ -1188,33 +1192,42 @@ def interpolacion_lagrange_t():
     fx = ['' for i in range(n)]
     return render_template("lagrange.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
+@app.route('/nevilleM', methods = ['GET' , 'POST'])
+def interpolacion_lagrange_t():
+    n = int(request.form.get('puntos'))
+    indiceColumnas = [i for i in range(n)]
+    x = ['' for i in range(n)]
+    fx = ['' for i in range(n)]
+    return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
+
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
     n = int(request.form.get('puntos'))
     cambiarMetodo = str(request.form.get('selector1'))
     indiceColumnas = [i for i in range(n)]
     val = float(request.form.get('valor'))
-    x = ['' for i in range(n)]
-    y = ['' for i in range(n)]
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
     for i in range(n):
         x[i] = float(request.form.get('x'+str(i)))
         y[i] = float(request.form.get('fx'+str(i)))
-    aux = [['' for i in range(n+1)] for j in range(1)]
+    aux = [[0 for i in range(n)] for j in range(n)]
     prod = 1.0
     acum = ''
     res = 0.0
     if cambiarMetodo == '0':
         for i in range(n):
             aux[i][0] = y[i]
-            for j in range(1,i):
+            for j in range(1,i + 1):
                 aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
             if(i > 0):
                 prod *= val-x[i-1]
             res += aux[i][i] * prod
-            acum = str(aux[i][i])+'*'+str(prod)+'+'
+            acum += str(aux[i][i])+'*'+str(prod)+'+'
         temp = len(acum)
         acum = acum[:temp - 1]
-        return render_template("newtonInterpolacion.html",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+        print(aux)
+        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
@@ -1225,12 +1238,12 @@ def lagrange():
     indiceColumnas = [i for i in range(n)]
     cambiarMetodo = str(request.form.get('selector1'))
     val = float(request.form.get('valor'))
-    x = ['' for i in range(n)]
-    y = ['' for i in range(n)]
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
     for i in range(n):
         x[i] = float(request.form.get('x'+str(i)))
         y[i] = float(request.form.get('fx'+str(i)))
-    l = ['' for i in range(n+1)]
+    l = [0.0 for i in range(n)]
     acum = ''
     res = 0.0
     #valorfx = 0
@@ -1239,15 +1252,47 @@ def lagrange():
             prod = 1.0
             for j in range(n):
                 if(j != i):
-                    prod *= (val - x[j]) / (x[i] / x[j])
-                l[i] = prod
-                acum += str(l[i])+'*'+str(y[i])+'+'
-                res += l[i]*y[i]
+                    prod *= (val - x[j]) / (x[i] - x[j])
+            l[i] = prod
+            res += (l[i]*y[i])
+            acum += str(l[i])+'*f(x'+str(i)+')+'
         temp = len(acum)
         acum = acum[:temp - 1]
         return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+
+@app.route('/neville', methods = ['GET','POST'])
+def neville():
+    n = int(request.form.get('puntos'))
+    indiceColumnas = [i for i in range(n)]
+    cambiarMetodo = str(request.form.get('selector1'))
+    val = float(request.form.get('valor'))
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
+    for i in range(n):
+        x[i] = float(request.form.get('x'+str(i)))
+        y[i] = float(request.form.get('fx'+str(i)))
+    valores = [[0 for i in range(n)] for j in range(n)]
+    acum = ''
+    res = 0.0
+    #valorfx = 0
+    if cambiarMetodo == '0':
+        for i in range(n):
+            valores[i][0] = y[i]
+        for i in range(n):
+            for j in range(1,i):
+                valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j]) 
+
+        res = valores[n-1][n-1]
+        
+        temp = len(acum)
+        acum = acum[:temp - 1]
+        
+        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+    else:
+        return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+
 #------------------------------------------------------------------------------------------------------------------
 
 def linear_solver(A,k,n):

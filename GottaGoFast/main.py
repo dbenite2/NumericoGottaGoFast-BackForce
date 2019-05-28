@@ -75,7 +75,7 @@ def Busquedas_incrementales():
             fx0 = Funcion_f(f,x0)
         except (ValueError, TypeError, NameError):
             return render_template('busquedasIncrementales.html', error = 1, mensajeError = 'Hay un error en la expresión ingresada',fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
-        fx0 = Funcion_f(f,x0)
+        #fx0 = Funcion_f(f,x0)
         if fx0 == 0:
             graficar(0,f,'',puntoInicial,'',delta/10)
             return render_template('busquedasIncrementales.html', grafica = 1 ,x1 = x0, raiz = 1, error = 0, fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
@@ -145,8 +145,11 @@ def Biseccion():
         ite = int(request.form.get('ite'))
         if ite <= 0:
             return render_template('biseccion.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El numero de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
-        fxi = Funcion_f(f,xi)
-        fxs = Funcion_f(f,xs)
+        try:
+            fxi = Funcion_f(f,xi)
+            fxs = Funcion_f(f,xs)
+        except (ValueError, TypeError, NameError):
+            return render_template('biseccion.html', error = 1, mensajeError = 'Hay un error en la expresión ingresada',fx = request.form.get('fx'), x0i = request.form.get('x0'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
         if fxi == 0:
             return render_template('biseccion.html', grafica = 1 , error = 0, raiz = 1, xm = xi, tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
@@ -221,10 +224,11 @@ def Regla_falsa():
         ite = int(request.form.get('ite'))
         if ite <= 0:
             return render_template('reglaFalsa.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El numero de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
-        print('FXI')
-        fxi = Funcion_f(f,xi)
-        print('FXs')
-        fxs = Funcion_f(f,xs)
+        try:
+            fxi = Funcion_f(f,xi)
+            fxs = Funcion_f(f,xs)
+        except:
+            return render_template('reglaFalsa.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         puntoInicial = xi
         puntoFinal = xs
         graficar(1,f,'',puntoInicial, puntoFinal,abs((puntoInicial-puntoFinal)/100))
@@ -292,19 +296,22 @@ def Punto_fijo():
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except (ValueError, TypeError, NameError):
-            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         g = parse_expr(request.form.get('gx'),transformations=transformations)
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         ite = int(request.form.get('ite'))
         if tol == 0:
-            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'La tolerancia debe ser diferente de 0', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'La tolerancia debe ser diferente de 0', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         ite = int(request.form.get('ite'))
         if ite <= 0: 
-            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
         primerPunto = x0
-        fxa = Funcion_f(f,x0)
+        try:
+            fxa = Funcion_f(f,x0)
+        except (ValueError, TypeError, NameError):
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         contador = 0
         error = tol + 1
         ejecuciones.append([contador, x0, "{:+.2e}".format(fxa),'No Hay'])
@@ -370,18 +377,21 @@ def Newton():
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except:
-            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:
-            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'La tolerancia debe ser diferente de 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'La tolerancia debe ser diferente de 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         ite = int(request.form.get('ite'))
         if ite <= 0: 
-            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
         primerPunto = x0
-        fx0 = Funcion_f(f,x0)
-        dfx0 = Funcion_p(f,x0)
+        try:
+            fx0 = Funcion_f(f,x0)
+            dfx0 = Funcion_p(f,x0)
+        except: 
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         error = tol + 1
         contador = 0
         ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), 'No Hay', 'No Hay'])
@@ -459,8 +469,11 @@ def Secante():
         ite = int(request.form.get('ite'))
         if ite <= 0:
             return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El número de iteraciones debe ser mayor a 0', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
-        fxi = Funcion_f(f,xi)
-        fxs = Funcion_f(f,xs)
+        try:
+            fxi = Funcion_f(f,xi)
+            fxs = Funcion_f(f,xs)
+        except:
+            return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         puntoInicial = xi
         puntoFinal = xs
         graficar(1,f,'',puntoInicial,puntoFinal,abs((puntoInicial-puntoFinal)/100))
@@ -526,19 +539,22 @@ def Raices_multiples():
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except:
-            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         x0 = float(request.form.get('x0'))
         tol = float(request.form.get('tol'))
         if tol == 0:
-            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'La toleraciona debe de ser diferente de 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensajeError = 'La toleraciona debe de ser diferente de 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         ite = int(request.form.get('ite'))
         if ite <= 0:
-            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensaje_error = 'El número de iteraciones debe de ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensajeError = 'El número de iteraciones debe de ser mayor a 0', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         puntoInicial = x0
         primerPunto = x0
-        fx0 = Funcion_f(f,x0)
-        dfx0 = Funcion_p(f,x0)
-        d2fx0 = Funcion_p2(f,x0)
+        try:
+            fx0 = Funcion_f(f,x0)
+            dfx0 = Funcion_p(f,x0)
+            d2fx0 = Funcion_p2(f,x0)
+        except:
+            return render_template('raicesMultples.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
         den = (dfx0**2) - (fx0*d2fx0)
         error = tol + 1 
         contador = 0

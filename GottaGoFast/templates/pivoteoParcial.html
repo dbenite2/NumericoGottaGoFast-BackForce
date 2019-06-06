@@ -66,13 +66,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="tab-content">
 				<div class="tab-pane active" id="horizontal-form">
 					<form class="form-horizontal" id="form2" action="/pivoteoParcial" method="POST">
-						<input type="text" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}">
+						<input type="number" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}" required>
 						{% for i in indiceFilas %}
 							<table class="table">
 								<tbody>
 									<tr class="table-row"style="border: 1px solid">
 										{% for j in indiceColumnas %}
-											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i}}{{j}}" value="{{matrizInicial[i][j]}}"></td>
+											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i+1}}{{j+1}}" value="{{matrizInicial[i][j]}}" required></td>
 										{% endfor %}
 									</tr
 								</tbody>

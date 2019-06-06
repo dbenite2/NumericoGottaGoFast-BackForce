@@ -41,7 +41,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese el Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="El tamaño de la matriz sera N*N+1 donde la columna final son los valores independientes"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}"> 
+							<input type="number" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}" required> 
 					</div>	
 					<div class="form-group">
 						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
@@ -66,13 +66,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="tab-content">
 				<div class="tab-pane active" id="horizontal-form">
 					<form class="form-horizontal" id="form2" action="/gaussSeidel" method="POST">
-						<input type="text" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}">
+						<input type="number" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}" required>
 						{% for i in indiceFilas %}
 							<table class="table">
 								<tbody>
 									<tr class="table-row"style="border: 1px solid">
 										{% for j in indiceColumnas %}
-											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i}}{{j}}" value="{{matrizInicial[i][j]}}"></td>
+											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i+1}}{{j+1}}" value="{{matrizInicial[i][j]}}" required></td>
 										{% endfor %}
 									</tr
 								</tbody>
@@ -83,7 +83,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<tbody>
 								<tr class="table-row"style="border: 1px solid">
 									{% for i in indiceFilas %}	
-										<td class="table-text"style="border: 1px solid"><input type="text" name="iniciales{{i}}" class="form-control1" placeholder="Valor x{{i}}" value="{{iniciales[i]}}"></td>
+										<td class="table-text"style="border: 1px solid"><input type="text"  name="iniciales{{i}}" class="form-control1" placeholder="Valor x{{i+1}}" value="{{iniciales[i]}}" required></td>
 									{% endfor %}
 								</tr>
 							</tbody>
@@ -91,13 +91,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<div class="form-group" style="margin-top:3%;">
 							<label for="focusedinput" class="col-sm-2 control-label">Ingrese la tolerancia <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba un valor del error minimo para que el metodo termine, escribalo0. en formato 0.01"></i></label>
 							<div class="col-sm-8">
-								<input type="text" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}">
+								<input type="number" step="1e-64" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}" required>
 							</div>
                     	</div>
 						<div class="form-group">
 							<label for="focusedinput" class="col-sm-2 control-label">Ingrese las iteraciones <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba el numero de iteraciones que el metodo hará"></i></label>
 							<div class="col-sm-8">
-								<input type="text" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}">
+								<input type="number" min="1" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}" required>
 							</div>
 						</div>
 						<div class="form-group">

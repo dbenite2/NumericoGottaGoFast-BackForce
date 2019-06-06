@@ -1,3 +1,7 @@
+#Ejecución principal del programa Gotta Go Fast
+#en este se reciben las peticiones del cliente web y se redirige al método correspondiente
+#Desarrollado por: Jose Miguel Alzate. David Alejandro Benitez. Juan Pablo Londoño. Jennifer Maria Palacio
+
 from __future__ import division
 from flask import Flask, request, render_template,redirect,url_for
 from flask_caching import Cache
@@ -13,6 +17,7 @@ from sympy.parsing.sympy_parser import parse_expr,convert_xor,standard_transform
 import os
 from math import pi
 
+#Sets iniciales para los manejos de funciones, expresiones y errores.
 np.seterr(all = 'raise',divide = 'raise', invalid = 'raise')
 f = Function('fx')
 X = Symbol('x')
@@ -56,13 +61,14 @@ def raices_multiples():
 def secante():
     return render_template("secante.html")
 
-
+#Ejecución inicial del método para busquedas incrementales
 @app.route('/busquedasIncrementales', methods=['GET','POST'])
 def Busquedas_incrementales():
     global f
     x = Symbol('x')
     metodo = request.form.get('selector1')
     if (metodo == "0") or (metodo == "busquedasIncrementales"):
+        #recolección de datos desde el cliente web con controles de entrada
         ejecuciones = []
         f = parse_expr(request.form.get('fx'),transformations=transformations)
         x0 = float(request.form.get('x0'))
@@ -82,6 +88,7 @@ def Busquedas_incrementales():
             graficar(0,f,'',puntoInicial,'',delta/10)
             return render_template('busquedasIncrementales.html', grafica = 1 ,x1 = x0, raiz = 1, error = 0, fx = request.form.get('fx'), x0i = request.form.get('x0'), delta = request.form.get('delta'), ite = request.form.get('ite'))
         else:
+            #Procesamiento de los datos según la funcionalidad del método
             x1 = x0 + delta
             fx1 = Funcion_f(f,x1)
             contador = 1
@@ -123,6 +130,7 @@ def Busquedas_incrementales():
             #ite = int(request.form.get('ite'))
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Bisección
 @app.route('/biseccion', methods=['GET','POST'])
 def Biseccion():
     global f
@@ -131,6 +139,7 @@ def Biseccion():
     if (metodo == "0") or (metodo == "biseccion"):
         x = Symbol('x')
         ejecuciones = []
+        #Recolección de los datos desde el cliente web con controles de entrada
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except (ValueError, TypeError, NameError):
@@ -160,6 +169,7 @@ def Biseccion():
         elif fxs*fxi > 0:
             return render_template('biseccion.html', grafica = 1 , error = 1, mensajeError = 'En el intervalor ingresado no hay ninguna raiz', tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         else:
+            #Procesamiento de los datos según la funcionalidad del método
             xm = (xi + xs) / 2
             fxm = Funcion_f(f,xm)
             ejecuciones.append([0,str(xm),str("{:+.2e}".format(fxm)),'No Hay','No Hay'])
@@ -207,6 +217,7 @@ def Biseccion():
             # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Regla falsa
 @app.route('/reglaFalsa', methods=['GET','POST'])
 def Regla_falsa():
     global f
@@ -215,6 +226,7 @@ def Regla_falsa():
     if (metodo == "0")  or (metodo == "reglaFalsa"):
         x = Symbol('x')
         ejecuciones = []
+        #Recolección de datos desde el cliente web con controles de entrada
         f = parse_expr(request.form.get('fx'),transformations=transformations)
         xi = float(request.form.get('xinf'))
         xs = float(request.form.get('xsup'))
@@ -241,6 +253,7 @@ def Regla_falsa():
         elif fxs*fxi > 0:
             return render_template('reglaFalsa.html', grafica = 1, error = 1, mensajeError = 'En el intervalor ingresado no hay ninguna raiz', tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         else:
+            #Procesamiento de los datos según la funcionalidad del método
             xm = xi - (fxi*(xs-xi))/(fxs-fxi)
             fxm = Funcion_f(f,xm)
             ejecuciones.append([0, xm, "{:+.2e}".format(fxm), 'No Hay', 'No Hay'])
@@ -288,6 +301,7 @@ def Regla_falsa():
             # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Punto fijo
 @app.route('/puntoFijo',methods = ['GET','POST'])
 def Punto_fijo():
     global f 
@@ -295,6 +309,7 @@ def Punto_fijo():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "puntoFijo"):
         ejecuciones = []
+        #Recolección de datos desde el cliente web con controles de entrada
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except (ValueError, TypeError, NameError):
@@ -313,17 +328,18 @@ def Punto_fijo():
         try:
             fxa = Funcion_f(f,x0)
         except (ValueError, TypeError, NameError):
-            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión fx ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+        try:
+            controlGx = Funcion_f(g,x0)
+        except (ValueError, TypeError, NameError):
+            return render_template('puntoFijo.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión gx ingresada ', fx = request.form.get('fx'), gx = request.form.get('gx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+        #Procesamiento de los datos según la funcionalidad del método            
         contador = 0
         error = tol + 1
         ejecuciones.append([contador, x0, "{:+.2e}".format(fxa),'No Hay'])
         while fxa != 0 and error > tol and contador < ite:
-            print("empieza ejecución")
-            print("Función g: ",g)
             xn = Funcion_f(g,x0)
-            print("xn: ", xn)
             fxa = Funcion_f(f,x0)
-            print("fxa: ", fxa)
             if e == 0:
                 error = abs(xn - x0)
             elif e == 1:
@@ -369,6 +385,7 @@ def Punto_fijo():
             # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Newton
 @app.route('/newton', methods = ['GET','POST'])
 def Newton():
     global f
@@ -376,6 +393,7 @@ def Newton():
     e = int(request.form.get('selector2'))
     if(metodo == "0" or metodo == "newton"):
         ejecuciones = []
+        #Recolección de los datos con control de datos
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except:
@@ -393,7 +411,8 @@ def Newton():
             fx0 = Funcion_f(f,x0)
             dfx0 = Funcion_p(f,x0)
         except: 
-            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+            return render_template('newton.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión fx ingresada', fx = request.form.get('fx'), x0 = request.form.get('x0'), ite = request.form.get('ite'))
+        #Procesamiento de los datos según la funcionalidad del método    
         error = tol + 1
         contador = 0
         ejecuciones.append([contador, x0, "{:+.2e}".format(fx0), 'No Hay', 'No Hay'])
@@ -449,6 +468,7 @@ def Newton():
             #return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Secante
 @app.route('/secante', methods=['GET','POST'])
 def Secante():
     global f
@@ -457,6 +477,7 @@ def Secante():
     if (metodo == "0")  or (metodo == "secante"):
         # x = Symbol('x')
         ejecuciones = []
+        #Recolección de los datos desde el cliente web con control de entrada
         try:
             f = parse_expr(request.form.get('fx'),transformations=transformations)
         except:
@@ -475,7 +496,7 @@ def Secante():
             fxi = Funcion_f(f,xi)
             fxs = Funcion_f(f,xs)
         except:
-            return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
+            return render_template('secante.html', error = 1, tol = request.form.get('tol'), mensajeError = 'Hay un error en la expresión fx ingresada', fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         puntoInicial = xi
         puntoFinal = xs
         graficar(1,f,'',puntoInicial,puntoFinal,abs((puntoInicial-puntoFinal)/100))
@@ -486,6 +507,7 @@ def Secante():
         elif fxs*fxi > 0:
             return render_template('secante.html', error = 1, mensajeError = 'En el intervalor ingresado no hay ninguna raiz', tol = request.form.get('tol'), fx = request.form.get('fx'), xinf = request.form.get('xinf'), xsup = request.form.get('xsup'), ite = request.form.get('ite'))
         else:
+            #Procesamiento de los datos según la funcionalidad del método
             contador = 0
             error = tol + 1
             denominador = fxs - fxi
@@ -531,6 +553,7 @@ def Secante():
             # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
             return render_template(metodo + ".html", fx = f)
 
+#Ejecución inicial del método para Raices Multiples
 @app.route('/raicesMultiples', methods = ['GET','POST'])
 def Raices_multiples():
     global f
@@ -621,7 +644,7 @@ def Raices_multiples():
 
 
 #-------------------------------------------------- SISTEMAS DE ECUACIONES---------------------------------------------------
-#Vistas iniciales 
+#Se inicia con las vistas iniciales antes de cualquier ejecución 
 @app.route('/eliminacionGaussiana')
 def eliminacionGaussiana():
     return render_template("eliminacionGaussiana.html")
@@ -658,7 +681,7 @@ def jacobi():
 def gaussSeidel():
     return render_template("gaussSeidel.html")
 
-#Generacion de matrices 
+#Generacion de las matrices visuales según el método seleccionado 
 @app.route('/eliminacionGaussianaM', methods = ['GET','POST'])
 def EliminacionGaussianaM():
     n = int(request.form.get('n'))
@@ -734,11 +757,13 @@ def GaussSeidelM():
     return render_template("gaussSeidel.html", dibujarMatrizInicial = 1, matrizInicial = matrizInicial, iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 #Metodos operacionales
+#Ejecución inicial del método para Eliminación Gaussiana
 @app.route('/eliminacionGaussiana', methods = ['GET','POST'])
 def EliminacionGaussiana():
-    np.seterr(divide = 'raise', invalid = 'raise')
+    np.seterr(divide = 'raise', invalid = 'raise') #Control de errores por parte de Numpy
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
+    #Recolección de datos por parte del cliente web con control de errores
     tam = int(request.form.get('n'))
     indiceColumnas = [i for i in range(tam+1)]
     indiceFilas= [i for i in range(tam)]
@@ -773,12 +798,8 @@ def EliminacionGaussiana():
                     AB[k,:] = AB[k,:]*coeficiente - AB[i,:]
                 else:
                     coeficiente= 'division para cero'
-                print('coeficiente: ',coeficiente)
-                print(AB)
                 procedimiento.append(np.vstack(AB))
-        print(' *** Gauss-Jordan elimina hacia atras *** ')
         matrizSolucion = np.vstack(AB)
-        print(matrizSolucion)
         # Gauss-Jordan elimina hacia atras
         ultfila = n-1
         ultcolumna = m-1
@@ -787,7 +808,6 @@ def EliminacionGaussiana():
             try:
                 AB[i,:] = AB[i,:] / AB[i,i]
             except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                print("Division por cero")
                 X = AB[:,ultcolumna]
                 X = np.transpose([X])
                 return render_template("eliminacionGaussiana.html", error = 1, mensajeError = "Se produjo una division por cero. Abortando",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam, X = X)                
@@ -810,12 +830,13 @@ def EliminacionGaussiana():
         return render_template("eliminacionGaussiana.html",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam)
-
+#Ejecución inicial del método para Eliminación Gaussiana con Pivoteo Total
 @app.route('/pivoteoTotal', methods = ['GET','POST'])
 def PivoteoTotal():
-    np.seterr(divide = 'raise', invalid = 'raise')
+    np.seterr(divide = 'raise', invalid = 'raise')#Control de errores por parte de Numpy
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
+    #Recolección de datos desde el cliente web con control de errores
     n = int(request.form.get('n'))
     tam = n
     indiceColumnas = [i for i in range(tam+1)]
@@ -865,12 +886,13 @@ def PivoteoTotal():
         return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-
+#Ejecución inicial del método para Eliminación Gaussiana con pivoteo parcial
 @app.route('/pivoteoParcial', methods = ['GET','POST'])
 def PivoteoParcial():
-    np.seterr(divide = 'raise', invalid = 'raise')
+    np.seterr(divide = 'raise', invalid = 'raise')#Control de errores por parte de Numpy
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
+    #Recolección de datos por parte del cliente web con control de entrada
     n = int(request.form.get('n'))
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
@@ -940,11 +962,13 @@ def PivoteoEscalonado():
     
     return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
+#Ejecución inicial del método para Crout
 @app.route('/crout', methods = ['GET','POST'])
 def Crout():
     np.seterr(divide = 'raise', invalid = 'raise')
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
+    #Recolección de datos por parte del cliente web con control de entrada
     n = int(request.form.get('n'))
     procedimientoL = []
     procedimientoU = []
@@ -1014,9 +1038,11 @@ def Crout():
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
+#Ejecución inicial del método para Doolittle
 @app.route('/doolittle', methods = ['GET','POST'])
 def Doolittle():
-    np.seterr(divide = 'raise', invalid = 'raise')
+    np.seterr(divide = 'raise', invalid = 'raise')#Control de errores por parte de Numpy
+    #Recolección de datos desde el cliente web con control de entrada
     n = int(request.form.get('n'))
     procedimientoL = []
     procedimientoU = []
@@ -1081,10 +1107,11 @@ def Doolittle():
         return render_template("doolittle.html",verProcedimiento = verProcedimiento, X = X, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-
+#Ejecución inicial del método para Cholesky
 @app.route('/cholesky', methods = ['GET','POST'])
 def Cholesky():
-    np.seterr(divide = 'raise', invalid = 'raise')
+    np.seterr(divide = 'raise', invalid = 'raise')#control de errores por parte de Numpy
+    #Recolección de datos desde el cliente web con control de entrada
     n = int(request.form.get('n'))
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
@@ -1197,7 +1224,10 @@ def Jacobi():
         x1 = [0 for i in range(n)]
         resultados.append([cont,iniciales,disp])
         while disp > tol and cont < niter:
-            x1 = calcular_nuevo_jacobi(iniciales,n,b,matriz_s)
+            try:
+                x1 = calcular_nuevo_jacobi(iniciales,n,b,matriz_s)
+            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                    return render_template("jacobi.html", tol = tol, ite = niter,dibujarMatrizInicial = 1, iniciales = iniciales1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             if error == 0:
                 try:
                     disp = abs((norma(x1) - norma(iniciales)) / norma(x1))
@@ -1261,7 +1291,10 @@ def GaussSeidel():
         x1 = [0 for i in range(n)]
         resultados.append([cont,iniciales,disp])
         while disp > tol and cont < niter:
-            x1 = calcular_nuevo_seidel(iniciales,n,b,matriz_s)
+            try:
+                x1 = calcular_nuevo_seidel(iniciales,n,b,matriz_s)
+            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                    return render_template("gaussSeidel.html", tol = tol, ite = niter,dibujarMatrizInicial = 1, iniciales = iniciales1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             if error == 1:
                 try:
                     disp = abs((norma(x1) - norma(iniciales)) / norma(x1))
@@ -1341,7 +1374,10 @@ def InterpolacionNewton():
         for i in range(n):
             aux[i][0] = y[i]
             for j in range(1,i + 1):
-                aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
+                try:
+                    aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
+                except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                    return render_template("newtonInterpolacion.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             if(i > 0):
                 prod *= val-x[i-1]
             res += aux[i][i] * prod
@@ -1375,7 +1411,10 @@ def lagrange():
             prod = 1.0
             for j in range(n):
                 if(j != i):
-                    prod *= (val - x[j]) / (x[i] - x[j])
+                    try:
+                        prod *= (val - x[j]) / (x[i] - x[j])
+                    except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                        return render_template("newtonInterpolacion.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             l[i] = prod
             res += (l[i]*y[i])
             acum += str(l[i])+'*f(x'+str(i)+')+'

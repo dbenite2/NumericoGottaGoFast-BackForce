@@ -86,7 +86,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
-		{% if grafica == 1%}
+		{% if grafica == 1 && error != 1%}
 		<div class="grid-form1">
 			<div class="gallery-img">
 				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
@@ -94,10 +94,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>	
 		</div>
 		{% endif %}
-		<div class="grid-form1">
-			{% if raiz == 1 %}
+		{% if raiz == 1 && error != 1 error != 1%}
+			<div class="grid-form1">
+			
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
-			{% elif raiz == 0%}
+		{% elif raiz == 0 && error != 1%}
 				<p style="margin-bottom: 1%; text-align: center;">El metodo no encontro ninguna raiz con una tolerancia de {{tol}} en {{n}} iteraciones</p>
 				<table class="table">
 					<tbody>
@@ -126,7 +127,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						{% endfor %}
 					</tbody>
 				</table>
-			{% elif raiz == 3 %}
+		{% elif raiz == 3 && error != 1%}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} con una tolerancia de {{tolFinal}} </p>
 				<table class="table">
 					<tbody>
@@ -154,7 +155,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						{% endfor %}
 					</tbody>
 				</table>
-				{% elif raiz == 2 %}
+			{% elif raiz == 2 && error != 1%}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
 				<table class="table">
 					<tbody>
@@ -182,8 +183,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						{% endfor %}
 					</tbody>
 				</table>
-			{% endif %}
-		</div>
+			</div>
+		{% endif %}
+		
 	</div>
 </div>
 </div>

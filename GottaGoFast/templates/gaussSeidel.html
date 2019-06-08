@@ -25,7 +25,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Gauss Seidel</p>
+		<p>Este método permite hallar las aproximaciones a una solución de sistemas de ecuaciones lineales, utilizando los valores calculados en cada uno de los pasos, para hallar los nuevos valores, es decir, en este método un cálculo siempre depende del anterior.</p>
+
+		<p><br/>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
+		
+		<p><br/>*	Para iniciar se debe de ingresar los siguientes datos: unas aproximaciones iniciales, la matriz de coeficientes, el vector de términos independientes, una tolerancia y un número total de iteraciones.</p>
+		<p>*	Se escogen las aproximaciones iniciales, las cuales servirán para hallar las nuevas aproximaciones.</p>
+		<p>*	En cada paso, es posible calcular el error, siempre y cuando se calcule la norma.</p>
+		<p>*	Como parte final de programa se debe tener pendiente lo siguiente. Si el programa sobrepasa el número de iteraciones, o si el error es menor del propuesto al principio; si sucede alguna de estas dos situaciones, la última iteración será donde se encuentra las aproximaciones a la solución del sistema de ecuaciones.</p>
 	</div>
 	
 	<div class="grid-form1">
@@ -126,7 +133,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</div>
 			</div>
 		{% endif %}
-		{% if dibujarMatrizSolucion == 1  && error != 1%}
+		{% if dibujarMatrizSolucion == 1  and error != 1%}
 			<div class="grid-form1">
 					<h3 style="text-align: center;">Solución</h3>
 				<table class="table">

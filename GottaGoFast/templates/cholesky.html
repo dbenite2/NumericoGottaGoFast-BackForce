@@ -25,7 +25,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Cholesky</p>
+		<p>En este método se utiliza como base que los valores de la diagonal de la matriz U son iguales a los de la matriz L, es decir: Ukk = Lkk.</p>
+		<p>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
+		<p>*	Se construye la matriz de coeficiente y el vector con los términos independientes correspondientes al sistema, tomándolos como valores iniciales para poder calcular la factorización.</p>
+		<p>*	Se toma la matriz de coeficiente y teniendo en cuenta la base del principio del método, se procede a realizar el cálculo de las matrices L y U, correspondientes a la factorización de A.</p>
+		<p>*	Cuando se tenga la factorización, se toma la matriz de la factorización U y el vector x para proceder a calcular el vector z.</p>
+		<p>*	Una vez se tenga el vector z, el vector de términos independientes y la matriz L de la factorización, se procede a resolver el sistema Lz=b.</p>
 	</div>
 	
 	<div class="grid-form1">
@@ -109,7 +114,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</div>
 			</div>
 		{% endif %}
-		{% if dibujarMatrizSolucion == 1   && error != 1 %}
+		{% if dibujarMatrizSolucion == 1   and error != 1 %}
 			<div class="grid-form1">
 			{% if verProcedimiento == 0 %}
 				<div class="tab-content">

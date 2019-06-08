@@ -25,7 +25,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Eliminacion Gaussiana</p>
+		</p>El método de eliminación Gaussiana Simple se descompone en 2 procesos fundamentales, los cuales son:</p>
+
+		<p><br/>Primero, se debe de transformar el sistema de ecuaciones, utilizando las operaciones básicas, hasta que se obtiene un sistema de ecuaciones equivalente, en la que la matriz de coeficiente es una matriz triangular superior.</p>
+
+		<p><br/>Segundo, se realiza el despeje en el sistema que se obtiene.</p>
+
+		<p><br/>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
+
+		<p><br/>*	Se debe construir la matriz de coeficientes y el vector con los términos independientes, correspondientes al sistema, y se crea una matriz llamada la matriz aumentada.</p>
+		<p>*	Se calculan los multiplicadores correspondientes en cada una de las etapas.</p>
+		<p>*	Con los multiplicadores que se hallan en cada una de las etapas, se procede al cálculo de las nuevas filas de la matriz aumentada.</p>
+		<p>*	Cuando se tenga la matriz aumentada de la forma triangular superior, se procede a realizar una sustitución regresiva, para el cálculo de las variables.</p>
+
 	</div>
 	
 	<div class="grid-form1">
@@ -110,7 +122,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 		{% endif %}
-		{% if dibujarMatrizSolucion == 1  && error != 1%}
+		{% if dibujarMatrizSolucion == 1  and error != 1%}
 			<div class="grid-form1">
 					<h3 style="text-align: center;">Matriz Solucion</h3>
 			{% if verProcedimiento == 0 %}

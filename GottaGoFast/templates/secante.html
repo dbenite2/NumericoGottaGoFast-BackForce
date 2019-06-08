@@ -93,7 +93,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
-        {% if grafica == 1 && error != 1 %}
+        {% if grafica == 1 and error != 1 %}
 		<div class="grid-form1">
 			<div class="gallery-img">
 				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
@@ -101,7 +101,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>	
 		</div>
 		{% endif %}
-		{% if raiz == 1 && error != 1 %}
+		{% if raiz == 1 and error != 1 %}
             <div class="grid-form1">
                 
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
@@ -131,7 +131,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                {% elif raiz == 3 && error != 1 %}
+                {% elif raiz == 3 and error != 1 %}
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} con una tolerancia de {{tolFinal}} </p>
                     <table class="table">
                         <tbody>
@@ -156,7 +156,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% elif raiz == 2 && error != 1 %}
+                    {% elif raiz == 2 and error != 1 %}
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
                     <table class="table">
                         <tbody>
@@ -182,7 +182,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% elif raiz == 4 && error != 1  %}
+                    {% elif raiz == 4 and error != 1  %}
                     <p style="margin-bottom: 1%; text-align: center;">Existen multiples raices cerca a X = {{xm}} </p>
                     <table class="table">
                         <tbody>

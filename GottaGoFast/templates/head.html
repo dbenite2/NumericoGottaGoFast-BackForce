@@ -61,6 +61,20 @@ document.getElementById("resultado").innerHTML=tabla;
 </script>
 <script src="{{url_for('static',filename='js/jquery.nicescroll.js')}}"></script>
 <script src="{{url_for('static',filename='js/scripts.js')}}"></script>
+<script>
+function mostrarOcultar(id){
+var elemento = document.getElementById(id);
+  if(!elemento) {
+    return true;
+  }
+  if (elemento.style.display == "none") {
+    elemento.style.display = "block"
+  } else {
+    elemento.style.display = "none"
+  };
+  return true;
+  };
+</script>
 
 <div id="wrapper">
     <nav class="navbar-default navbar-static-top" role="navigation">

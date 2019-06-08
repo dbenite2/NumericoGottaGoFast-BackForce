@@ -25,12 +25,21 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
+	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
 		<p>El método de regla falsa es muy parecido al método de bisección, la única variante en este es la forma en que es calculado el punto medio, Para esto se tienen dos puntos los cuales se sabe que uno está por debajo del eje x y otro está por encima del eje x, la idea con este método es que al trazar una recta entre dos puntos, el punto que corte el eje x será el punto medio que crea los dos nuevos sub intervalos, ahora mirando el valor de f(medio) y el signo y comparando este  con los signos de  f(a) y f(b) elegiremos  uno de los dos sub intervalos para volver a hacer el mismo procedimiento.</p>
 		<p>En la siguiente gráfica se tienen 2 puntos (a, f(a)) y (b, f(b)) los primero que se hace es trazar una recta entre estos dos puntos, como se puede observar el punto de la recta que corta el eje x será nuestro nuevo punto medio y lo llamaremos x1, ahora como se ve que f(x1) * f(a) ! < 0 pero f(x1) * f(b) < 0 Entonces se elige el intervalo de la derecha para asegurar que la recta entre los puntos corte el eje x. Luego se coge el punto (f(x1)) y se traza una recta con el punto (b, f(b)) el punto que corta con el eje x será el nuevo punto medio, en este caso es x2.</p>
 		<div class="gallery-img">
 			<img class="img-responsive " src="{{url_for('static',filename='images/regla.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
 			<span class="zoom-icon"> </span> </a>
+		</div>
+	</div>
+	<div class="blankpage">
+		<div class="form-group">
+			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
+				<label class="hvr-shutter-in-horizontal login-sub">
+					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+				</label>
+			</div>
 		</div>
 	</div>
 	<div class="grid-form1">

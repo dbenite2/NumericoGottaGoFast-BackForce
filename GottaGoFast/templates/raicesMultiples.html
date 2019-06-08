@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
+	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
 		<p>Una de las condiciones para garantizar la convergencia del método de Newton es que la primera derivada f’(x) debe ser diferente de cero (0), donde x es la raíz de la ecuación f(x), pero si por el contrario la derivada se va aproximando a cero, se observa que va perdiendo rapidez y se debe hallar la segunda derivada f’’(x) para encontrar una solución.</p>
 		<p>Para poder hallar la segunda derivada, se debe de tener en cuenta la siguiente ecuación:</p>
 		<div class="gallery-img">
@@ -38,6 +38,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<div class="gallery-img">
 			<img class="img-responsive " src="{{url_for('static',filename='images/raices2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
 			<span class="zoom-icon"> </span> </a>
+		</div>
+	</div>
+	<div class="blankpage">
+		<div class="form-group">
+			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
+				<label class="hvr-shutter-in-horizontal login-sub">
+					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+				</label>
+			</div>
 		</div>
 	</div>
 	<div class="grid-form1">

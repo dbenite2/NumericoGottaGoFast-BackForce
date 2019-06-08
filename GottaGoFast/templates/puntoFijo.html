@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
+	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
 		<p>El método de Punto Fijo parte desde un punto inicial y aplicando la ecuación g(x)=0 se calcula los términos sucesivos, realizando repeticiones en el proceso hasta que se obtiene el resultado.</p>
 		<p>La ecuación x =g(x) se utiliza para generar la sucesión de {xn}n=0 que se define de la siguiente manera:</p>
 		<p> * Paso 0. Elegimos una aproximación inicial X0</p>
@@ -34,6 +34,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<div class="gallery-img">
 			<img class="img-responsive " src="{{url_for('static',filename='images/punto.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
 			<span class="zoom-icon"> </span> </a>
+		</div>
+	</div>
+	<div class="blankpage">
+		<div class="form-group">
+			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
+				<label class="hvr-shutter-in-horizontal login-sub">
+					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+				</label>
+			</div>
 		</div>
 	</div>
 	<div class="grid-form1">

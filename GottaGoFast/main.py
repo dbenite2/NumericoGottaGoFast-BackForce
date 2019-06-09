@@ -1560,10 +1560,11 @@ def calcular_nuevo_seidel(x0, n, b, A):
         x1[i] = x0[i]
     for i in range(0,n):
         suma = 0.0
+        print("x1: ",x1)
         for j in range(0,n):
             if j != i:
                 suma += A[i][j] * x1[j]
-        x1 = (b[i] - suma) / A[i][i]
+        x1[i] = (b[i] - suma) / A[i][i]
     return x1
 
 def norma(x0):

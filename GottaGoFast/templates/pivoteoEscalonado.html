@@ -25,7 +25,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
-		<p>Aqui va informacion sobre Pivoteo Escalonado</p>
+		<p>En el pivoteo escalonado, el primer paso consiste en elegir como pivote cada fila, al elemento que tenga el maximo valor absoluto.</p>
+		<p>Luego, se procede a dividir cada elemento de la columna en valor absoluto por el maximo de cada fila.</p>
+		<p>La fila p escogida como pivote sera aquella cuyo resultado derivado de la division anterior sea mayor.</p>
 	</div>
 	<div class="blank-page" style="margin-bottom:1.5%">
 		<form class="form-horizontal" id="form" >
@@ -46,7 +48,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese el Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="El tamaño de la matriz sera N*N+1 donde la columna final son los valores independientes"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}"> 
+							<input type="number" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}" required> 
 					</div>	
 					<div class="form-group">
 						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
@@ -77,12 +79,37 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<tbody>
 									<tr class="table-row"style="border: 1px solid">
 										{% for j in indiceColumnas %}
-											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i}}{{j}}" value="{{matrizInicial[i][j]}}"></td>
+											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i+1}}{{j+1}}" value="{{matrizInicial[i][j]}}" required></td>
 										{% endfor %}
 									</tr
 								</tbody>
 							</table>
 						{% endfor %}
+						<div class="form-group" style="margin-top:1.5%;">
+							<label  for="selector" class="col-sm-2 control-label">Ver procedimiento <i class="fas fa-info-circle" data-toggle="tooltip" title="Dale si sí deseas ver cada una de las fases del metodo"></i></label>
+								<div class="col-sm-8">
+									<select name="selector" id="selector" class="form-control1">
+										<option value="0">No</option>
+										<option value="1">Si</option>
+									</select>
+								</div>
+						</div>
+						<div class="form-group">
+							<label for="selector1" class="col-sm-2 control-label">¿Desea usar otro metodo? <i class="fas fa-info-circle" data-toggle="tooltip" title="Cambia de metodo escogiendo que metodo deseas usar y dandole al boton ejecutar"></i></label>
+							<div class="col-sm-8">
+								<select name="selector1" id="selector1" class="form-control1">
+									<option selected="true" value="0">No</option>
+									<option value="eliminacionGaussiana">Eliminacion Gaussiana</option>
+									<option value="pivoteoParcial">Pivoteo Parcial</option>
+									<option value="pivoteoEscalonado">Pivoteo Total</option>
+									<option value="crout">Crout</option>
+									<option value="doolittle">Doolittle</option>
+									<option value="cholesky">Cholesky</option>
+									<option value="jacobi">Jacobi</option>
+									<option value="gaussSeidel">Gauss Seidel</option>
+								</select>
+							</div>
+						</div>
 						<div class="form-group">
 							<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
 								<label class="hvr-shutter-in-horizontal login-sub">
@@ -94,27 +121,56 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</div>
 			</div>
 		{% endif %}
-		{% if dibujarMatrizSolucion == 1 and error != 1 %}
+		</div>
+		{% if dibujarMatrizSolucion == 1  and error != 1 %}
 			<div class="grid-form1">
 					<h3 style="text-align: center;">Matriz Solucion</h3>
+			{% if verProcedimiento == 0 %}
 				<div class="tab-content">
-				<div class="tab-pane active" id="horizontal-form">
+					<div class="tab-pane active" id="horizontal-form">
 						<table class="table">
 							<tbody>
-							{% for i in matrizSolucion %}
-									<tr class="table-row"style="border: 1px solid">
-									{% for j in i %}
-											<td class="table-text"style="border: 1px solid">{{j}}</td>
-									{% endfor %}
-									</tr
-							{% endfor %}
+								{% for i in matrizSolucion %}
+										<tr class="table-row"style="border: 1px solid">
+											{% for j in i %}
+													<td class="table-text"style="border: 1px solid">{{j}}</td>
+											{% endfor %}
+										</tr
+								{% endfor %}
 							</tbody>
 						</table>
+						<div class="form-group">
+								{% for i in indiceFilas %}
+									<p style="margin-bottom: 1%;margin-top:2%;text-align:center;">X{{i}} = {{X[i][0]}} </p>
+								{% endfor %}
+						</div>
+					</div>
 				</div>
-			</div>
+			{% else %}
+				{% for k in procedimiento %}
+				<div class="tab-content">
+					<div class="tab-pane active" id="horizontal-form">
+						<table class="table">
+							<tbody>
+									{% for i in k %}
+											<tr class="table-row"style="border: 1px solid">
+												{% for j in i %}
+														<td class="table-text"style="border: 1px solid">{{j}}</td>
+												{% endfor %}
+											</tr>
+									{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{% endfor %}
+				<div class="form-group">
+						{% for i in indiceFilas %}
+							<p style="margin-bottom: 1%;margin-top:2%;text-align:center;">X{{i}} = {{X[i][0]}} </p>
+						{% endfor %}
+				</div>
+			{% endif %}
 		{% endif %}
-	</div>
-
 </div>
 </div>
 

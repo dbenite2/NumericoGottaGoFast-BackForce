@@ -899,7 +899,6 @@ def PivoteoParcial():
                 matrizInicial[i][j] = float(Fraction(request.form.get(indice)))
             except(ValueError, TypeError, NameError):
                 return render_template("pivoteoParcial.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-
     M = np.vstack(matrizInicial)
     if cambiarMetodo == '0':
         for k in range(n):
@@ -937,6 +936,7 @@ def PivoteoEscalonado():
     verProcedimiento = int(request.form.get('selector'))
     cambiarMetodo = str(request.form.get('selector1'))
     n = int(request.form.get('n'))
+    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
@@ -953,40 +953,42 @@ def PivoteoEscalonado():
     matriz_s = np.vstack(matriz_s)
     A = np.delete(matriz_s,n,1)
     mayores = []
-    for k in range(n - 1):
-        for i in range(n):
-            mayores.append(max(A[i]))
-        mayor = 0
-        fila_mayor = k
-        cocientes = []
-        for i in range(k,n):
-            try:
-                cocientes.append(abs(matriz_s[i][k])/mayores[i])
-            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+    if cambiarMetodo == '0':
+        for k in range(n - 1):
+            for i in range(n):
+                mayores.append(max(A[i]))
+            mayor = 0
+            fila_mayor = k
+            cocientes = []
+            for i in range(k,n):
+                try:
+                    cocientes.append(abs(matriz_s[i][k])/mayores[i])
+                except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                        return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
+            fila_mayor = max(range(len(cocientes)), key = lambda i: cocientes[i])
+            mayor = cocientes[fila_mayor]
+            if mayor == 0:
+                return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "El sistema no tiene solución única ", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            elif fila_mayor != k:
+                matriz_s[k], matriz_s[fila_mayor] = matriz_s[fila_mayor], matriz_s[k]
+                mayores[k], mayores[fila_mayor] = mayores[fila_mayor], mayores[k]
+            for i in range(k+1,n):
+                try:
+                    mult = matriz_s[i][k] / float(matriz_s[k][k])
+                except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
                     return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
-        fila_mayor = max(range(len(cocientes)), key = lambda i: cocientes[i])
-        mayor = cocientes[fila_mayor]
-        if mayor == 0:
-            return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "El sistema no tiene solución única ", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        elif fila_mayor != k:
-            matriz_s[k], matriz_s[fila_mayor] = matriz_s[fila_mayor], matriz_s[k]
-            mayores[k], mayores[fila_mayor] = mayores[fila_mayor], mayores[k]
-        for i in range(k+1,n):
-            try:
-                mult = matriz_s[i][k] / float(matriz_s[k][k])
+                for j in range(k,n+1):
+                    matriz_s[i][j] -=  mult * matriz_s[k][j]
+        b = matriz_s[0:n,n]
+        matriz_s = np.delete(matriz_s,n,1)
+        try:
+            x = regresiva(matriz_s,b)
+        except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
             return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
-            for j in range(k,n+1):
-                matriz_s[i][j] -=  mult * matriz_s[k][j]
-    
-    b = matriz_s[0:n,n]
-    matriz_s = np.delete(matriz_s,n,1)
-    try:
-        x = regresiva(matriz_s,b)
-    except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-        return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
-    x = np.transpose(x)
-
-    return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, x = x, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        X = np.transpose([x])
+        return render_template("pivoteoEscalonado.html",verProcedimiento = verProcedimiento, X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    else:
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 #Ejecución inicial del método para Crout
 @app.route('/crout', methods = ['GET','POST'])
@@ -1054,12 +1056,12 @@ def Crout():
         try:                
             z = progresiva(L,b)
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                        return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución progresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         try:
             x = regresiva(U,z)
             X = np.transpose([x])
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                        return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("crout.html",dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1 , error = 1, mensajeError = "Hubo un problema en la sustitución regresiva", matrizInicial = matriz_i,L = L, U = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         return render_template("crout.html",verProcedimiento = verProcedimiento, X = X, procedimientoL = procedimientoL, procedimientoU = procedimientoU, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucionL = L, matrizSolucionU = U, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)

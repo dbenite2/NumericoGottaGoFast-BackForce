@@ -867,22 +867,14 @@ def PivoteoTotal():
                     return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                 for j in range(k,n+1):
                     matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
-            procedimiento.append(np.vstack(matrizSolucion))         
-        x = [0 for i in range(n)]
+            procedimiento.append(np.vstack(matrizSolucion))
+
+        b = matrizSolucion[0:n,n]
+        matrizSolucion = np.delete(matrizSolucion,n,1)
         try:
-            x[n-1] = float(matrizSolucion[n-1][n])/matrizSolucion[n-1][n-1]
+            x = regresiva(matrizSolucion,b)
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-            X = np.traspose([x])
-            return render_template("pivoteoTotal.html", X = X, verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-        for i in reversed(range(0,n)):
-            z = 0
-            for j in range(i+1,n):
-                z = z + float(matrizSolucion[i][i]) * x[j]
-            try:
-                x[i] = float(matrizSolucion[i][n] - z) / matrizSolucion[i][i]
-            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                X = np.traspose([x])
-                return render_template("pivoteoTotal.html", X = X, verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("pivoteoTotal.html", verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         X = np.transpose([x])
         return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
@@ -919,27 +911,21 @@ def PivoteoParcial():
                     pass
             for j in range(k+1,n):
                 try:
-                    q = float(M[j][k]) / M[k][k]
+                    mult = float(M[j][k]) / M[k][k]
                 except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
                     return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
                 for m in range(k, n+1):
-                    M[j][m] -=  q * M[k][m]
+                    M[j][m] -=  mult * M[k][m]
             #print de analisis
             print(M)
             procedimiento.append(M)
-        X = [0 for i in range(n)]
+
+        b = M[0:n,n]
+        matriz_s = np.delete(M,n,1)
         try:
-            X[n-1] =float(M[n-1][n])/M[n-1][n-1]
+            X = regresiva(M,b)
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
             return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, X = X, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
-        for i in range (n-1,-1,-1):
-            z = 0
-            for j in range(i+1,n):
-                z = z  + float(M[i][j])*X[j]
-            try:
-                X[i] = float(M[i][n] - z)/M[i][i]
-            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                return render_template("pivoteoParcial.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = M, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, X = X, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
         X = np.transpose([X])
         return render_template("pivoteoParcial.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = M, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
@@ -948,19 +934,14 @@ def PivoteoParcial():
 @app.route('/pivoteoEscalonado', methods = ['GET','POST'])
 def PivoteoEscalonado():
     np.seterr(divide = 'raise', invalid = 'raise')
+    verProcedimiento = int(request.form.get('selector'))
+    cambiarMetodo = str(request.form.get('selector1'))
     n = int(request.form.get('n'))
-    k = int(request.form.get('filaMayor'))#posicion de la fila mayor
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
     matriz_i = [['' for i in range(n+1)] for j in range(n)]
     matriz_s = [['' for i in range(n+1)] for j in range(n)]
-    mayores = ['' for i in range(n+1)]#Vector que contiene los valores de la fila mayor
     for i in range(n):
-        index = str(i)
-        try:
-            mayores = float(Fraction(request.form.get(index)))
-        except(ValueError, TypeError, NameError):
-            return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         for j in range(n+1):
             indice = str(i)+str(j)
             try:
@@ -970,21 +951,39 @@ def PivoteoEscalonado():
                 return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     matriz_i = np.vstack(matriz_i)
     matriz_s = np.vstack(matriz_s)
-    mayor = 0
-    cocientes = []
-    for i in range(k,n):
-        cocientes.append(abs(matriz_s[i][k]/mayores[i]))
-        fila_mayor = max(range(len(cocientes)),key = lambda i: cocientes[i])
+    A = np.delete(matriz_s,n,1)
+    mayores = []
+    for k in range(n - 1):
+        for i in range(n):
+            mayores.append(max(A[i]))
+        mayor = 0
+        fila_mayor = k
+        cocientes = []
+        for i in range(k,n):
+            try:
+                cocientes.append(abs(matriz_s[i][k])/mayores[i])
+            except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                    return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
+        fila_mayor = max(range(len(cocientes)), key = lambda i: cocientes[i])
         mayor = cocientes[fila_mayor]
         if mayor == 0:
             return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "El sistema no tiene solución única ", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         elif fila_mayor != k:
-            matriz_s[k], matriz_s[fila_mayor] = matriz_s[fila_mayor] , matriz_s[k]
-            mayores[k],mayores[fila_mayor] = mayores[fila_mayor],mayores[k]
+            matriz_s[k], matriz_s[fila_mayor] = matriz_s[fila_mayor], matriz_s[k]
+            mayores[k], mayores[fila_mayor] = mayores[fila_mayor], mayores[k]
+        for i in range(k+1,n):
+            try:
+                mult = matriz_s[i][k] / float(matriz_s[k][k])
+            return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
+            for j in range(k,n+1):
+                matriz_s[i][j] -=  mult * matriz_s[k][j]
     
     b = matriz_s[0:n,n]
     matriz_s = np.delete(matriz_s,n,1)
-    x = regresiva(matriz_s,b)
+    try:
+        x = regresiva(matriz_s,b)
+    except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
+        return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
     x = np.transpose(x)
 
     return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, x = x, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
@@ -1494,10 +1493,10 @@ def neville():
 #------------------------------------------------------------------------------------------------------------------
 
 def linear_solver(A,k,n):
-    mayor = 0
+    mayor = 0.0
     fila_mayor = k
     columna_mayor = k
-    marcas = [0 for i in range(n)]
+    marcas = [0.0 for i in range(n)]
     for i in range(1,n+1):
         marcas[i-1] = i
     for i in range(k,n):

@@ -948,19 +948,45 @@ def PivoteoParcial():
 def PivoteoEscalonado():
     np.seterr(divide = 'raise', invalid = 'raise')
     n = int(request.form.get('n'))
+    k = int(request.form.get('filaMayor'))#posicion de la fila mayor
     indiceColumnas = [i for i in range(n+1)]
     indiceFilas= [i for i in range(n)]
-    matrizInicial = [['' for i in range(n+1)] for j in range(n)]
-    matrizSolucion = [['' for i in range(n+1)] for j in range(n)]
+    matriz_i = [['' for i in range(n+1)] for j in range(n)]
+    matriz_s = [['' for i in range(n+1)] for j in range(n)]
+    mayores = ['' for i in range(n+1)]#Vector que contiene los valores de la fila mayor
     for i in range(n):
+        index = str(i)
+        try:
+            mayores = float(Fraction(request.form.get(index)))
+        except(ValueError, TypeError, NameError):
+            return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         for j in range(n+1):
             indice = str(i)+str(j)
             try:
-                matrizInicial[i][j] = float(Fraction(request.form.get(indice)))
+                matriz_i[i][j] = float(Fraction(request.form.get(indice)))
+                matriz_s[i][j] = float(Fraction(request.form.get(indice)))
             except(ValueError, TypeError, NameError):
-                return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    matriz_i = np.vstack(matriz_i)
+    matriz_s = np.vstack(matriz_s)
+    mayor = 0
+    cocientes = []
+    for i in range(k,n):
+        cocientes.append(abs(matriz_s[i][k]/mayores[i]))
+        fila_mayor = max(range(len(cocientes)),key = lambda i: cocientes[i])
+        mayor = cocientes[fila_mayor]
+        if mayor == 0:
+            return render_template("pivoteoEscalonado.html", error = 1, mensajeError = "El sistema no tiene solución única ", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        elif fila_mayor != k:
+            matriz_s[k], matriz_s[fila_mayor] = matriz_s[fila_mayor] , matriz_s[k]
+            mayores[k],mayores[fila_mayor] = mayores[fila_mayor],mayores[k]
     
-    return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+    b = matriz_s[0:n,n]
+    matriz_s = np.delete(matriz_s,n,1)
+    x = regresiva(matriz_s,b)
+    x = np.transpose(x)
+
+    return render_template("pivoteoEscalonado.html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, x = x, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 #Ejecución inicial del método para Crout
 @app.route('/crout', methods = ['GET','POST'])
@@ -1325,9 +1351,9 @@ def interpolacionNewton():
 def interpolacion_lagrange():
     return render_template("lagrange.html")
 
-# @app.route('/neville')
-# def interpolacion_neville():
-#     return render_template("nevile.html")
+@app.route('/neville')
+def interpolacion_neville():
+    return render_template("nevile.html")
 
 
 @app.route('/newtonIntM', methods = ['GET' , 'POST'])
@@ -1346,13 +1372,13 @@ def interpolacion_lagrange_t():
     fx = ['' for i in range(n)]
     return render_template("lagrange.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
-# @app.route('/nevilleM', methods = ['GET' , 'POST'])
-# def interpolacion_lagrange_t():
-#     n = int(request.form.get('puntos'))
-#     indiceColumnas = [i for i in range(n)]
-#     x = ['' for i in range(n)]
-#     fx = ['' for i in range(n)]
-#     return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
+@app.route('/nevilleM', methods = ['GET' , 'POST'])
+def interpolacion_neville_t():
+    n = int(request.form.get('puntos'))
+    indiceColumnas = [i for i in range(n)]
+    x = ['' for i in range(n)]
+    fx = ['' for i in range(n)]
+    return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
@@ -1424,37 +1450,40 @@ def lagrange():
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
-# @app.route('/neville', methods = ['GET','POST'])
-# def neville():
-#     n = int(request.form.get('puntos'))
-#     indiceColumnas = [i for i in range(n)]
-#     cambiarMetodo = str(request.form.get('selector1'))
-#     val = float(request.form.get('valor'))
-#     x = [0 for i in range(n)]
-#     y = [0 for i in range(n)]
-#     for i in range(n):
-#         x[i] = float(request.form.get('x'+str(i)))
-#         y[i] = float(request.form.get('fx'+str(i)))
-#     valores = [[0 for i in range(n)] for j in range(n)]
-#     acum = ''
-#     res = 0.0
-#     #valorfx = 0
-#     if cambiarMetodo == '0':
-#         for i in range(n):
-#             valores[i][0] = y[i]
-#         for i in range(n):
-#             for j in range(1,i):
-#                 try:
-#                     valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j]) 
+@app.route('/neville', methods = ['GET','POST'])
+def neville():
+    np.seterr(divide = 'raise', invalid = 'raise')
+    n = int(request.form.get('puntos'))
+    indiceColumnas = [i for i in range(n)]
+    cambiarMetodo = str(request.form.get('selector1'))
+    val = float(request.form.get('valor'))
+    x = [0 for i in range(n)]
+    y = [0 for i in range(n)]
+    for i in range(n):
+        x[i] = float(request.form.get('x'+str(i)))
+        y[i] = float(request.form.get('fx'+str(i)))
+    valores = [[0 for i in range(n)] for j in range(n)]
+    acum = ''
+    res = 0.0
+    #valorfx = 0
+    if cambiarMetodo == '0':
+        for i in range(n):
+            valores[i][0] = y[i]
+        for i in range(n):
+            for j in range(1,i):
+                try:
+                    valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j])
+                except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
+                        return render_template("neville.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y) 
 
-#         res = valores[n-1][n-1]
+        res = valores[n-1][n-1]
         
-#         temp = len(acum)
-#         acum = acum[:temp - 1]
+        temp = len(acum)
+        acum = acum[:temp - 1]
         
-#         return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
-#     else:
-#         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+    else:
+        return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
 #------------------------------------------------------------------------------------------------------------------
 

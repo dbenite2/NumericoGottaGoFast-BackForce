@@ -16,6 +16,7 @@ from sympy import *
 from sympy.parsing.sympy_parser import parse_expr,convert_xor,standard_transformations,implicit_multiplication,implicit_application,function_exponentiation,factorial_notation,rationalize
 import os
 from math import pi
+from numba import njit
 
 #Sets iniciales para los manejos de funciones, expresiones y errores.
 np.seterr(all = 'raise',divide = 'raise', invalid = 'raise')
@@ -1227,6 +1228,7 @@ def Jacobi():
     if niter <= 0:
         return render_template("jacobi.html", error = 1,tol = tol, ite = int(request.form.get('ite')), mensajeError = "El número de iteraciones debe ser mayor que 0", dibujarMatrizInicial = 1,matrizInicial = matriz_i,iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     resultados = [['N',['X'+str(i) for i in range(n)],'ERROR']]
+    
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
@@ -1241,6 +1243,7 @@ def Jacobi():
                 return render_template("jacobi.html", error = 1,tol = tol, ite = niter, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i,iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     iniciales1 = iniciales
     if cambiarMetodo == '0':
+        calcular_nuevo_jacobi_par = njit(parallel=True)(calcular_nuevo_jacobi)
         cont = 0
         disp = tol + 1
         matriz_i = np.vstack(matriz_i)
@@ -1251,7 +1254,7 @@ def Jacobi():
         resultados.append([cont,iniciales,disp])
         while disp > tol and cont < niter:
             try:
-                x1 = calcular_nuevo_jacobi(iniciales,n,b,matriz_s)
+                x1 = calcular_nuevo_jacobi_par(iniciales,n,b,matriz_s)
             except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
                     return render_template("jacobi.html", tol = tol, ite = niter,dibujarMatrizInicial = 1, iniciales = iniciales1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             if error == 0:
@@ -1293,7 +1296,7 @@ def GaussSeidel():
         return render_template("gaussSeidel.html", error = 1,tol = float(request.form.get('tol')), ite = niter, mensajeError = "La tolerancia debe ser diferente de 0", dibujarMatrizInicial = 1,matrizInicial = matriz_i,iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     if niter <= 0:
         return render_template("gaussSeidel.html", error = 1,tol = tol, ite = int(request.form.get('ite')), mensajeError = "El número de iteraciones debe ser mayor que 0", dibujarMatrizInicial = 1,matrizInicial = matriz_i,iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
-    resultados = []
+    resultados = [['N',['X'+str(i) for i in range(n)],'ERROR']]
     for i in range(n):
         for j in range(n+1):
             indice = str(i)+str(j)
@@ -1308,6 +1311,7 @@ def GaussSeidel():
                 return render_template("gaussSeidel.html", error = 1, tol = tol, ite = niter ,mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1,matrizInicial = matriz_i, iniciales = iniciales, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     iniciales1 = iniciales
     if cambiarMetodo == '0':
+        calcular_nuevo_seidel_par = njit(parallel=True)(calcular_nuevo_seidel)
         matriz_i = np.vstack(matriz_i)
         matriz_s = np.vstack(matriz_s)
         cont = 0
@@ -1318,7 +1322,7 @@ def GaussSeidel():
         resultados.append([cont,iniciales,disp])
         while disp > tol and cont < niter:
             try:
-                x1 = calcular_nuevo_seidel(iniciales,n,b,matriz_s)
+                x1 = calcular_nuevo_seidel_par(iniciales,n,b,matriz_s)
             except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
                     return render_template("gaussSeidel.html", tol = tol, ite = niter,dibujarMatrizInicial = 1, iniciales = iniciales1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             if error == 1:
@@ -1353,7 +1357,7 @@ def interpolacion_lagrange():
 
 @app.route('/neville')
 def interpolacion_neville():
-    return render_template("nevile.html")
+    return render_template("neville.html")
 
 
 @app.route('/newtonIntM', methods = ['GET' , 'POST'])
@@ -1378,7 +1382,7 @@ def interpolacion_neville_t():
     indiceColumnas = [i for i in range(n)]
     x = ['' for i in range(n)]
     fx = ['' for i in range(n)]
-    return render_template("nevile.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
+    return render_template("neville.html", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas,x = x, fx = fx, puntos = n)
 
 @app.route('/newtonInt', methods = ['GET','POST'])
 def InterpolacionNewton():
@@ -1446,7 +1450,7 @@ def lagrange():
             acum += str(l[i])+'*f(x'+str(i)+')+'
         temp = len(acum)
         acum = acum[:temp - 1]
-        return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+        return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y )
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
@@ -1467,6 +1471,7 @@ def neville():
     res = 0.0
     #valorfx = 0
     if cambiarMetodo == '0':
+        
         for i in range(n):
             valores[i][0] = y[i]
         for i in range(n):
@@ -1480,8 +1485,9 @@ def neville():
         
         temp = len(acum)
         acum = acum[:temp - 1]
-        
-        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, )
+        print(valores)
+        print(res)
+        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 

@@ -809,9 +809,7 @@ def EliminacionGaussiana():
             try:
                 AB[i,:] = AB[i,:] / AB[i,i]
             except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                X = AB[:,ultcolumna]
-                X = np.transpose([X])
-                return render_template("eliminacionGaussiana.html", error = 1, mensajeError = "Se produjo una division por cero. Abortando",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam, X = X)                
+                return render_template("eliminacionGaussiana.html", error = 1, mensajeError = "Se produjo una division por cero. Abortando",verProcedimiento = verProcedimiento ,procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = tam)                
                 
             pivote = AB[i,i] # uno
             # arriba de la fila i
@@ -864,7 +862,7 @@ def PivoteoTotal():
                 try:
                     mult = matrizSolucion[i][k] / matrizSolucion[k][k]
                 except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                    return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                    return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial1, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                 for j in range(k,n+1):
                     matrizSolucion[i][j] = matrizSolucion[i][j] - mult * matrizSolucion[k][j]
             procedimiento.append(np.vstack(matrizSolucion))
@@ -874,9 +872,9 @@ def PivoteoTotal():
         try:
             x = regresiva(matrizSolucion,b)
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-            return render_template("pivoteoTotal.html", verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+            return render_template("pivoteoTotal.html", verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial1, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
         X = np.transpose([x])
-        return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template("pivoteoTotal.html",verProcedimiento = verProcedimiento, X = X, procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matrizInicial1, matrizSolucion = matrizSolucion, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
         return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 #Ejecución inicial del método para Eliminación Gaussiana con pivoteo parcial
@@ -1330,7 +1328,7 @@ def GaussSeidel():
                 try:
                     disp = abs((norma(x1) - norma(iniciales)) / norma(x1))
                 except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                    return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1,dibujarMatrizInicial = 1,dibujarMatrizSolucion = 1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
+                    return render_template("gaussSeidel.html", tol = tol, ite = niter, iniciales = iniciales1,dibujarMatrizInicial = 1, error = 1,mensajeError = "Se produjo una division por cero", resultados = resultados, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n =  n)
             elif error == 0:
                 disp = abs(norma(x1) - norma(iniciales))
             iniciales = x1
@@ -1408,7 +1406,7 @@ def InterpolacionNewton():
                 try:
                     aux[i][j] = (aux[i][j-1] - aux[i-1][j-1])/(x[i] - x[i-j])
                 except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                    return render_template("newtonInterpolacion.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
+                    return render_template("newtonInterpolacion.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando",acum = acum, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             if(i > 0):
                 prod *= val-x[i-1]
             res += aux[i][i] * prod
@@ -1445,7 +1443,7 @@ def lagrange():
                     try:
                         prod *= (val - x[j]) / (x[i] - x[j])
                     except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                        return render_template("newtonInterpolacion.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
+                        return render_template("newtonInterpolacion.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             l[i] = prod
             res += (l[i]*y[i])
             acum += str(l[i])+'*f(x'+str(i)+')+'
@@ -1480,7 +1478,7 @@ def neville():
                 try:
                     valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j])
                 except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                        return render_template("neville.html",error = "1", mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y) 
+                        return render_template("neville.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y) 
 
         res = valores[n-1][n-1]
         

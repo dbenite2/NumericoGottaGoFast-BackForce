@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
 		<p>Este método permite hallar las aproximaciones a una solución de sistemas de ecuaciones lineales, utilizando los valores iniciales para la primera aproximación, luego esa aproximación sirve para hallar la segunda y así sucesivamente, en este método el cálculo de cualquier variable es independiente por lo que se puede entender que no se necesita ninguna para poder hallar la siguiente variable.</p> 
 
 		<p><br/>A continuación, el procedimiento que se debe de seguir para la aplicación del método.</p>
@@ -35,14 +35,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<p>*	En cada paso, es posible calcular el error, siempre y cuando se calcule la norma.</p>
 		<p>*	Como parte final de programa se debe tener pendiente lo siguiente. Si el programa sobrepasa el número de iteraciones, o si el error es menor del propuesto al principio; si sucede alguna de estas dos situaciones, la última iteración será donde se encuentra las aproximaciones a la solución del sistema de ecuaciones.</p>
 	</div>
-	<div class="blankpage">
-		<div class="form-group">
-			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
-				<label class="hvr-shutter-in-horizontal login-sub">
-					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
-				</label>
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Crear Matriz</h3>

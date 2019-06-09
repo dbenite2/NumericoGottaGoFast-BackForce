@@ -32,17 +32,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<span class="zoom-icon"> </span> </a>
 		</div>
 		<p>Este método al finalizar tiene tres posibles salidas, una solución a la ecuación, una solución con una tolerancia, o un fracaso por agotamiento en las iteraciones.</p>
-		
 	</div>
-	<div class="blankpage">
-		<div class="form-group">
-			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
-				<label class="hvr-shutter-in-horizontal login-sub">
-					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
-				</label>
+
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
+
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
 		{% if error == 1 %}

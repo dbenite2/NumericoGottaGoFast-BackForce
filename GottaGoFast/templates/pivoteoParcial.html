@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
 		<p>Para cada etapa k, se pretende que el mayor de los elementos de la columna k que ocupan posiciones mayores o iguales que K, ocupe la posición akk, para esto el mayor de los números se busca entre los |aik| con k menor que i menor que n, y luego de encontrarlo se debe de realizar el intercambio de filas para ubicar el mayor elegido de la fila k.</p>
 		<p><br/>Cuando se realiza el procedimiento de la eliminación se logra que los valores de los multiplicadores sean pequeños y con esto se logre reducir el efecto del error de redondeo. </p>
 		<p><br/>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
@@ -34,14 +34,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<p>*	Con los multiplicadores hallados en cada etapa, se procede al cálculo de las nuevas filas de la matriz aumentada.</p>
 		<p>*	Una vez se tiene la matriz aumentada en la forma triangular superior, se procede a realizar una sustitución regresiva, para el cálculo de las variables.</p>
 	</div>
-	<div class="blankpage">
-		<div class="form-group">
-			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
-				<label class="hvr-shutter-in-horizontal login-sub">
-					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
-				</label>
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Crear Matriz</h3>

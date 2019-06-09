@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
 		<p>En el método de la factorización LU CROUT, se maneja el fundamento en que el valor de la diagonal de la matriz U, deben ser todos unos (1). </p>
 		<p>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
 		<p>*	Se debe construir la matriz de coeficiente y el vector con los términos independientes, los cuales deben de corresponder al sistema, estos se toman como valores iniciales para poder calcular la factorización.</p>
@@ -33,14 +33,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<p>*	En este momento con el vector z, con el vector de términos independientes y la matriz L de la factorización, se procede a resolver el sistema Lz = b</p>
 	</div>
 	
-	<div class="blankpage">
-		<div class="form-group">
-			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
-				<label class="hvr-shutter-in-horizontal login-sub">
-					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
-				</label>
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 
 	<div class="grid-form1">

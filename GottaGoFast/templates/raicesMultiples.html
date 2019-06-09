@@ -24,7 +24,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%; display:none;">		
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
 		<p>Una de las condiciones para garantizar la convergencia del método de Newton es que la primera derivada f’(x) debe ser diferente de cero (0), donde x es la raíz de la ecuación f(x), pero si por el contrario la derivada se va aproximando a cero, se observa que va perdiendo rapidez y se debe hallar la segunda derivada f’’(x) para encontrar una solución.</p>
 		<p>Para poder hallar la segunda derivada, se debe de tener en cuenta la siguiente ecuación:</p>
 		<div class="gallery-img">
@@ -40,14 +40,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<span class="zoom-icon"> </span> </a>
 		</div>
 	</div>
-	<div class="blankpage">
-		<div class="form-group">
-			<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:1%">
-				<label class="hvr-shutter-in-horizontal login-sub">
-					<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
-				</label>
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
@@ -96,14 +98,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 		{% if grafica == 1 and error != 1%}
-		<div class="grid-form1">
-			<div class="gallery-img">
-				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
-					<span class="zoom-icon"> </span> </a>
-			</div>	
-		</div>
+			<div class="grid-form1">
+				<div class="gallery-img">
+					<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+						<span class="zoom-icon"> </span> </a>
+				</div>	
+			</div>
 		{% endif %}
-		{% if raiz == 1 and error != 1 error != 1%}
+		{% if raiz == 1 and error != 1 %}
 			<div class="grid-form1">
 			
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
@@ -164,7 +166,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						{% endfor %}
 					</tbody>
 				</table>
-			{% elif raiz == 2 and error != 1%}
+		{% elif raiz == 2 and error != 1%}
 				<p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xs}} </p>
 				<table class="table">
 					<tbody>
@@ -194,7 +196,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</table>
 			</div>
 		{% endif %}
-		
 	</div>
 </div>
 </div>

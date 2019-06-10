@@ -966,9 +966,11 @@ def PivoteoEscalonado():
                 try:
                     mult = matriz_s[i][k] / float(matriz_s[k][k])
                 except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                    return render_template("pivoteoEscalonado.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_s, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+                    return render_template("pivoteoEscalonado.html",verProcedimiento = verProcedimiento, error = 1, mensajeError = "Se produjo una division por cero. Abortando", procedimiento = procedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
                 for j in range(k,n+1):
                     matriz_s[i][j] -=  mult * matriz_s[k][j]
+            procedimiento.append(matriz_s)
+        print (procedimiento)
         b = matriz_s[0:n,n]
         matriz_s = np.delete(matriz_s,n,1)
         try:
@@ -976,9 +978,9 @@ def PivoteoEscalonado():
         except(ValueError, TypeError, NameError,ZeroDivisionError,RuntimeError,FloatingPointError):
             return render_template("pivoteoEscalonado.html", error = 1,verProcedimiento = verProcedimiento, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizSolucion = matriz_s, matrizInicial = matriz_i, mensajeError = "Se presentó una división por cero. Se aborta la ejecución")
         X = np.transpose([x])
-        return render_template("pivoteoEscalonado.html",verProcedimiento = verProcedimiento, X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template("pivoteoEscalonado.html",verProcedimiento = verProcedimiento, procedimiento = procedimiento, X = X, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1,matrizInicial = matriz_i, matrizSolucion = matriz_s, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
     else:
-        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matrizInicial, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
+        return render_template(cambiarMetodo+".html", dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, matrizInicial = matriz_i, indiceColumnas = indiceColumnas, indiceFilas = indiceFilas, n = n)
 
 #Ejecución inicial del método para Crout
 @app.route('/crout', methods = ['GET','POST'])
@@ -1381,12 +1383,18 @@ def InterpolacionNewton():
     n = int(request.form.get('puntos'))
     cambiarMetodo = str(request.form.get('selector1'))
     indiceColumnas = [i for i in range(n)]
-    val = float(request.form.get('valor'))
     x = [0 for i in range(n)]
     y = [0 for i in range(n)]
     for i in range(n):
-        x[i] = float(request.form.get('x'+str(i)))
-        y[i] = float(request.form.get('fx'+str(i)))
+        try:
+            x[i] = float(request.form.get('x'+str(i)))
+            y[i] = float(request.form.get('fx'+str(i)))
+        except:
+            return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n, x = x, fx = y )
+    try:
+        val = float(request.form.get('valor'))
+    except:
+        return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
     aux = [[0 for i in range(n)] for j in range(n)]
     prod = 1.0
     acum = ''
@@ -1416,12 +1424,19 @@ def lagrange():
     n = int(request.form.get('puntos'))
     indiceColumnas = [i for i in range(n)]
     cambiarMetodo = str(request.form.get('selector1'))
-    val = float(request.form.get('valor'))
+    #val = float(request.form.get('valor'))
     x = [0 for i in range(n)]
     y = [0 for i in range(n)]
     for i in range(n):
-        x[i] = float(request.form.get('x'+str(i)))
-        y[i] = float(request.form.get('fx'+str(i)))
+        try:
+            x[i] = float(request.form.get('x'+str(i)))
+            y[i] = float(request.form.get('fx'+str(i)))
+        except:
+            return render_template("lagrange.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n)
+    try:
+        val = float(request.form.get('valor'))
+    except:
+        return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
     l = [0.0 for i in range(n)]
     acum = ''
     res = 0.0
@@ -1434,7 +1449,7 @@ def lagrange():
                     try:
                         prod *= (val - x[j]) / (x[i] - x[j])
                     except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
-                        return render_template("newtonInterpolacion.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
+                        return render_template("lagrange.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             l[i] = prod
             res += (l[i]*y[i])
             acum += str(l[i])+'*f(x'+str(i)+')+'
@@ -1450,12 +1465,19 @@ def neville():
     n = int(request.form.get('puntos'))
     indiceColumnas = [i for i in range(n)]
     cambiarMetodo = str(request.form.get('selector1'))
-    val = float(request.form.get('valor'))
+    #val = float(request.form.get('valor'))
     x = [0 for i in range(n)]
     y = [0 for i in range(n)]
     for i in range(n):
-        x[i] = float(request.form.get('x'+str(i)))
-        y[i] = float(request.form.get('fx'+str(i)))
+        try:
+            x[i] = float(request.form.get('x'+str(i)))
+            y[i] = float(request.form.get('fx'+str(i)))
+        except:
+            return render_template("neville.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n)
+    try:
+        val = float(request.form.get('valor'))
+    except:
+        return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
     valores = [[0 for i in range(n)] for j in range(n)]
     acum = ''
     res = 0.0

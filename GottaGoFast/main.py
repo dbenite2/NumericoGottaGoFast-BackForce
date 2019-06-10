@@ -122,14 +122,14 @@ def Busquedas_incrementales():
     else:
         if (metodo == "biseccion") or (metodo == "reglaFalsa") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
-            #x0 = float(request.form.get('x0'))
-            #ite = int(request.form.get('ite'))
-            return render_template(metodo + ".html", fx = f)
+            x0 = float(request.form.get('x0'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, ite = ite, xinf = x0)
         elif (metodo == "puntoFijo") or (metodo == "newton") or (metodo == "raicesMultiples"):
             f = parse_expr(request.form.get('fx'))
-            #x0 = float(request.form.get('x0'))
-            #ite = int(request.form.get('ite'))
-            return render_template(metodo + ".html", fx = f)
+            x0 = float(request.form.get('x0'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, ite = ite, x0 = x0)
 
 #Ejecución inicial del método para Bisección
 @app.route('/biseccion', methods=['GET','POST'])
@@ -204,19 +204,17 @@ def Biseccion():
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # xs = float(request.form.get('xsup'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "puntoFijo") or (metodo == "newton") or (metodo == "raicesMultiples") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
 
 #Ejecución inicial del método para Regla falsa
 @app.route('/reglaFalsa', methods=['GET','POST'])
@@ -288,19 +286,17 @@ def Regla_falsa():
     else:
         if (metodo == "biseccion") or (metodo == "secante"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # xs = float(request.form.get('xsup'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "puntoFijo") or (metodo == "newton") or (metodo == "raicesMultiples") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
 
 #Ejecución inicial del método para Punto fijo
 @app.route('/puntoFijo',methods = ['GET','POST'])
@@ -372,20 +368,18 @@ def Punto_fijo():
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # xs = float(request.form.get('xsup'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "newton")  or (metodo == "raicesMultiples") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
-
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
+        
 #Ejecución inicial del método para Newton
 @app.route('/newton', methods = ['GET','POST'])
 def Newton():
@@ -455,19 +449,17 @@ def Newton():
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
-            #xi = float(request.form.get('xinf'))
-            #xs = float(request.form.get('xsup'))
-            #tol = float(request.form.get('tol'))
-            #ite = int(request.form.get('ite'))
-            #return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "puntoFijo")  or (metodo == "raicesMultiples") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            #xi = float(request.form.get('xinf'))
-            #tol = float(request.form.get('tol'))
-            #ite = int(request.form.get('ite'))
-            #return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
 
 #Ejecución inicial del método para Secante
 @app.route('/secante', methods=['GET','POST'])
@@ -540,19 +532,17 @@ def Secante():
     else:
         if (metodo == "biseccion") or (metodo == "reglaFalsa"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # xs = float(request.form.get('xsup'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "puntoFijo") or (metodo == "newton") or (metodo == "raicesMultiples") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
 
 #Ejecución inicial del método para Raices Multiples
 @app.route('/raicesMultiples', methods = ['GET','POST'])
@@ -625,19 +615,17 @@ def Raices_multiples():
     else:
         if (metodo == "reglaFalsa") or (metodo == "secante") or (metodo == "biseccion"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # xs = float(request.form.get('xsup'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            xs = float(request.form.get('xsup'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, xinf = xi, xsup = xs, tol = tol, ite = ite)
         elif (metodo == "puntoFijo")  or (metodo == "newton") or (metodo == "busquedasIncrementales"):
             f = parse_expr(request.form.get('fx'))
-            # xi = float(request.form.get('xinf'))
-            # tol = float(request.form.get('tol'))
-            # ite = int(request.form.get('ite'))
-            # return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
-            return render_template(metodo + ".html", fx = f)
+            xi = float(request.form.get('xinf'))
+            tol = float(request.form.get('tol'))
+            ite = int(request.form.get('ite'))
+            return render_template(metodo + ".html", fx = f, x0 = xi, tol = tol, ite = ite, x0i = xi)
 
 #-------------------------------------------------ECUACIONES DE UNA VARIABLE-------------------------------------------------
 
@@ -1431,9 +1419,13 @@ def InterpolacionNewton():
                 acum += " (x - "+ "(" + str(y[j])+")"+ ") *"
         temp = len(acum)
         acum = acum[:temp - 1]
+<<<<<<< HEAD
         #print(aux)
         print (acum)
         return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, matrizSolucion = aux)
+=======
+        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+>>>>>>> master
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 

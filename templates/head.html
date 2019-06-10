@@ -61,6 +61,20 @@ document.getElementById("resultado").innerHTML=tabla;
 </script>
 <script src="{{url_for('static',filename='js/jquery.nicescroll.js')}}"></script>
 <script src="{{url_for('static',filename='js/scripts.js')}}"></script>
+<script>
+function mostrarOcultar(id){
+var elemento = document.getElementById(id);
+  if(!elemento) {
+    return true;
+  }
+  if (elemento.style.display == "none") {
+    elemento.style.display = "block"
+  } else {
+    elemento.style.display = "none"
+  };
+  return true;
+  };
+</script>
 
 <div id="wrapper">
     <nav class="navbar-default navbar-static-top" role="navigation">
@@ -113,7 +127,7 @@ document.getElementById("resultado").innerHTML=tabla;
         <ul class="nav nav-second-level">
             <li><a href="newtonInt" class=" hvr-bounce-to-right"> <i class="fa fa-area-chart nav_icon"></i>Newton</a></li>
             <li><a href="lagrange" class=" hvr-bounce-to-right"><i class="fa fa-area-chart nav_icon"></i>Lagrange</a></li>
-            <li><a href="splinters" class=" hvr-bounce-to-right"><i class="fa fa-area-chart nav_icon"></i>Splinters</a></li>
+            <li><a href="neville" class=" hvr-bounce-to-right"><i class="fa fa-area-chart nav_icon"></i>Neville</a></li>
         </ul>
       </li>
 	  </ul>

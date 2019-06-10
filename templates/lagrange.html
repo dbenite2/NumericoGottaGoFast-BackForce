@@ -24,16 +24,42 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Interpolacion Lagrange</p>
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
+		<p>El polinomio de interpolación de Lagrange, se considera una reforma del polinomio de Newton, el cual evita realizar el cálculo de las diferencias divididas.<br/>Se puede representar de la siguiente manera:</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange1.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>En donde</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>La versión del segundo orden es:</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange3.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>Se observa que al igual que el método de Newton, Lagrange tiene un error aproximado dado por.</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange4.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		
+	</div>
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
+			</div>
+		</form>
 	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Puntos a interpolar</h3>
-		{% if error == 1 %}
-				<div class="form-group has-error">
-					<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
-				</div>
-		{% endif %}
 		<div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
 				<form  class="form-horizontal" id="form" action="/lagrangeM" method="POST">
@@ -111,19 +137,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 	{% endif %}
-	{% if dibujarMatrizSolucion == 1  %}
+	{% if dibujarMatrizSolucion == 1  and error != 1%}
+
 			<div class="grid-form1">
 					<h3 style="text-align: center;">Interpolacion</h3>
-			{% if error == 1 %}
-					<div class="form-group has-error">
-						<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
-					</div>
-			{% endif %}
             <div class="form-group">
-                <h4 style="text-align: center;"> Polinomio = {{acum}} </h4>
+				<div class="blank-page" style="margin-bottom: 1%">		
+					<p>Polinomio = {{acum}}</p>
+				</div>
             </div>
             <div class="form-group">
-                <h4 style="text-align: center;"> Resultado = {{res}} </h4>
+				<div class="blank-page" style="margin-bottom: 1%">		
+					<p> Resultado = {{res}} </p>
+				</div>
             </div>
 	{% endif %}
 	</div>

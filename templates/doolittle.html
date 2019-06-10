@@ -24,24 +24,34 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
-		<p>Aqui va informacion sobre Doolittle</p>
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
+		<p>Para este método se utiliza como fundamento que los valores de la diagonal de la matriz L, son todos unos.</p>
+		<p>A continuación, el procedimiento que se debe de seguir para la aplicación del método:</p>
+		<p>*	Se construye la matriz de coeficientes y el vector con los términos independientes, correspondientes al sistema, y estos son los que se toman como valores iniciales para poder calcular la factorización.</p>
+		<p>*	Con esa matriz de coeficientes, y teniendo en cuenta el fundamento principal del método, se procese al cálculo de las matrices L y U, correspondientes a la factorización de A.</p>
+		<p>*	Luego de tener realizada la factorización, se toma la matriz de la factorización U y el vector x y se procede a calcular el vector z.</p>
+		<p>*	Ahora con el vector z, el vector de términos independientes y la matriz L de la factorización, se procede a resolver el sistema Lz=b.</p>
 	</div>
-	
+	<div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Crear Matriz</h3>
-		{% if error == 1 %}
-				<div class="form-group has-error">
-					<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
-				</div>
-		{% endif %}
 		<div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
 				<form class="form-horizontal" id="form" action="/doolittleM" method="POST">
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese el Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="El tamaño de la matriz sera N*N+1 donde la columna final son los valores independientes"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}"> 
+							<input type="number" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}" required> 
 					</div>	
 					<div class="form-group">
 						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
@@ -66,13 +76,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="tab-content">
 				<div class="tab-pane active" id="horizontal-form">
 					<form class="form-horizontal" id="form2" action="/doolittle" method="POST">
-						<input type="text" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}">
+						<input type="number" style="visibility:hidden;" id="n" name="n" class="form-control1" value="{{n}}" required>
 						{% for i in indiceFilas %}
 							<table class="table">
 								<tbody>
 									<tr class="table-row"style="border: 1px solid">
 										{% for j in indiceColumnas %}
-											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i}}{{j}}" value="{{matrizInicial[i][j]}}"></td>
+											<td class="table-text"style="border: 1px solid"><input type="text" name="{{i}}{{j}}" class="form-control1" placeholder="Posicion {{i+1}}{{j+1}}" value="{{matrizInicial[i][j]}}" required></td>
 										{% endfor %}
 									</tr
 								</tbody>
@@ -114,13 +124,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</div>
 			</div>
 		{% endif %}
-		{% if dibujarMatrizSolucion == 1  %}
+		{% if dibujarMatrizSolucion == 1  and error != 1%}
 			<div class="grid-form1">
-			{% if error == 1 %}
-					<div class="form-group has-error">
-						<p  style="text-align: center;margin-top: 1%;" class="form-control1" id="inputError1">{{mensajeError}}</p>
-					</div>
-			{% endif %}
 			{% if verProcedimiento == 0 %}
 				<div class="tab-content">
 					<div class="tab-pane active" id="horizontal-form">

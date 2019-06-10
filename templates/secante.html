@@ -25,7 +25,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 <!--faq-->
 <div class="blank">
-	<div class="blank-page" style="margin-bottom: 1%">		
+	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
 		<p>Este método es una variante del método de Newton y a partir de la formula iterativa del método de Newton se sustituye la derivada por una expresión que la aproxima.</p>
 		<p>Para hallar la intersección de la recta con el eje X usamos la siguiente fórmula:</p>
 		<div class="gallery-img">
@@ -41,6 +41,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<span class="zoom-icon"> </span> </a>
 		</div>
 	</div>
+    <div class="blank-page" style="margin-bottom:1.5%">
+		<form class="form-horizontal" id="form" >
+			<div class="form-group"style="margin-top:1.5%">
+				<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;,">
+					<label class="hvr-shutter-in-horizontal login-sub">
+						<input type="button" name="Ayuda" value="Ayuda" onClick="mostrarOcultar('ayuda')"> <br />
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
 	<div class="grid-form1">
 		<h3 style="text-align: center;">Ejecutar Metodo</h3>
 		{% if error == 1 %}
@@ -54,31 +65,31 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese una funcion F(X) <i class="fas fa-info-circle" data-toggle="tooltip" title="Log() se recibe como ln(); e^n se recibe como exp(n) o E^n"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="fx" name="fx" class="form-control1" placeholder="F(x)" value="{{fx}}"> 
+							<input type="text" id="fx" name="fx" class="form-control1" placeholder="F(x)" value="{{fx}}" required> 
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese un x inferior <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba el numero (menor) del espacio de busqueda del metodo"></i></label>
 						<div class="col-sm-8">
-                                <input type="text" id="xinf" class="form-control1" name="xinf" placeholder="X inferior" value="{{xinf}}">
+                                <input type="number" step="1e-64" id="xinf" class="form-control1" name="xinf" placeholder="X inferior" value="{{xinf}}" required>
 						</div>
                     </div>
                     <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Ingrese un x superior <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba el numero (mayor) del espacio de busqueda del metodo"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" id="xsup" class="form-control1" name="xsup" placeholder="X superior" value="{{xsup}}">
+                            <input type="number" step="1e-64" id="xsup" class="form-control1" name="xsup" placeholder="X superior" value="{{xsup}}" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Ingrese la tolerancia <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba un valor del error minimo para que el metodo termine, escribalo0. en formato 0.01"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}">
+                            <input type="number" step="1e-64" id="tol" class="form-control1" name="tol" placeholder="Tolerancia" value="{{tol}}" required>
                         </div>
                     </div>
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese las iteraciones <i class="fas fa-info-circle" data-toggle="tooltip" title="Escriba el numero de iteraciones que el metodo hará"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}">
+							<input type="number" min="1" id="ite" name="ite" class="form-control1" placeholder="Iteraciones" value="{{ite}}" required>
 						</div>
 					</div>
                     {% include 'selector.html' %}
@@ -93,7 +104,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</form>
 			</div>
 		</div>
-        {% if grafica == 1%}
+        {% if grafica == 1 and error != 1 %}
 		<div class="grid-form1">
 			<div class="gallery-img">
 				<img class="img-responsive " src="{{url_for('static',filename='images/img.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
@@ -101,8 +112,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>	
 		</div>
 		{% endif %}
-		<div class="grid-form1">
-                {% if raiz == 1 %}
+		{% if raiz == 1 and error != 1 %}
+            <div class="grid-form1">
+                
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
                 {% elif raiz == 0%}
                     <p style="margin-bottom: 1%; text-align: center;">El metodo no encontro ninguna raiz con una tolerancia de {{tol}} en {{n}} iteraciones</p>
@@ -130,7 +142,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                {% elif raiz == 3 %}
+                {% elif raiz == 3 and error != 1 %}
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} con una tolerancia de {{tolFinal}} </p>
                     <table class="table">
                         <tbody>
@@ -155,7 +167,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% elif raiz == 2 %}
+                    {% elif raiz == 2 and error != 1 %}
                     <p style="margin-bottom: 1%; text-align: center;">Existe una raiz en X = {{xm}} </p>
                     <table class="table">
                         <tbody>
@@ -181,7 +193,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% elif raiz == 4 %}
+                    {% elif raiz == 4 and error != 1  %}
                     <p style="margin-bottom: 1%; text-align: center;">Existen multiples raices cerca a X = {{xm}} </p>
                     <table class="table">
                         <tbody>
@@ -205,8 +217,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             {% endfor %}
                         </tbody>
                     </table>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
     </div>

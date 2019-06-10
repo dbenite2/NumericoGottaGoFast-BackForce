@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Newton</title>
+<title>Neville</title>
 {% include 'head.html' %}
 <div id="page-wrapper" class="gray-bg dashbard-1">
 	<div class="content-main">
@@ -17,7 +17,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<h2>
 		<a href="inicio.html">Inicio</a>
 		<i class="fa fa-angle-right"></i>
-		<span>Interpolacion de Newton</span>
+		<span>Interpolacion de neville</span>
 	</h2>
 </div>
 <!--//banner-->
@@ -25,12 +25,27 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--faq-->
 <div class="blank">
 	<div class="blank-page" id="ayuda" style="margin-bottom: 1%; display:none;">		
-		<p>El polinomio de interpolación de Lagrange, se considera una reforma del polinomio de Newton, el cual evita realizar el cálculo de las diferencias divididas.<br/>Se puede representar de la siguiente manera:</p>
+		<p>El polinomio de interpolación de Neville, se considera una reforma del polinomio de Newton, el cual evita realizar el cálculo de las diferencias divididas.<br/>Se puede representar de la siguiente manera:</p>
 		<div class="gallery-img">
 			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange1.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
 			<span class="zoom-icon"> </span> </a>
 		</div>
 		<p>En donde</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange2.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>La versión del segundo orden es:</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange3.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		<p>Se observa que al igual que el método de Newton, Neville tiene un error aproximado dado por.</p>
+		<div class="gallery-img">
+			<img class="img-responsive " src="{{url_for('static',filename='images/lagrange4.png')}}" alt="" style="margin-left:auto;margin-right:auto;"/>   
+			<span class="zoom-icon"> </span> </a>
+		</div>
+		
 	</div>
 	<div class="blank-page" style="margin-bottom:1.5%">
 		<form class="form-horizontal" id="form" >
@@ -47,7 +62,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<h3 style="text-align: center;">Puntos a interpolar</h3>
 		<div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
-				<form  class="form-horizontal" id="form" action="/newtonIntM" method="POST">
+				<form  class="form-horizontal" id="form" action="/nevilleM" method="POST">
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label"> Cantidad de Puntos <i class="fas fa-info-circle" data-toggle="tooltip" title="Ingrese la cantidad de puntos a interpolar"></i></label>
 						<div class="col-sm-8">
@@ -75,7 +90,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		{% endif %}
         <div class="tab-content">
 			<div class="tab-pane active" id="horizontal-form">
-				<form class="form-horizontal" id="form2" action="/newtonInt" method="POST">
+				<form class="form-horizontal" id="form2" action="/neville" method="POST">
 					<input type="text" style="visibility:hidden;" id="puntos" name="puntos" class="form-control1" value="{{puntos}}">
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label"> Valor a evaluar <i class="fas fa-info-circle" data-toggle="tooltip" title="Ingrese el valor con el que se evaluara el polinomio"></i></label>
@@ -101,16 +116,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							</tr>
 						</tbody>
 					</table>
-					<div class="form-group" style="margin-top:1.5%">
-							<label for="selector1" class="col-sm-2 control-label">¿Desea usar otro metodo? <i class="fas fa-info-circle" data-toggle="tooltip" title="Cambia de metodo escogiendo que metodo deseas usar y dandole al boton ejecutar"></i></label>
-							<div class="col-sm-8">
-									<select name="selector1" id="selector1" class="form-control1">
-											<option selected="true" value="0">No</option>
-											<option value="lagrange">Interpolacion de Lagrange</option>
-											<option value="splines">Splines</option>
-									</select>
-							</div>
-					</div>
+                    <div class="form-group" style="margin-top:1.5%">
+                        <label for="selector1" class="col-sm-2 control-label">¿Desea usar otro metodo? <i class="fas fa-info-circle" data-toggle="tooltip" title="Cambia de metodo escogiendo que metodo deseas usar y dandole al boton ejecutar"></i></label>
+                        <div class="col-sm-8">
+                            <select name="selector1" id="selector1" class="form-control1">
+                                <option selected="true" value="0">No</option>
+                                <option value="newtonInterpolacion">Interpolacion de Newton</option>
+                                <option value="lagrange">Interpolacion de Lagrange</option>
+                            </select>
+                        </div>
+                    </div>
 					<div class="form-group">
 						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
 							<label class="hvr-shutter-in-horizontal login-sub">

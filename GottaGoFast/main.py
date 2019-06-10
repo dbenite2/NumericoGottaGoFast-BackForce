@@ -1400,7 +1400,9 @@ def InterpolacionNewton():
     for i in range(n):
         try:
             x[i] = float(request.form.get('x'+str(i)))
+            print(x[i])
             y[i] = float(request.form.get('fx'+str(i)))
+            print(y[i])
         except:
             return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n, x = x, fx = y )
     try:
@@ -1409,7 +1411,7 @@ def InterpolacionNewton():
         return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
     aux = [[0 for i in range(n)] for j in range(n)]
     prod = 1.0
-    acum = ''
+    acum = ""
     res = 0.0
     if cambiarMetodo == '0':
         for i in range(n):
@@ -1422,11 +1424,16 @@ def InterpolacionNewton():
             if(i > 0):
                 prod *= val-x[i-1]
             res += aux[i][i] * prod
-            acum += str(aux[i][i])+'*'+str(prod)+'+'
+        acum = str(aux[0][0])
+        for i in range(1,n):
+            acum += " + " + str(aux[i][i]) + " * "
+            for j in range(0,i): 
+                acum += " (x - "+ "(" + str(y[j])+")"+ ") *"
         temp = len(acum)
         acum = acum[:temp - 1]
-        print(aux)
-        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+        #print(aux)
+        print (acum)
+        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, matrizSolucion = aux)
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
@@ -1445,7 +1452,7 @@ def lagrange():
             x[i] = float(request.form.get('x'+str(i)))
             y[i] = float(request.form.get('fx'+str(i)))
         except:
-            return render_template("lagrange.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n)
+            return render_template("lagrange.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n, x = x, y = y)
     try:
         val = float(request.form.get('valor'))
     except:
@@ -1465,7 +1472,9 @@ def lagrange():
                         return render_template("lagrange.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y)
             l[i] = prod
             res += (l[i]*y[i])
-            acum += str(l[i])+'*f(x'+str(i)+')+'
+        acum ="( " + str(l[0]) + " )*( "+ y[0] + " )+"
+        for i in range(1,n):
+            acum += "( " + str(l[i]) + " )*( "+ y[i] + " )+"
         temp = len(acum)
         acum = acum[:temp - 1]
         return render_template("lagrange.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y )
@@ -1486,13 +1495,12 @@ def neville():
             x[i] = float(request.form.get('x'+str(i)))
             y[i] = float(request.form.get('fx'+str(i)))
         except:
-            return render_template("neville.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n)
+            return render_template("neville.html", error = 1, mensajeError = "Por favor ingresa únicamente números", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n, x = x, y = y)
     try:
         val = float(request.form.get('valor'))
     except:
-        return render_template("newtonInterpolacion.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
-    valores = [[0 for i in range(n)] for j in range(n)]
-    acum = ''
+        return render_template("neville.html", error = 1, mensajeError = "Por favor ingresa un valor para evaluar", dibujarMatrizInicial = 1, indiceColumnas = indiceColumnas, n = n , x = x, fx = y)
+    valores = [[0.0 for i in range(n)] for j in range(n)]
     res = 0.0
     #valorfx = 0
     if cambiarMetodo == '0':
@@ -1500,19 +1508,14 @@ def neville():
         for i in range(n):
             valores[i][0] = y[i]
         for i in range(n):
-            for j in range(1,i):
+            for j in range(1,i+1):
                 try:
-                    valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - [i - j])
+                    valores[i][j] = ((val - x[i - j]) * valores[i][j-1] - ((val - x[i]) * valores[i - 1][j - 1])) / (x[i] - x[i - j])
                 except(ValueError,TypeError,ZeroDivisionError,RuntimeError,FloatingPointError):
                         return render_template("neville.html",error = 1, mensajeError = "Se produjo una división por cero.Abortando", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas,valor = val, x = x, fx = y) 
-
+        acum = "((x - " + str(x[0]) + ")*(" + str(valores[n-1][n-2]) + ") - (x - " + str(x[n-1]) + ")*(" + str(valores[n-2][n-2]) + ")) / (" + str(x[n-1]) + " - " + str(x[0]) + ")" 
         res = valores[n-1][n-1]
-        
-        temp = len(acum)
-        acum = acum[:temp - 1]
-        print(valores)
-        print(res)
-        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
+        return render_template("neville.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, matrizSolucion = valores)
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 

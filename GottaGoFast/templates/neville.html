@@ -138,7 +138,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		</div>
 	{% endif %}
 	{% if dibujarMatrizSolucion == 1  and error != 1%}
-
+			<div class="tab-pane active" id="horizontal-form">
+						<table class="table">
+							<tbody>
+								{% for i in matrizSolucion %}
+										<tr class="table-row"style="border: 1px solid">
+											{% for j in i %}
+													<td class="table-text"style="border: 1px solid">{{j}}</td>
+											{% endfor %}
+										</tr
+								{% endfor %}
+							</tbody>
+						</table>
+			</div>
 			<div class="grid-form1">
 					<h3 style="text-align: center;">Interpolacion</h3>
             <div class="form-group">

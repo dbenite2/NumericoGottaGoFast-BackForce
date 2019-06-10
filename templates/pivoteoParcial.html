@@ -53,7 +53,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<div class="form-group">
 						<label for="focusedinput" class="col-sm-2 control-label">Ingrese el Tamaño <i class="fas fa-info-circle" data-toggle="tooltip" title="El tamaño de la matriz sera N*N+1 donde la columna final son los valores independientes"></i></label>
 						<div class="col-sm-8">
-							<input type="text" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}"> 
+							<input type="number" id="n" name="n" class="form-control1" placeholder="Tamaño" value="{{n}}" required> 
 					</div>	
 					<div class="form-group">
 						<div class="col-md-3 login-do" style="margin-left: 37%;margin-right:37%;margin-top:5%">
@@ -110,8 +110,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 									<option value="crout">Crout</option>
 									<option value="doolittle">Doolittle</option>
 									<option value="cholesky">Cholesky</option>
-									<option value="jacobi">Jacobi</option>
-									<option value="gaussSeidel">Gauss Seidel</option>
 								</select>
 							</div>
 						</div>

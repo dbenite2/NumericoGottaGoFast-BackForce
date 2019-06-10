@@ -1419,13 +1419,9 @@ def InterpolacionNewton():
                 acum += " (x - "+ "(" + str(y[j])+")"+ ") *"
         temp = len(acum)
         acum = acum[:temp - 1]
-<<<<<<< HEAD
         #print(aux)
         print (acum)
         return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y, matrizSolucion = aux)
-=======
-        return render_template("newtonInterpolacion.html",acum = acum,res = res, puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 1, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
->>>>>>> master
     else:
         return render_template(cambiarMetodo+".html", puntos = n, dibujarMatrizInicial = 1, dibujarMatrizSolucion = 0, indiceColumnas = indiceColumnas, valor = val, x = x, fx = y)
 
